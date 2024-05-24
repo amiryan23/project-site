@@ -1,0 +1,251 @@
+.megaContainer {
+	width: 100%;
+	min-height: 100vh;
+	display:flex;
+	flex-direction:column;
+	gap:10px;
+	opacity: 0;
+	transform: translateY(-100px);
+	transition: 500ms linear;
+
+	.content1{
+		display:flex;
+		flex-direction:row;
+		padding:15px;
+		gap: 25px;
+
+		button{
+			background-color: transparent;
+			border: none;
+			outline: none;
+			cursor: pointer;
+		}
+
+		.item1{
+			color: whitesmoke;
+			font-size: 27px;
+		}
+
+		.item2{
+			align-self: center;
+			width: 25px;
+			height: 25px;
+			padding: 5px;
+			border-radius: 50%;
+			background: rgba(256, 256, 256, 0.5);
+			color: #222;
+			font-size: 15px;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			font-weight: bold;
+
+		}
+
+	}
+
+	.content2 {
+		padding: 15px;
+		border-top: 2px solid rgba(256, 256, 256, 0.9);
+		display: flex;
+		flex-direction: column;
+		gap:20px;
+
+
+		.followersContent {
+			width: 400px;
+			display: flex;
+			flex-direction: row;
+			gap: 7px;
+			// align-items: center;
+			background-color: rgba(60, 60, 60, 1.0);
+			padding: 7px;
+			border-radius: 7px;
+
+
+			.item1{
+				align-self: center;
+
+				img{
+					width: 50px;
+					height: 50px;
+					border-radius: 50%;
+					border: 2px solid #999;
+				}
+			}
+
+			.item2{
+				// align-self: flex-start;
+				font-size: 15px;
+				color: whitesmoke;
+				font-weight: bold;
+				display: flex;
+				flex-direction: column;
+				justify-content: flex-start;
+				align-items: flex-start;
+				gap: 5px;
+				flex: 1;
+
+				.miniItem1{
+
+				font-size: 15px;
+				color: whitesmoke;
+				}
+
+				.miniItem2{
+					// align-self: center;
+					font-size: 10px;
+				color: rgba(256, 256, 256, 0.4);
+				}
+			}
+
+			.item3{
+				align-self: center;
+
+				.item {
+					color: whitesmoke;
+					font-weight: bold;
+					font-size: 15px;
+					padding: 25px;
+				}
+				
+				.btn1{
+					width: 100%;
+					padding: 5px;
+            background:rgba(0, 0, 0, 0.5) ;
+            border: 2px solid rgba(256, 256, 256, 0.5);
+            border-radius: 7px;
+            display: flex;
+            flex-direction: row;
+           	gap:5px;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            font-weight: bold;
+            color:rgba(256, 256, 256, 0.5);
+            font-size: 15px;
+            transition: 250ms linear;	
+
+				}
+
+				.btn1:hover{
+            color:rgba(256, 256, 256, 0.7);
+            border: 2px solid rgba(256, 256, 256, 0.7);
+            transition: 250ms linear;	
+
+
+
+				}
+
+				.btn1:active{
+            color:rgba(256, 256, 256, 1);
+            border: 2px solid rgba(256, 256, 256, 1);
+            	
+
+
+
+				}
+
+				.btn2{
+					width: 100%;
+					padding: 5px;
+            background:#888 ;
+            border: 2px solid rgba(256, 256, 256, 0.5);
+            border-radius: 7px;
+            display: flex;
+            flex-direction: row;
+           	gap:5px;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            font-weight: bold;
+            color:rgba(0, 0, 0, 0.5);
+            font-size: 15px;
+            transition: 250ms linear;	
+
+				}
+
+				.btn2:hover{
+            color:#333;
+            border: 2px solid rgba(256, 256, 256, 0.7);
+            transition: 250ms linear;	
+
+
+
+				}
+
+				.btn2:active{
+           color:rgba(0, 0, 0, 1);
+            border: 2px solid rgba(0, 0, 0, 1);
+            	
+
+
+
+				}
+
+				.btn3{
+					width: 100%;
+					padding: 5px;
+            background:#222;
+            border: 2px solid rgba(256, 256, 256, 0.5);
+            border-radius: 7px;
+            display: flex;
+            flex-direction: row;
+           	gap:5px;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            font-weight: bold;
+            color:rgba(256, 256, 256, 0.5);
+            font-size: 15px;
+            transition: 250ms linear;	
+
+				}
+
+				.btn3:hover{
+            color:rgba(256, 256, 256, 0.7);
+            border: 2px solid rgba(256, 256, 256, 0.6);
+            transition: 250ms linear;	
+
+
+
+				}
+
+				.btn3:active{
+           color:rgba(256, 256, 256, 1);
+            border: 2px solid rgba(256, 256, 256, 1);
+            	
+}
+			}
+		}
+
+		.noFollowers{
+			width: 100%;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			font-size: 19px;
+			font-weight: bold;
+			color: rgba(256, 256, 256, 0.5);
+			padding: 25px;
+		}
+	}
+
+}
+
+.animBlock{
+	opacity: 1;
+	transform: translateY(0px);
+	transition: 500ms linear;
+}
+
+
+@media screen and (max-width: 800px) {
+	.megaContainer{
+		.content2{
+			.followersContent{
+				width: 100%;
+			}
+		}
+	}
+}

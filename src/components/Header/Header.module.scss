@@ -1,0 +1,197 @@
+
+
+
+.megaContainer {
+    width: 100%;
+    min-height: 60px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    // flex-wrap: wrap;
+    // border-bottom: 2px solid whitesmoke;
+    padding: 10px;
+    border-radius: 19px;;
+    // background: linear-gradient(0deg, rgba(69,200,168,1) 0%, rgba(36,157,153,1) 100%);
+        // background: linear-gradient(0deg, rgba(69,200,168,0.5) 0%, rgba(36,157,153,0.5) 100%);
+    background-color:rgba(0, 0, 0, 1.0);
+    z-index: 95;
+    position:sticky;
+    top:0;
+    user-select:none;
+
+
+    .content{
+        align-self: center;
+        display: flex;
+        justify-content: center;
+        flex:1 1 50px;
+        svg{
+            cursor: pointer;
+        }
+    }
+
+
+    .content1 {
+        align-self: center;
+        display: flex;
+        justify-content: center;
+        flex:1 1 50px;
+    }
+
+    .content2{
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-end;
+        gap: 25px;
+        font-family: "Josefin Sans","Roboto Condensed", sans-serif;
+        flex:1 1 50px;
+
+
+
+
+
+        .miniBlock2{
+            min-width: 225px;
+            display: flex;
+        flex-direction: row;
+        justify-content: flex-end;
+        // gap: 10px;
+      
+
+        .item1 {
+            
+            padding: 10px;
+            background-color: whitesmoke;
+            border-radius: 13px;
+            color: #222;
+            text-decoration: none;
+            transition-duration: 200ms;
+        }
+
+        .item2{
+            align-self: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #444;
+            font-weight: bold;
+
+        }
+
+        .item3 {
+            padding: 10px 20px 10px 20px;
+            background-color: #999;
+            border-radius: 13px 7px 13px 7px;
+            color: whitesmoke;
+            text-decoration: none;
+            transition-duration: 200ms;
+        }
+
+        .item1:hover,.item3:hover{
+            transform: translateY(5px);
+            transition-duration: 200ms;
+        }
+
+    }
+
+    .megaContent{
+        min-width: 225px;
+            display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+                align-items: center;
+
+
+        .miniItem1 {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            gap:20px;
+            padding:0;
+
+
+            .miniContent1{
+
+                img{
+                    width: 50px;
+                    height: 50px;
+                    border-radius: 50%;
+                    border: 2px solid rgba(256, 256, 256, 0.7);
+                }
+
+
+            }
+
+            .miniContent2{
+                color:whitesmoke;
+
+                svg{
+                    cursor: pointer;
+                }
+
+            }
+        }
+
+            
+
+            .miniItem2{
+                display:flex;
+                flex-direction:row;
+                justify-content:center;
+                align-items:center;
+                color:whitesmoke;
+                
+                button{
+                     padding: 7px;
+            background-color: rgba(0,0,0,0.5);
+            border: 2px solid whitesmoke;
+            border-radius: 7px;
+            display: flex;
+            flex-direction: row;
+            gap: 5px;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            font-weight: bold;
+            color: whitesmoke;
+                }
+                
+            }
+        
+        
+    }
+    }
+}
+
+@media screen and (max-width:900px) {
+    .megaContainer{
+        gap: 25px;
+        align-items:center;
+        border-radius:0;
+
+        .content1{
+            flex: 0 0;
+        }
+
+        .content2{
+                flex:0 0;
+
+                .miniBlock2{
+                    min-width: 50px;
+                }
+
+                .megaContent{
+                    min-width:50px;
+                }
+
+           }
+    }
+}
+
+@media screen and (max-width: 330px) {
+    .megaContainer{
+        // justify-content: flex-start;
+        gap: 0;
+    }
+}

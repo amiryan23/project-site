@@ -1,0 +1,13 @@
+.App {
+ width: 100%;
+ min-height: 100vh;
+/* background: linear-gradient(0deg, rgba(221,252,245,1) 0%, rgba(216,222,222,1) 100%);*/
+background-color:rgba(60, 60, 60, 0.9);
+padding:0px 15px 15px 15px;
+}
+
+@media screen and (max-width:768px) {
+	.App {
+		padding:0;
+	}
+}

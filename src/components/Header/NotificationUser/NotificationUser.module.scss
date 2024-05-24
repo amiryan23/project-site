@@ -1,0 +1,312 @@
+.miniContent {
+	width: auto;
+	display: flex;
+	flex-direction: column;
+	justify-content:center;
+	align-items:center;
+	overflow: hidden;
+	font-family: "Josefin Sans","Source Code Pro","Noto Sans Armenian", sans-serif;
+
+
+	.item1{
+		display:flex;
+		flex-direction:row;
+
+		svg{
+			color:#999;
+			font-size: 25px;
+		}
+
+		span{
+			font-size: 12px;
+			// padding: 5px;
+			width: 25px;
+			height: 25px;
+			background-color: rgba(256, 256, 256, 0.3);
+			border-radius: 50%;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			color: ghostwhite;
+			font-weight: bold;
+		}
+		
+	}
+
+	
+
+	.item2{
+		 width: 470px;
+            height: 200px;
+            padding: 5px;
+            margin-top: 250px;
+            position: absolute;
+            right: 0;
+            border: 1px solid #555;
+            // background-color: rgba(60, 60, 60, 0.8);
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            border-radius: 15px;
+            opacity: 0;
+            transform: translateY(-50px);
+            visibility: hidden;
+            transition: 250ms linear ;
+            overflow-y:scroll;
+
+
+          
+          .requestsContent{
+            	width: 100%;
+            	display: flex;
+            	flex-direction: row;
+            	justify-content: space-between;
+            	align-items: center;
+            	gap:5px;
+            	padding:10px;
+            	border:2px solid #333;
+            	background-color:rgba(0,0,0,0.5);
+            	border-radius:9px;
+
+
+            	.miniItem1{
+            		display:flex;
+            		flex-direction:column;
+            		align-items: center;
+            		justify-content: center;
+            		gap:5px;
+            		
+            		img{
+            			width: 40px;
+            			height: 40px;
+            			border-radius: 50%;
+            			border: 2px solid rgba(256, 256, 256, 0.7);
+            		}
+
+            		
+
+            	}
+
+            	.miniItem2{
+            		
+            		display: flex;
+            		flex-direction:column;
+            		
+            		gap:5px;
+
+            		.block1{
+            			align-self: flex-start;
+            			color: rgba(256, 256, 256, 0.7);
+            			font-size: 11px;
+            			font-weight: bold;
+            		}
+
+            		.block2{
+            			font-size: 14px;
+            			color: whitesmoke;
+            			font-weight: bold;
+            		}
+
+            	}
+
+            	.miniItem3{
+            		display: flex;
+            		flex-direction: row;
+            		gap:5px;
+
+            		.btn1{
+            			padding: 0 5px 0 5px;
+            			background-color: rgba(256, 256, 256, 0.5);
+            			color: white;
+            			border: 2px solid #999;
+            			border-radius: 5px;
+            		}
+
+            		.btn2 {
+            			// padding: 5px;
+            			// background-color: rgba(256, 256, 256, 0.2);
+            			background-color: transparent;
+            			color: white;
+            			// border: 2px solid #999;
+            			border: none;
+            			border-radius: 5px;
+
+            			svg{
+            				color: rgba(255, 0, 0,0.8);
+            				font-size: 25px;
+            			}
+            		}
+            	}
+            }
+
+             .notNotific{
+            	width: 100%;
+            	height: 100%;
+            	display: flex;
+            	justify-content: center;
+            	align-items: center;
+            	flex-direction: row;
+            	gap: 15px;
+            	color:rgba(256, 256, 256, 0.5);
+            	font-weight: bold;
+            	font-size: 20px;
+            	letter-spacing:1px;
+
+
+            	svg{
+            		font-size: 23px;
+            	}
+            }
+
+	}
+
+	.notificAnim{
+		 width: 470px;
+            height: 200px;
+            padding: 5px;
+            margin-top: 250px;
+            position: absolute;
+            right: 0;
+            border: 1px solid #555;
+            // background-color: rgba(60, 60, 60, 0.8);
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            border-radius: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+            opacity: 1;
+            transform: translateY(0px);
+            transition: 400ms linear ;
+            overflow-y:scroll;
+      
+
+            .requestsContent{
+            	width: 100%;
+            	display: flex;
+            	flex-direction: row;
+            	justify-content: space-between;
+            	align-items: center;
+            	gap:5px;
+            	padding:10px;
+            	border:2px solid #333;
+            	background-color:rgba(0,0,0,0.5);
+            	border-radius:9px;
+
+
+            	.miniItem1{
+            		display:flex;
+            		flex-direction:column;
+            		align-items: center;
+            		justify-content: center;
+            		gap:5px;
+            		
+            		img{
+            			width: 40px;
+            			height: 40px;
+            			border-radius: 50%;
+            			border: 2px solid rgba(256, 256, 256, 0.7);
+            		}
+
+            		
+
+            	}
+
+            	.miniItem2{
+            		
+            		display: flex;
+            		flex-direction:column;
+            		
+            		gap:5px;
+
+            		.block1{
+            			align-self: flex-start;
+            			color: rgba(256, 256, 256, 0.7);
+            			font-size: 11px;
+            			font-weight: bold;
+            		}
+
+            		.block2{
+            				font-size: 14px;
+            			color: whitesmoke;
+            			font-weight: bold;
+            		}
+
+            	}
+
+            	.miniItem3{
+            		display: flex;
+            		flex-direction: row;
+            		gap:5px;
+
+            		.btn1{
+            			padding: 0 5px 0 5px;
+            			background-color: rgba(256, 256, 256, 0.5);
+            			color: white;
+            			border: 2px solid #999;
+            			border-radius: 5px;
+            			cursor: pointer;
+            		}
+
+            		.btn2 {
+            			// padding: 5px;
+            			// background-color: rgba(256, 256, 256, 0.2);
+            			background-color: transparent;
+            			color: white;
+            			// border: 2px solid #999;
+            			border: none;
+            			border-radius: 5px;
+
+            			svg{
+            				color: rgba(255, 0, 0,0.8);
+            				font-size: 25px;
+            			}
+            		}
+            	}
+            }
+
+            .notNotific{
+            	width: 100%;
+            	height: 100%;
+            	display: flex;
+            	justify-content: center;
+            	align-items: center;
+            	flex-direction: row;
+            	gap: 15px;
+            	color:rgba(256, 256, 256, 0.5);
+            	font-weight: bold;
+            	font-size: 20px;
+            	letter-spacing:1px;
+
+
+            	svg{
+            		font-size: 23px;
+            	}
+            }
+	}
+}
+
+@media screen and (max-width:768px) {
+	.miniContent{
+		.item2{
+
+			width: 100%;
+			left: 0;
+
+			.miniItem2{
+				.block2{
+				font-size: 12px;
+			}
+		}
+		}
+
+		.notificAnim {
+			width: 100%;
+			left: 0;
+			.miniItem2{
+				.block2{
+				font-size: 12px;
+			}
+		}
+		}
+	}
+}

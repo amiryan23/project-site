@@ -1,0 +1,248 @@
+.megaContainer {
+	width: 100%;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	font-family: "Josefin Sans","Source Code Pro","Noto Sans Armenian", sans-serif;
+	opacity: 0;
+	transform: translateY(-100px);
+	transition: 500ms linear;
+
+
+	.content1{
+		width: 100%;
+		color: whitesmoke;
+			font-size: 30px;
+			font-weight: bold;
+			margin:25px;
+			// border-bottom: 2px solid whitesmoke;
+	}
+
+	.content2{
+		width: 100%;
+		display: flex;
+		flex-direction: row;
+		justify-content: space-around;
+		flex-wrap: wrap;
+		border-top: 2px solid whitesmoke;
+
+		.Block1{
+			width: 100%;
+			min-height: 300px;
+			flex: 1 0 400px;
+			// border: 1px solid whitesmoke;
+			padding:20px;
+			display: flex;
+			flex-direction: column;
+			gap: 15px;
+			justify-content:center;
+			align-items:center;
+			
+
+			.item1{
+
+				display:flex;
+
+				input{
+					visibility: hidden;
+				}
+
+				label {
+					width: 250px;
+					height: 250px;
+					border-radius: 50%;
+					border: 2px solid whitesmoke;
+					display: flex;
+					justify-content: center;
+					align-items: center;
+					color: whitesmoke;
+					cursor: pointer;
+					background-size: 100% 100%;
+					background-repeat: no-repeat;
+					color: #999;
+					text-shadow: 1px 1px 0px #222;
+					font-size: 19px;
+					font-weight: bold;
+				}
+			}
+
+			.item2{
+				color: whitesmoke;
+				font-weight: bold;
+			}
+
+		}
+
+		.Block2{
+			width: 100%;
+			min-height: 300px;
+
+			flex: 1 0 400px;
+			// border: 1px solid whitesmoke;
+			display: flex;
+			flex-direction: column;
+			gap: 15px;
+			justify-content: center;
+			align-items: center;
+			padding:20px;
+
+			.item1{
+
+				width: 100%;
+				display: flex;
+				flex-direction: column;
+				gap: 10px;
+				color: whitesmoke;
+				font-weight:bold;
+
+				input{
+					width: 100%;
+					padding: 5px;
+					background-color: rgba(256, 256, 256, 0.2);
+					border: none;
+					outline: none;
+					color: whitesmoke;
+					font-weight: bold;
+					border-radius: 7px;
+				}
+
+				input:invalid{
+                    border: 2px solid red;
+                    animation:inputAnim 50ms linear forwards
+                }
+
+                @keyframes inputAnim {
+                    0%{transform: translateX(-5px);}
+                    50%{transform: translateX(5px);}
+                    100%{transform: translateX(0);}
+                }
+
+			}
+		}
+	}
+
+	.content3{
+		width: 100%;
+		display: flex;
+		flex-direction: column;
+		gap: 5px;
+		padding:20px;
+		border-bottom: 2px solid whitesmoke;
+
+
+		.item1{
+			color: whitesmoke;
+			font-weight: bold;
+			font-size: 23px;
+
+		}
+
+		.item2{
+			width:100%;
+
+			input{
+				width: 70%;
+				padding: 7px;
+					background-color: rgba(256, 256, 256, 0.2);
+					border: none;
+					outline: none;
+					color: whitesmoke;
+					font-weight: bold;
+					border-radius: 7px;
+				
+			}
+
+			input:invalid{
+                    border: 2px solid red;
+                    animation:inputAnim 50ms linear forwards
+                }
+
+               
+		}
+
+		
+	}
+
+	.content4{
+		width: 100%;
+		padding:15px;
+
+		.item3{
+			color: whitesmoke;
+			font-weight: bold;
+			font-size: 17px;
+			display: flex;
+			align-items: center;
+			gap: 25px;
+			padding: 10px;
+			border-bottom: 2px solid rgba(256, 256, 256, 0.5);
+			transition: 500ms linear;
+			user-select: none;
+
+
+			svg{
+				font-size: 25px;
+				cursor: pointer;
+
+			}
+		}
+	}
+
+	.content5{
+		align-self: flex-end;
+		width: 100%;
+		display: flex;
+		justify-content: flex-end;
+		flex-direction: column;
+		gap:5px;
+		align-items: center;
+		padding: 25px;
+		flex: 1;
+
+		button{
+					padding: 10px 25px 10px 25px;
+            background:transparent ;
+            border: 2px solid whitesmoke;
+            border-radius: 7px;
+            display: flex;
+            flex-direction: row;
+            // gap: 5px;
+            // justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            font-weight: bold;
+            color: whitesmoke;
+            transition: 250ms linear;			
+		}
+	}
+}
+
+.animBlock{
+	opacity: 1;
+	transform: translateY(0px);
+	transition: 500ms linear;
+}
+
+
+@media screen and (max-width: 768px) {
+	.megaContainer  {
+
+		.content2{
+			.Block2 {
+				.item1{
+					input{
+						padding: 10px;
+					}
+				}
+			}
+		}
+		.content3{
+			.item2{
+				input{
+					width: 100%;
+					padding: 10px;
+				}
+			}
+		}
+	}
+}
