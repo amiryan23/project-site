@@ -7,7 +7,7 @@ import React,{ useState,useCallback,useEffect,useContext,useRef  } from 'react'
 
 const Footer = () => {
 
- const {  t,setActiveLink} = useContext(MyContext);
+ const {  t,setActiveLink,logined} = useContext(MyContext);
 
 	return (
 		<footer className={s.megaContainer}>
@@ -51,7 +51,7 @@ const Footer = () => {
 			</div>
 			</div>
 			<div className={s.megaContent2}>
-				<div className={s.content}>© 2024 <Link to="/home/user/profile/M7EOY6gQCgWHNg9nUveIT442zFm1">user23</Link> </div>
+				<div className={s.content}>© 2024 {logined ? <Link to="/home/user/profile/M7EOY6gQCgWHNg9nUveIT442zFm1">user23</Link> : "user23"} </div>
 				
 			</div>
 		</footer>

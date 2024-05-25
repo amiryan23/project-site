@@ -181,7 +181,7 @@ useEffect(()=>{
                 }}>
                     <span>{checkbox ? <MdCheckBox color="whitesmoke" size="17"/> : <MdCheckBoxOutlineBlank size="17" color="white" />}</span>
                 </label>
-                <span><Link to="/home">{t('Rules')}</Link></span>
+                <span><Link >{t('Rules')}</Link></span>
             </div>
             <div className={s.content4}>
             <span>{t('acctext1')}<Link to="/login">{t('login')}</Link></span>
