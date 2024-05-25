@@ -15,6 +15,7 @@ const Login = () => {
 
     const [email,setEmail] = useState(null)
     const [password,setPassword] = useState(null)
+    const [saveMe,setSaveMe] = useState(false)
     const [error,setError] = useState(null)
     const btn = useRef(null)
     const animBlock = useRef()
@@ -58,8 +59,11 @@ const Login = () => {
     setEmail('')
     setPassword('')
     setError('')
-    console.log(user)
+    if(saveMe){
+        localStorage.setItem("saveMe",true)
+    }
     window.location.href = "/home"
+
 
     // ...
   })
@@ -113,7 +117,7 @@ const Login = () => {
                  </span>
                 <span className={s.content4}>
                     
-                  <input type="checkbox" />
+                  <input value={saveMe} type="checkbox" onClick={()=>{setSaveMe(!saveMe)}}/>
                   <span>{t("SaveMe")}</span>
                  
                 </span>

@@ -2,34 +2,40 @@ import {db,storage,docId,firebaseConfig} from './../firebase'
 import { doc, updateDoc,setDoc  } from "firebase/firestore";
 import { ref, uploadBytes } from "firebase/storage";
 import imageCompression from 'browser-image-compression';
-
+import Resizer from 'react-image-file-resizer';
 
 
 export  const addPostFunction = async (thisUser,postText,fileUrl,imageRef,forwardPost,arrayPosts,queryClient) => {
    	
     try {
-     if (arrayPosts !== null && postText !== "") {
+     
 
      	if(fileUrl){
      	 const file = imageRef.current.files[0];
 
-         const options = {
-          maxSizeMB: 1,
-          maxWidthOrHeight: 1920,
-          useWebWorker: true
-        };
-
-        // Сжимаем изображение
-        const compressedFile = await imageCompression(file, options);
+          const compressedFile = await new Promise((resolve) => {
+          Resizer.imageFileResizer(
+            file,
+            file.width, 
+            file.height, 
+            'JPEG', 
+            60, 
+            0, 
+            (uri) => {
+              resolve(uri);
+            },
+            'file'
+          );
+        });
 
      	 	const timestamp = new Date().getTime();
-  			const uniqueFilename = `post_${timestamp}_${compressedFile.name}`;
+  			const uniqueFilename = `post_${timestamp}_${file.name}`;
             
             // Создаем ссылку на путь в Firebase Storage, куда будем загружать файл
             const storageRef = ref(storage, `imagePosts/${uniqueFilename}`);
 
             // Загружаем файл на Firebase Storage
-            await uploadBytes(storageRef, file);
+            await uploadBytes(storageRef,compressedFile );
 
         const newPost = { 
           id: new Date().getTime(), 
@@ -75,7 +81,7 @@ export  const addPostFunction = async (thisUser,postText,fileUrl,imageRef,forwar
 				// setPostText("")
     //     setFileUrl("")
        }
-      }
+      
     } catch (error) {
       console.error("Ошибка при добавлении нового объекта в Firestore:", error);
       console.log(arrayPosts)

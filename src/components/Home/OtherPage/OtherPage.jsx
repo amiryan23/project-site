@@ -47,7 +47,7 @@ const queryClient = useQueryClient();
     const { data: arrayPosts } = useQuery('arrayPosts', () => queryClient.getQueryData('arrayPosts'));
 
 
-	const selectedUser = users ? users.find((user) => {
+	const selectedUser = users ? users?.find((user) => {
     if (userId && user && user.id.toString() === userId) {
         return true;
     }
@@ -144,7 +144,7 @@ const unfollowMutation = useUnfollowMutation()
 
 	const postThisUser = arrayPosts 
   ? arrayPosts
-  .filter(m => m.userId === selectedUser.id) 
+  .filter(m => m.userId === selectedUser?.id) 
   	.map(m => 		<div className={s.postMegaContent} key={m.id}>
 					<div className={s.postMiniContent1}>
 						<span className={s.postBlock1}>
@@ -161,7 +161,7 @@ const unfollowMutation = useUnfollowMutation()
 						</span>
 							<span className={s.postSettings} onMouseLeave={()=>{setOpenSettings(null)}}>
 						<span onClick={()=>{ setOpenSettings(m.id) }} className={s.item1}><BsThreeDotsVertical /></span>
-						{thisUser.isAdmin ?
+						{thisUser?.isAdmin ?
 						openSettings === m.id 
 						? 
 						<span className={s.item2} >
@@ -193,7 +193,7 @@ const unfollowMutation = useUnfollowMutation()
 					<span className={s.miniFwitem1}>
 					{t("Forward")}
 					</span>
-					<Link to={`/home/user/profile/${arrayPosts.find(post => post.id === m.forwardPost.fwPostid).userId}`} className={s.miniFwitem2}>
+					<Link to={`/home/user/profile/${arrayPosts?.find(post => post.id === m.forwardPost.fwPostid).userId}`} className={s.miniFwitem2}>
 					{m.forwardPost?.fwPostUser}
 					</Link>
 
@@ -220,22 +220,22 @@ const unfollowMutation = useUnfollowMutation()
 						: "" }
 					</div>
 					<div className={s.postMiniContent3}>
-						{m.likes.includes(thisUser.id) 
-						? <span onClick={()=>{handleLikePost(m.id,thisUser.id)}}>
+						{m.likes.includes(thisUser?.id) 
+						? <span onClick={()=>{handleLikePost(m.id,thisUser?.id)}}>
 						<FaHeart title="Like" color="whitesmoke"/>
 						{Array.isArray(m.likes) ? m.likes.length : 0}
 						</span>
-						:<span onClick={()=>{handleLikePost(m.id,thisUser.id)}}>
+						:<span onClick={()=>{handleLikePost(m.id,thisUser?.id)}}>
 						<FaHeart title="Like" />
 						{Array.isArray(m.likes) ? m.likes.length : 0}
 						</span> 
 						}
-						{m.dislikes.includes(thisUser.id) 
-						?  <span onClick={()=>{handleDislikePost(m.id,thisUser.id)}}>
+						{m.dislikes.includes(thisUser?.id) 
+						?  <span onClick={()=>{handleDislikePost(m.id,thisUser?.id)}}>
 						<FaHeartBroken title="Dislike" color="whitesmoke"/>
 						{Array.isArray(m.dislikes) ? m.dislikes.length : 0}
 						</span> 
-						: <span onClick={()=>{handleDislikePost(m.id,thisUser.id)}}>
+						: <span onClick={()=>{handleDislikePost(m.id,thisUser?.id)}}>
 						<FaHeartBroken title="Dislike"/>
 						{Array.isArray(m.dislikes) ? m.dislikes.length : 0}
 						</span> 
@@ -292,14 +292,14 @@ const unfollowMutation = useUnfollowMutation()
 								<div className={s.item}>{t("ClosedComment")}<HiMiniLockClosed color="#999" size="52"/></div>
 							</div> }
 						<div className={s.postCommentBlock2}>
-							<span className={s.postCommentItem1}><img title={thisUser.username} src={thisUser?.photo?.placed ||  thisUser?.photo?.default } alt="" /></span>
+							<span className={s.postCommentItem1}><img title={thisUser?.username} src={thisUser?.photo?.placed ||  thisUser?.photo?.default } alt="" /></span>
 							<span className={s.postCommentItem2}>
 							{!m.privateComment 
 							? <input value={commentText} onChange={(e)=>{setCommentText(e.target.value)}} type="text" placeholder="Comment"/>
 							: <input value={commentText} disabled="true" onChange={(e)=>{setCommentText(e.target.value)}} type="text" placeholder="..."/>}
 							</span>
 							{!m.privateComment 
-							? <span className={s.postCommentItem3} onClick={()=>{addCommentToPost(m.id,thisUser.id)}}><RiSendPlaneFill title="Send"/></span>
+							? <span className={s.postCommentItem3} onClick={()=>{addCommentToPost(m.id,thisUser?.id)}}><RiSendPlaneFill title="Send"/></span>
 							: <span className={s.postCommentItem3} style={{opacity:"0.5"}}><RiSendPlaneFill title="Send"/></span> 
 							}	
 						</div>
@@ -312,7 +312,7 @@ const unfollowMutation = useUnfollowMutation()
 
 
   useEffect(()=>{
-  	if(userId === thisUser.id){
+  	if(userId === thisUser?.id){
   		window.location.href = "/home/profile"
   	}
   },[userId])
@@ -331,10 +331,10 @@ const unfollowMutation = useUnfollowMutation()
 				
 				<span className={s.miniBlock1}><img src={selectedUser?.photo?.placed || selectedUser?.photo?.default } alt="" /></span>
 				<span className={s.miniBlock2}>
-					{selectedUser ? selectedUser.username : <MiniLoader/>}
+					{selectedUser ? selectedUser?.username : <MiniLoader/>}
 				</span>
 				<span className={s.miniBlock3}>
-							{selectedUser?.userData && selectedUser.userData?.requests?.includes(thisUser.id)
+							{selectedUser?.userData && selectedUser.userData?.requests?.includes(thisUser?.id)
 					? <button className={s.btn3} onClick={()=>{handleFollow(selectedUser)}}><RiUserReceivedFill/>{t("Req")}</button>
 					:
 					thisUser?.userData && thisUser?.userData?.following?.includes(selectedUser.id)
@@ -420,7 +420,7 @@ const unfollowMutation = useUnfollowMutation()
 			? postThisUser.length > 0 ? postThisUser.reverse() : <div className={s.noPost}>{t("NoPosts")}</div>
 			: <MiniLoader />
 			:
-			thisUser.isAdmin || thisUser.userData?.following?.includes(selectedUser.id)
+			thisUser?.isAdmin || thisUser?.userData?.following?.includes(selectedUser?.id)
 			? arrayPosts 
 			? postThisUser.length > 0 ? postThisUser.reverse() : <div className={s.noPost}>{t("NoPosts")}</div>
 			: <MiniLoader />

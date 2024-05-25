@@ -4,7 +4,6 @@ import { HiHome } from "react-icons/hi";
 import { FaUser,FaUsers,FaMusic } from "react-icons/fa";
 import { IoSettingsSharp } from "react-icons/io5";
 import React,{ useState,Suspense,useContext,useRef,useEffect} from 'react';
-import { useTranslation } from 'react-i18next';
 import { Route, Routes } from 'react-router-dom';
 import Loading from './../Loading/Loading'
 import { TbMessageCircle2Filled } from "react-icons/tb";
@@ -15,6 +14,7 @@ import { IoExit } from "react-icons/io5";
 import {signOut} from 'firebase/auth'
 import {auth,db,storage,docId} from './../../firebase'
 import Language from './../Language/Language'
+import { useQueryClient,useQuery } from 'react-query';
 
 
 const HomePage = React.lazy(()=>import('./HomePage/HomePage'))
@@ -29,6 +29,7 @@ const OtherFollowers = React.lazy(()=> import('./OtherPage/OtherFollowers/OtherF
 const OtherFollowing = React.lazy(()=> import('./OtherPage/OtherFollowing/OtherFollowing'))
 const MyFollowers = React.lazy(()=> import('./ProfilePage/MyFollowers/MyFollowers'))
 const MyFollowing = React.lazy(()=> import('./ProfilePage/MyFollowing/MyFollowing'))
+const UpdatedSitePage = React.lazy(()=>import('./../UpdatedSitePage/UpdatedSitePage'))
 
 
 
@@ -41,11 +42,17 @@ const Home = ()=> {
 //     const [activeLink,setActiveLink] = useState(locationStorage ? locationStorage : "/home")
     const [open,setOpen] = useState(false)
 
-     const {  logined, setLogined  , thisUser , isWideScreen,openMenu,setOpenMenu,activeLink,setActiveLink} = useContext(MyContext);
+     const {  logined, setLogined  , thisUser , isWideScreen,openMenu,setOpenMenu,activeLink,setActiveLink,openUpdate,setOpenUpdate,t} = useContext(MyContext);
 
      const mobileMenuAnim = useRef()
 
-    const {t} = useTranslation()
+     const queryClient = useQueryClient();
+
+        const { data: users } = useQuery('users', () => queryClient.getQueryData('users'));
+    // const { data: thisUser } = useQuery('thisUser', () => queryClient.getQueryData('thisUser'));
+    const { data: arrayPosts } = useQuery('arrayPosts', () => queryClient.getQueryData('arrayPosts'));
+
+   
 
     const changeActvieLink = (path) =>{
         setActiveLink(path)
@@ -54,9 +61,34 @@ const Home = ()=> {
     const signOutHandler = () =>{
         signOut(auth)
         .then(()=> window.location.href = "/")
+
+        localStorage.removeItem("saveMe")
     }
 
 
+
+    const usersWithPostCount = users?.map(user => ({
+  ...user,
+  postCount: arrayPosts?.filter(post => post.userId === user.id).length || 0,
+}));
+
+const sortedUsers = usersWithPostCount?.sort((a, b) => b.postCount - a.postCount).slice(0,5);
+
+const topUsersList = sortedUsers?.map((user,index) => (
+  <Link to={`/home/user/profile/${user.id}`} key={user.id} className={s.topUserContainer}>
+    <span className={s.miniItem1}>
+       <span>#{index + 1}</span>
+      <img src={user.photo?.placed ? user.photo?.placed : user.photo?.default} alt="" />
+        
+    </span>
+    <span className={s.miniItem2}>
+      {user.username}
+    </span>
+    <span className={s.miniItem3}>
+      {t('Posts')}: {user.postCount}
+    </span>
+  </Link>
+));
 
     useEffect(()=>{
         if(openMenu && mobileMenuAnim.current){
@@ -169,53 +201,43 @@ const Home = ()=> {
             <Route path="user/profile/:userId/following" element={<OtherFollowing />} />
             <Route path="profile/followers" element={<MyFollowers />} />
             <Route path="profile/following" element={<MyFollowing />} />
+            <Route path="updated" element={<UpdatedSitePage />} />
             </Routes>
             </Suspense> 
             </div>
             <div className={s.content3}>
-                <div className={s.miniContent1}>
-                    <span className={s.item1}>Обновления 0.2.0</span>
+               {openUpdate ? <div className={s.miniContent1}>
+                    <span className={s.item1}>Обновления 1.0.1</span>
                     <span className={s.item2}>
-                        текст текст текст
-                        текст текст текст
-                        текст текст текст
-                        текст текст текст
-                        текст текст текст
-                        текст текст текст
-                        текст текст текст
-                        текст текст текст
-                        текст текст текст
-                        текст текст текст
-                        текст текст текст
-                        текст текст текст
-                        текст текст текст
-                        текст текст текст
-                        текст текст текст
-                        текст текст текст
-                        текст текст текст
-                        текст текст текст
-                        текст текст текст
-                        текст текст текст
-                        текст текст текст
-                        текст текст текст
-                        текст текст текст
-                        текст текст текст
-                        текст текст текст
-                        текст текст текст
-                        текст текст текст
-                        текст текст текст
+                        Начало бета-тестирования сайта 24.05.2024
+                        <br /><br />
+                        1.Добавлена функция добавления/удаления постов.
+                        <br /><br />
+                        2.Добавлена функция добавления/удаления подписок.
+                        <br /><br />
+                        3.Добавлена функция лайк/дизлайк/комментирования.
+                        <br /><br />
+                        4.Теперь можно пересылать посты других пользователей. 
+
                     </span>
                     <span className={s.item3}>
-                        <button>Подробнее</button>
+                        <Link to="updated">Подробнее</Link>
+                    </span>
+                </div>
+            : "" }
+                <div className={s.miniContent2}>
+                    <span className={s.item1}>{t('ActiveUsers')}</span>
+                    <span className={s.item2}>
+                        {topUsersList}
                     </span>
                 </div>
             </div>
-            <div className={s.content4}>
-            {open ? <span className={s.item1}></span> : "" }
-            <span onClick={()=>{
-                setOpen((prevOpen)=> !prevOpen)
-            }} className={s.item2}><TbMessageCircle2Filled /></span> 
-            </div>
+            {/* <div className={s.content4}> */}
+            {/* {open ? <span className={s.item1}></span> : "" } */}
+            {/* <span onClick={()=>{ */}
+            {/*     setOpen((prevOpen)=> !prevOpen) */}
+            {/* }} className={s.item2}><TbMessageCircle2Filled /></span>  */}
+            {/* </div> */}
         </main>
     )
 }

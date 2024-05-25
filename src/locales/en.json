@@ -70,7 +70,8 @@
 		"ViewMore":"View More",
 		"Hide":"Hide",
 		"NоtificAccept":"Subscription request accepted",
-		"NotificReject":"Subscription request rejected"
+		"NotificReject":"Subscription request rejected",
+		"ActiveUsers":"Active users"
 
 		
 }

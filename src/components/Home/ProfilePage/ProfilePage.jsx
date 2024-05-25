@@ -36,7 +36,7 @@ const ProfilePage = ()=>{
  	const forwardPostStorage = JSON.parse(localStorage.getItem("forwardPost"))
 
 	const queryClient = useQueryClient();
- 	const [postText,setPostText] = useState()
+ 	const [postText,setPostText] = useState("")
   const [fileUrl, setFileUrl] = useState(null);
   const [showFile,setShowFile] = useState(false)
   const [openSettings,setOpenSettings] = useState(null)
@@ -77,7 +77,7 @@ const ProfilePage = ()=>{
       const file = e.target.files[0];
       const url = URL.createObjectURL(file);
       setFileUrl(url);
-      console.log(fileUrl)
+      
     }
   };
 
@@ -121,12 +121,16 @@ const ProfilePage = ()=>{
 
   const handleAddPost = async (thisUser,postText,fileUrl,imageRef,forwardPost) => {
   	try{
+  		if(postText !== "" || fileUrl !== null){
   		await addPostMutation.mutate({thisUser,postText,fileUrl,imageRef,forwardPost})
   		setPostText("")
       setFileUrl("")
       setForwardPost(null)
   		setNotificText(t('NotificPostAdd'))
   		localStorage.removeItem("forwardPost")
+  	} else {
+  		setNotificText(t('Error'))
+  	}
   	}catch (error) {
   		console.error("Ошибка при добовления поста")
   	}

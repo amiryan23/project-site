@@ -1,0 +1,33 @@
+.megaContainer {
+	width: 100%;
+	height: auto;
+	display: flex;
+	flex-direction: column;
+	gap: 15px;
+}
+
+.item1{
+	width: 100%;
+	display: flex;
+	flex-direction: row;
+	gap: 15px;
+	font-size: 25px;
+	font-weight: bold;
+	padding: 15px;
+	border-bottom: 2px solid whitesmoke;
+	color: whitesmoke;
+
+	button{
+		background: transparent;
+		border: none;
+		outline: none;
+		cursor: pointer;
+	}
+}
+
+.item2{
+	width: 100%;
+	color: rgba(256, 256, 256, 0.8);
+	padding: 10px;
+	font-weight: bold;
+}

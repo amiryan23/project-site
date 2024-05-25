@@ -2,11 +2,11 @@ import { useState,useRef, useEffect,useContext } from 'react';
 import s from './Registration.module.scss'
 import {Link} from 'react-router-dom'
 import { MdCheckBoxOutlineBlank,MdCheckBox  } from "react-icons/md";
-import { useTranslation } from 'react-i18next';
 import { MyContext } from './../../context/Context';
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import {  doc, setDoc} from "firebase/firestore";
 import {auth,db } from './../../firebase'
+import { useQueryClient,useQuery } from 'react-query';
 
 
 const Registration = ()=>{
@@ -17,11 +17,18 @@ const Registration = ()=>{
     const [age,setAge] = useState()
     const [error,setError] = useState()
     const [checkbox,setCheckbox]=useState(false)
+
     const animBlock = useRef()
+    const rePassRef = useRef()
+    const userRef = useRef()
 
-    const { logined } = useContext(MyContext);
+    const { logined , t } = useContext(MyContext);
 
-     const {t} = useTranslation()
+ const queryClient = useQueryClient();
+
+ const { data: users } = useQuery('users', () => queryClient.getQueryData('users'));
+
+     
 
     useEffect(()=>{
         let timer;
@@ -39,11 +46,42 @@ const Registration = ()=>{
 
     },[])
 
+
+    useEffect(()=>{
+        if( password !==  copypassword && rePassRef.current){
+        rePassRef.current.classList.add(s.rePassInvalid)
+       
+    } else if( password ===  copypassword && rePassRef.current){
+        rePassRef.current.classList.remove(s.rePassInvalid)
+
+    }   
+
+
+
+    },[password,copypassword])
+
+
+   const userNameVerify = users ?
+   users?.some((user) => user.username?.toLowerCase() === username?.toLowerCase())
+   : ""
+
+    useEffect(()=>{
+        
+        if(userNameVerify && userRef.current){
+            userRef.current.classList.add(s.userInvalid)
+        } else if (!userNameVerify && userRef.current) {
+            userRef.current.classList.remove(s.userInvalid)
+        }
+    },[username,userNameVerify])
+
+
+
     const register = (e) => {
     e.preventDefault()
-     if( password !==  copypassword){
-        setError("Пароль не совподает!!!")
-        return
+     if( password !== copypassword && !checkbox && userNameVerify){
+        setError("Ошибка")
+        
+        return 
      }
     createUserWithEmailAndPassword(auth, email , password )
     .then((userCredential) => {
@@ -91,7 +129,7 @@ const Registration = ()=>{
     const errorCode = error.code;
     const errorMessage = error.message;
     console.error("Ошибка регистрации пользователя:", errorCode, errorMessage);
-   setError(errorMessage);
+   setError("Ошибка");
   });
 }
 
@@ -108,7 +146,7 @@ useEffect(()=>{
             <div className={s.content1}>{t('signUp')}</div>
             <div className={s.content2}>
                 <span className={s.item1}>{t('Username')}</span>
-                <span><input type="name" value={username} pattern="^[a-zA-Z0-9]*$" minLength={4} maxLength={16} name="username" placeholder='Username' onChange={(e)=>{
+                <span><input ref={userRef} type="name" value={username} pattern="^[a-zA-Z0-9]*$" minLength={4} maxLength={16} name="username" placeholder='Username' onChange={(e)=>{
                     setUsername(e.target.value)
                 }}/></span>
             </div>
@@ -126,7 +164,7 @@ useEffect(()=>{
             </div>
             <div className={s.content2}>
                 <span className={s.item1}>{t('CopyPassword')}</span>
-                <span><input type="password" value={copypassword} minLength={8} maxLength={30} name="copypassword" placeholder='Replay password' onChange={(e)=>{
+                <span><input ref={rePassRef} type="password" value={copypassword} minLength={8} maxLength={30} name="copypassword" placeholder='Replay password' onChange={(e)=>{
                     setCopypassword(e.target.value)
                 }} /></span>
             </div>
@@ -148,7 +186,7 @@ useEffect(()=>{
             <div className={s.content4}>
             <span>{t('acctext1')}<Link to="/login">{t('login')}</Link></span>
                     <button type="submit">{t('signUp')}</button>
-                    <p style={{color:"red"}}>{error}</p>
+                    <p style={{color:"red",textAlign:"center"}}>{error}</p>
             </div>
 
      </form>

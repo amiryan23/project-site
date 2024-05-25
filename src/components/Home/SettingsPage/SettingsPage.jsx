@@ -6,6 +6,7 @@ import { getStorage,ref, uploadBytes } from "firebase/storage";
 import { RiCheckboxBlankCircleLine ,RiCheckboxCircleFill} from "react-icons/ri";
 import {firebaseConfig,db,storage,docId} from './../../../firebase'
 import { useQueryClient,useQuery } from 'react-query';
+import Resizer from 'react-image-file-resizer';
 // import {useChangeInfoUser} from './../../../hooks/queryesHooks'
 
 
@@ -86,6 +87,21 @@ const handlerChangeInfo = async () => {
 		if(fileUrl){
 		const file = imageRef.current ? imageRef.current.files[0] : ""
 
+		          const compressedFile = await new Promise((resolve) => {
+          Resizer.imageFileResizer(
+            file,
+            file.width, 
+            file.height, 
+            'JPEG', 
+            80, 
+            0, 
+            (uri) => {
+              resolve(uri);
+            },
+            'file'
+          );
+        });
+
 		const timestamp = new Date().getTime();
   			const uniqueFilename = `post_${timestamp}_${file.name}`;
             
@@ -94,7 +110,7 @@ const handlerChangeInfo = async () => {
             const storageRef = ref(storage, `imageUsers/${uniqueFilename}`);
 
             // Загружаем файл на Firebase Storage
-            await uploadBytes(storageRef, file);
+            await uploadBytes(storageRef, compressedFile);
 
    const newData = {
    	username: username,
@@ -116,7 +132,7 @@ const handlerChangeInfo = async () => {
   console.log("Данные пользователя успешно обновлены");
   setError("")
   setNotificText(t('NotificSettings'))
-   setTimeout(()=>{window.location.href = "/home" },50)
+   setTimeout(()=>{window.history.back(-1)},50)
 
 } else {
 

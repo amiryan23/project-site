@@ -17,6 +17,7 @@ const MyContext = createContext();
 const MyContextProvider = ({ children }) => {
 
     const locationStorage = localStorage.getItem("location")
+    const saveMeStorage = localStorage.getItem("saveMe")
 
   const [logined,setLogined] = useState(false)
   const [authUser,setAuthUser] = useState()
@@ -29,6 +30,7 @@ const MyContextProvider = ({ children }) => {
   const [theme,setTheme] = useState("light")
   const [notificText,setNotificText] = useState("")
   const [isStatusUpdated, setStatusUpdated] = useState(false);
+  const [openUpdate,setOpenUpdate] = useState(true)
 
 const [activeLink,setActiveLink] = useState(locationStorage ? locationStorage : "/home")
 
@@ -44,12 +46,12 @@ const queryClient = useQueryClient();
 
 
 useEffect(()=>{
-    if(thisUser){
+    if(saveMeStorage === "true" || thisUser){
         setLogined(true);
     } else {
         setLogined(false);
     }
-},[thisUser])
+},[saveMeStorage,thisUser])
 
 
 
@@ -214,8 +216,10 @@ const calculateTimeDifference = (timeAdded) => {
         theme,
         setTheme,
         activeLink,
-        setActiveLink
-    }), [logined, authUser, isWideScreen, openMenu, commentText,notificText,theme,t,activeLink,setActiveLink]);
+        setActiveLink,
+        openUpdate,
+        setOpenUpdate
+    }), [logined, authUser, isWideScreen, openMenu, commentText,notificText,theme,t,activeLink,setActiveLink,openUpdate]);
 
   return (
     <MyContext.Provider 

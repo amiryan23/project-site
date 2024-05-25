@@ -74,13 +74,32 @@
                 // border: 2px solid #999;
                 background-color: rgba(256, 256, 256, 0.7);
                 color:rgba(0, 0, 0, 0.9);
+                transition: 250ms linear;
+                font-weight: bold;
 
                 }
 
                 input:invalid{
                     // border: 2px solid red;
-                    background-color: rgba(255, 0, 0, 0.5);
-                    animation:inputAnim 50ms linear forwards
+                    background-color: rgba(255, 0, 0, 0.6);
+                    animation:inputAnim 50ms linear forwards;
+                    color: whitesmoke;
+                    transition: 250ms linear;
+
+                }
+
+                .rePassInvalid{
+                    background-color: rgba(255, 0, 0, 0.6);
+                    animation:inputAnim 50ms linear forwards;
+                    color: whitesmoke;
+                    transition: 250ms linear;
+                }
+
+                .userInvalid {
+                    background-color: rgba(255, 0, 0, 0.6);
+                    animation:inputAnim 50ms linear forwards;
+                    color: whitesmoke;
+                    transition: 250ms linear;
                 }
 
                 @keyframes inputAnim {
