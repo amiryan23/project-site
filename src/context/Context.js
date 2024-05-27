@@ -13,11 +13,12 @@ import { useTranslation } from 'react-i18next';
 
 const MyContext = createContext();
 
-// Создаем провайдер контекста
+
 const MyContextProvider = ({ children }) => {
 
     const locationStorage = localStorage.getItem("location")
     const saveMeStorage = localStorage.getItem("saveMe")
+   
 
   const [logined,setLogined] = useState(false)
   const [authUser,setAuthUser] = useState()
@@ -25,12 +26,13 @@ const MyContextProvider = ({ children }) => {
   const [isWideScreen, setIsWideScreen] = useState(window.innerWidth <= 900);
   const [openMenu,setOpenMenu] = useState(false)
   // const [arrayPosts,setArrayPosts] = useState(null)
-  const [commentText,setCommentText] = useState(null)
+  const [commentText,setCommentText] = useState({})
   // const [users, setUsers] = useState([]);
   const [theme,setTheme] = useState("light")
   const [notificText,setNotificText] = useState("")
   const [isStatusUpdated, setStatusUpdated] = useState(false);
   const [openUpdate,setOpenUpdate] = useState(true)
+  
 
 const [activeLink,setActiveLink] = useState(locationStorage ? locationStorage : "/home")
 
@@ -46,81 +48,64 @@ const queryClient = useQueryClient();
 
 
 useEffect(()=>{
-    if(saveMeStorage === "true" || thisUser){
+    if( thisUser){
         setLogined(true);
     } else {
         setLogined(false);
     }
-},[saveMeStorage,thisUser])
+},[thisUser])
 
 
 
-// useEffect(() => {
-// 
-//   localStorage.setItem('isSubscribed', true);
-// 
-//   const updateStatus = async (status) => {
-//     const isSubscribed = localStorage.getItem('isSubscribed') === 'true';
-//     if (isSubscribed && thisUser?.id) {
-//       const userRef = doc(db, 'users', thisUser.id);
-//       await updateDoc(userRef, { onlineStatus: status });
-//       thisUser.onlineStatus = status;
-//       queryClient.setQueryData('thisUser', thisUser);
-//       localStorage.setItem('isSubscribed',false)
-//     }
-//   };
-// 
-//  
-// 
-//   const handleBeforeUnload = () => {
-//     updateStatus(false);
-//     localStorage.removeItem("location");
-//     localStorage.removeItem('isSubscribed')
-//   };
-// 
-//   if (thisUser) {
-//    
-//     updateStatus(true)
-// 
-//     window.addEventListener('beforeunload', handleBeforeUnload);
-//   } else {
-//     updateStatus(false)
-//   }
-// 
-//  
-// }, []);
 
-  useEffect(() => {
-    
-    let isSubscribedStorage = localStorage.getItem('isSubscribed');
 
-    const updateStatus = async (status) => {
-      
-      if (isSubscribedStorage === "true" && thisUser) {
-        console.log(thisUser)
-        const userRef = doc(db, 'users', thisUser.id);
-        await updateDoc(userRef, { onlineStatus: status });
-        thisUser.onlineStatus = status;
-        queryClient.setQueryData('thisUser', thisUser);
-        localStorage.removeItem('isSubscribed');
-      }
-    };
+useEffect(() => {
+  const isSubscribedStorage = localStorage.getItem('isSubscribed') === "true";
 
-    const handleBeforeUnload = () => {
-      // localStorage.setItem('isSubscribed', 'true')
-      updateStatus(false);
-      localStorage.removeItem('location');
-      
-    };
-
-    if (thisUser) {
-      updateStatus(true);
+  const updateStatus = async (status) => {
+    if (isSubscribedStorage && thisUser) {
+      const userRef = doc(db, 'users', thisUser.id);
+      await updateDoc(userRef, { onlineStatus: status });
+      thisUser.onlineStatus = status;
+      queryClient.setQueryData('thisUser', thisUser);
+      localStorage.removeItem('isSubscribed');
     }
+  };
 
-    window.addEventListener('beforeunload', handleBeforeUnload);
+  const handleBeforeUnload = () => {
+    updateStatus(false);
+    localStorage.removeItem('location');
+  };
 
-   
-  }, [thisUser]); 
+  const handlePageHide = (event) => {
+    if (event.persisted) {
+      return;
+    }
+    updateStatus(false);
+  };
+
+  const handleVisibilityChange = () => {
+    if (document.visibilityState === 'hidden' && isWideScreen) {
+      updateStatus(false);
+    } else {
+      updateStatus(true)
+    }
+  };
+
+  if (thisUser) {
+    updateStatus(true);
+  }
+
+  window.addEventListener('beforeunload', handleBeforeUnload);
+  window.addEventListener('pagehide', handlePageHide);
+  document.addEventListener('visibilitychange', handleVisibilityChange);
+
+  return () => {
+    window.removeEventListener('beforeunload', handleBeforeUnload);
+    window.removeEventListener('pagehide', handlePageHide);
+    document.removeEventListener('visibilitychange', handleVisibilityChange);
+  };
+}, [thisUser, isWideScreen]);
 
 
  useEffect(() => {
@@ -218,7 +203,9 @@ const calculateTimeDifference = (timeAdded) => {
         activeLink,
         setActiveLink,
         openUpdate,
-        setOpenUpdate
+        setOpenUpdate,
+        // replyComment,
+        // setReplyComment
     }), [logined, authUser, isWideScreen, openMenu, commentText,notificText,theme,t,activeLink,setActiveLink,openUpdate]);
 
   return (

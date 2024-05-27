@@ -83,7 +83,7 @@ export const dislikePostFunction = async (postId, userId , arrayPosts , queryCli
 
 
 
-export const addCommentPostFunction = async (postId, userId, thisUser , commentText , arrayPosts , queryClient) => {
+export const addCommentPostFunction = async (postId, userId, thisUser , commentText , arrayPosts , replyComment , queryClient) => {
     try {
         if(commentText !== ""){
         const postIndex = arrayPosts.findIndex(post => post.id === postId);
@@ -92,6 +92,8 @@ export const addCommentPostFunction = async (postId, userId, thisUser , commentT
             const post = arrayPosts[postIndex];
            
             const updatedPosts = [...arrayPosts];
+
+            const thisRepleyPost = replyComment ? replyComment[postId] : ""
           
             const comment = 
             { 
@@ -101,6 +103,7 @@ export const addCommentPostFunction = async (postId, userId, thisUser , commentT
             commentText: commentText ,
             imgUrl:"",
             timeAdded: new Date().toLocaleString() ,
+            replyComment:thisRepleyPost
             };
             updatedPosts[postIndex].commentArray.push(comment);
   

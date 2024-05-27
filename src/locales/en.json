@@ -71,7 +71,9 @@
 		"Hide":"Hide",
 		"NоtificAccept":"Subscription request accepted",
 		"NotificReject":"Subscription request rejected",
-		"ActiveUsers":"Active users"
+		"ActiveUsers":"Active users",
+		"Posts":"Posts",
+		"inReply":"In reply"
 
 		
 }

@@ -92,11 +92,11 @@ export const useLikePostMutation = () => {
   const queryClient = useQueryClient();
 
   const addCommentPostMutation = useMutation(
-    async ({ postId, userId , thisUser , commentText }) => {
+    async ({ postId, userId , thisUser , commentText,replyComment }) => {
       const arrayPosts = queryClient.getQueryData('arrayPosts');
 
       if (arrayPosts) {
-        return addCommentPostFunction(postId, userId, thisUser, commentText, arrayPosts, queryClient);
+        return addCommentPostFunction(postId, userId, thisUser, commentText, arrayPosts,replyComment, queryClient);
       } else {
         return Promise.reject("Массив постов не определен.");
       }

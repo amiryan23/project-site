@@ -10,7 +10,8 @@ import { HiMiniLockClosed } from "react-icons/hi2";
 import {useLikePostMutation,usePostsQuery,useDislikePostMutation,useAddCommentToPostMutation,useDeletePostMutation} from './../../../hooks/queryesHooks'
 import { useQueryClient,useQuery } from 'react-query';
 import { LuReplyAll } from "react-icons/lu";
-
+import { MdOutlineReply,MdOutlineClose } from "react-icons/md";
+import { MdCircle,MdBrightness1 } from "react-icons/md";
 
 
 
@@ -33,6 +34,8 @@ const CommentPage = () => {
   const addCommentPostMutation = useAddCommentToPostMutation()
   // const deletePostMutation = useDeletePostMutation()
 
+  const [replyComment,setReplyComment] = useState(null)
+
  let timer;
 
  useEffect (()=>{
@@ -49,6 +52,21 @@ const CommentPage = () => {
  }
  }
  },[])
+
+
+ const replyCommentRef = useRef()
+
+ useEffect(()=>{
+ 	
+if(replyComment !== null && replyCommentRef.current){
+
+replyCommentRef.current.classList.add(s.replyCommentAnim) 
+} else if(replyComment === null && replyCommentRef.current){
+	replyCommentRef.current.classList.remove(s.replyCommentAnim)
+
+}
+
+ },[replyComment])
 
 	const selectedPost = arrayPosts ? arrayPosts.find((post) => {
     if (id && post && post.id === parseInt(id, 10)) {
@@ -76,9 +94,9 @@ const CommentPage = () => {
   	}
   }
 
-  const addCommentToPost = async (postId,userId,thisUser,commentText) => {
+  const addCommentToPost = async (postId,userId,thisUser,commentText,replyComment) => {
   	try{
-  		await addCommentPostMutation.mutate({postId,userId,thisUser,commentText})
+  		await addCommentPostMutation.mutate({postId,userId,thisUser,commentText,replyComment})
   		setCommentText("")
   		setNotificText(t('NotificComment'))
 
@@ -86,6 +104,20 @@ const CommentPage = () => {
   		console.error("Ошибка при добовления комментари")
   	}
   }
+
+     const handleCommentChange = useCallback((postId, text) => {
+    setCommentText(prevState => ({
+      ...prevState,
+      [postId]: text
+    }));
+  }, []);
+
+
+     const handleReplyComment = useCallback((postId, comment) => {
+    localStorage.setItem("thisComment", JSON.stringify(comment));
+    setReplyComment({ ...replyComment, [postId]: comment });
+  }, []);
+
 
   // const handleDeleteItem = async (idToDelete) => {
   // 	try{
@@ -101,53 +133,53 @@ const CommentPage = () => {
 		<div className={s.content1}>
 			<button onClick={() => window.history.back(-1)}><AiOutlineRollback size="30" color="whitesmoke"/></button>
 		</div>
-		{selectedPost ?	<div className={s.postMegaContent} key={selectedPost.id}>
+		{selectedPost ?	<div className={s.postMegaContent} key={selectedPost?.id}>
 					<div className={s.postMiniContent1}>
 						<span className={s.postBlock1}>
 							<img src={users?.find(user => user.id === selectedPost?.userId).photo?.placed || users?.find(user => user.id === selectedPost?.userId).photo?.default} alt="" />
 						</span>
 						<span className={s.postBlock2}>
-							{selectedPost.user}
+							{selectedPost?.user}
 						</span>
 						<span className={s.postBlock3}>
-							{calculateTimeDifference(selectedPost.timeAdded)}
+							{calculateTimeDifference(selectedPost?.timeAdded)}
 						</span>
 						<span className={s.postBlock4}>
-							{selectedPost.postChanged ?  `( ${t('Changed')} )` : ""}
+							{selectedPost?.postChanged ?  `( ${t('Changed')} )` : ""}
 						</span>
 					</div>
 					<div className={s.postMiniContent2}>
-						{selectedPost.imageURL 
-						? <span className={s.item1}><img src={selectedPost.imageURL ? selectedPost.imageURL : <MiniLoader />} alt="" /></span>
+						{selectedPost?.imageURL 
+						? <span className={s.item1}><img src={selectedPost?.imageURL ? selectedPost?.imageURL : <MiniLoader />} alt="" /></span>
 						: "" }
-						{selectedPost.postText 
+						{selectedPost?.postText 
 						? <span className={s.item2}>
-						{selectedPost.postText}
+						{selectedPost?.postText}
 						</span>
 						: "" }
 					</div>
 					<div className={s.postMiniContent3}>
-						{selectedPost.likes.includes(thisUser.id) 
-						? <span onClick={()=>{handleLikePost(selectedPost.id,thisUser?.id)}}>
+						{selectedPost?.likes.includes(thisUser?.id) 
+						? <span onClick={()=>{handleLikePost(selectedPost?.id,thisUser?.id)}}>
 						<FaHeart title="Like" color="whitesmoke"/>
-						{Array.isArray(selectedPost.likes) ? selectedPost.likes.length : 0}
+						{Array.isArray(selectedPost?.likes) ? selectedPost?.likes.length : 0}
 						</span>
-						:<span onClick={()=>{handleLikePost(selectedPost.id,thisUser?.id)}}>
+						:<span onClick={()=>{handleLikePost(selectedPost?.id,thisUser?.id)}}>
 						<FaHeart title="Like" />
-						{Array.isArray(selectedPost.likes) ? selectedPost.likes.length : 0}
+						{Array.isArray(selectedPost?.likes) ? selectedPost?.likes.length : 0}
 						</span> 
 						}
 						{selectedPost.dislikes.includes(thisUser?.id) 
-						?  <span onClick={()=>{handleDislikePost(selectedPost.id,thisUser?.id)}}>
+						?  <span onClick={()=>{handleDislikePost(selectedPost?.id,thisUser?.id)}}>
 						<FaHeartBroken title="Dislike" color="whitesmoke"/>
-						{Array.isArray(selectedPost.dislikes) ? selectedPost.dislikes.length : 0}
+						{Array.isArray(selectedPost?.dislikes) ? selectedPost?.dislikes.length : 0}
 						</span> 
-						: <span onClick={()=>{handleDislikePost(selectedPost.id,thisUser?.id)}}>
+						: <span onClick={()=>{handleDislikePost(selectedPost?.id,thisUser?.id)}}>
 						<FaHeartBroken title="Dislike"/>
-						{Array.isArray(selectedPost.dislikes) ? selectedPost.dislikes.length : 0}
+						{Array.isArray(selectedPost?.dislikes) ? selectedPost?.dislikes.length : 0}
 						</span> 
 						}
-						{!selectedPost.privateComment 
+						{!selectedPost?.privateComment 
 						?<Link to={`/home/comment/post/${selectedPost.id}`}>
 							<span><FaComment title="Comments"/>{selectedPost.commentArray.length}</span>
 						</Link>
@@ -157,10 +189,10 @@ const CommentPage = () => {
 						{!selectedPost.privateForward 
 						?<Link onClick={()=>{
 							localStorage.setItem("forwardPost",JSON.stringify({
-								fwPostid:selectedPost.id,
-								fwPosttext:selectedPost.postText,
-								fwPostImage:selectedPost.imageURL ? selectedPost.imageURL : "",
-								fwPostUser:selectedPost.user
+								fwPostid:selectedPost?.id,
+								fwPosttext:selectedPost?.postText,
+								fwPostImage:selectedPost?.imageURL ? selectedPost?.imageURL : "",
+								fwPostUser:selectedPost?.user
 							}))
 						}} to={`/home/profile`}>
 							<span><LuReplyAll title="forward" /></span>
@@ -168,14 +200,15 @@ const CommentPage = () => {
 						: <span><LuReplyAll title="forward"/><HiMiniLockClosed color="#888" size="15"/></span> }
 					</div>
 					<div className={s.postMiniContent4}>
-						{!selectedPost.privateComment 
+						{!selectedPost?.privateComment 
 						? <div className={s.postCommentBlock1}>
-							{selectedPost.commentArray.length !== 0
-							?  selectedPost.commentArray.map(comment => (
+							{selectedPost?.commentArray.length !== 0
+							?  selectedPost?.commentArray.map(comment => (
 					        <div key={comment.id} className={s.Comment}>
 					          <div className={s.Block1}>
 					            <span className={s.item}>
-					             <img src={users?.find(user => user.id === comment.userId).photo?.placed ? users?.find(user => user.id === comment.userId).photo?.placed : users?.find(user => user.id === comment.userId).photo?.default} alt="" />
+					             <Link to={thisUser?.id !== comment.userId ? `/home/user/profile/${comment.userId}` : "/home/profile"} ><img src={users?.find(user => user.id === comment.userId).photo?.placed  || users?.find(user => user?.id === comment.userId).photo?.default } alt="" /></Link>
+					             <span>{users?.find(user => user.id === comment.userId).onlineStatus  ? <MdCircle title="Online" size="9" color="limegreen"/> : <MdBrightness1 title="Offline" size="9" color="rgba(256,256,256,0.8)"/>}</span>
 					            </span>
 					          </div>
 					          <div className={s.Block2}>
@@ -185,9 +218,27 @@ const CommentPage = () => {
 
 					            </span>
 					            <span className={s.item2}>
+					            	{comment.replyComment !== undefined &&  comment.replyComment !== ""
+					            	?	<div className={s.miniItem1}>
+					            		<span className={s.miniBlock1}>
+					            			{users?.find(user => user.id === comment.replyComment.userId).username || ""}
+					            		</span>
+					            		<span className={s.miniBlock2}>
+					            			{comment.replyComment.commentText}
+					            		</span>
+					            	</div>
+					            	: "" }
+					         				<div className={s.miniItem2}>
 					              {comment.commentText}
+					              </div>
 					            </span>
 					          </div>
+					          <div className={s.Block3} onClick={()=>{
+					          handleReplyComment(selectedPost?.id,comment)
+					          	
+					          }}>
+					          	<MdOutlineReply placeholder="reply" />
+					          </div>					          
 					        </div>
 					      ))
 							
@@ -198,15 +249,35 @@ const CommentPage = () => {
 						: <div className={s.privateComment}>
 								<div className={s.item}>{t("ClosedComment")}<HiMiniLockClosed color="#999" size="52"/></div>
 							</div> }
+
+							{replyComment !== null && replyComment[selectedPost?.id] ? 
+							<div className={s.replyContainer} ref={replyCommentRef}>
+							<div className={s.replyMegaContent1}>
+							<div className={s.replyContent1}>
+								{t('inReply')} {users?.find(user => user.id === replyComment[selectedPost?.id]?.userId).username}
+							</div>
+							<div className={s.replyContent2} onClick={()=>{
+								localStorage.removeItem("thisComment")
+								setReplyComment(null)
+							}}>
+								<MdOutlineClose />
+							</div>
+							</div>
+							<div className={s.replyMegaContent2}>
+								{replyComment[selectedPost?.id]?.commentText}
+							</div>
+							</div>
+							:"" }
+
 						<div className={s.postCommentBlock2}>
-							<span className={s.postCommentItem1}><img title={thisUser.username} src={thisUser?.photo?.placed || thisUser?.photo?.default} alt="" /></span>
+							<span className={s.postCommentItem1}><img title={thisUser?.username} src={thisUser?.photo?.placed || thisUser?.photo?.default} alt="" /></span>
 							<span className={s.postCommentItem2}>
-							{!selectedPost.privateComment 
-							? <input value={commentText} onChange={(e)=>{setCommentText(e.target.value)}} type="text" placeholder="Comment"/>
-							: <input value={commentText} disabled="true" onChange={(e)=>{setCommentText(e.target.value)}} type="text" placeholder="..."/>}
+							{!selectedPost?.privateComment 
+							? <input value={commentText[selectedPost?.id] || ""} onChange={(e)=>{handleCommentChange(selectedPost?.id,e.target.value)}} type="text" placeholder="Comment"/>
+							: <input value={commentText[selectedPost?.id] || ""} disabled="true" onChange={(e)=>{handleCommentChange(selectedPost?.id,e.target.value)}} type="text" placeholder="..."/>}
 							</span>
-							{!selectedPost.privateComment 
-							? <span className={s.postCommentItem3} onClick={()=>{addCommentToPost(selectedPost.id,thisUser?.id,thisUser,commentText)}}><RiSendPlaneFill title="Send"/></span>
+							{!selectedPost?.privateComment 
+							? <span className={s.postCommentItem3} onClick={()=>{addCommentToPost(selectedPost?.id,thisUser?.id,thisUser,commentText[selectedPost?.id],replyComment)}}><RiSendPlaneFill title="Send"/></span>
 							: <span className={s.postCommentItem3} style={{opacity:"0.5"}}><RiSendPlaneFill title="Send"/></span> 
 							}
 						</div>

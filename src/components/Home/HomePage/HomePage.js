@@ -1,13 +1,13 @@
 import s from './HomePage.module.scss'
 import { MyContext } from './../../../context/Context';
 import {  collection, doc, setDoc, getDoc , updateDoc } from "firebase/firestore";
-import React,{ useState,useCallback,useEffect,useContext,useRef } from 'react'
+import React,{ useState,useCallback,useEffect,useContext,useRef,useMemo } from 'react'
 import { FaHeart,FaHeartBroken,FaComment } from "react-icons/fa";
 import { RiSendPlaneFill } from "react-icons/ri";
 import {Link} from 'react-router-dom'
 import MiniLoader from './../../MiniLoader/MiniLoader'
 import { BsThreeDotsVertical } from "react-icons/bs";
-import { MdEdit,MdDeleteForever} from "react-icons/md";
+import { MdEdit,MdDeleteForever,MdOutlineClose} from "react-icons/md";
 import { IoCopySharp,IoReturnUpForward } from "react-icons/io5";
 import { MdReport } from "react-icons/md";
 import { FaArrowTurnDown,FaArrowTurnUp  } from "react-icons/fa6";
@@ -15,6 +15,7 @@ import { HiMiniLockClosed } from "react-icons/hi2";
 import { LuReplyAll } from "react-icons/lu";
 import {useLikePostMutation,usePostsQuery,useDislikePostMutation,useAddCommentToPostMutation,useDeletePostMutation} from './../../../hooks/queryesHooks'
 import { useQueryClient,useQuery } from 'react-query';
+import { MdOutlineReply,MdOutlineCircle,MdCircle,MdBrightness1 } from "react-icons/md";
 
 
 
@@ -26,6 +27,7 @@ const HomePage = ()=>{
 
  const queryClient = useQueryClient();
 
+ 
   
   const likePostMutation = useLikePostMutation();
   const dislikePostMutation = useDislikePostMutation()
@@ -39,8 +41,11 @@ const HomePage = ()=>{
 
   const [openSettings,setOpenSettings] = useState(false)
   const [arrayLength,setArrayLength] = useState(4)
+  const [replyComment,setReplyComment] = useState(null)
+
 
  const animBlock = useRef()
+ 
 
  let timer;
 
@@ -58,6 +63,35 @@ setActiveLink("/home")
  }
  }
  },[])
+
+
+const replyCommentRef = useRef()
+
+ useEffect(()=>{
+ 	
+if(replyComment !== null && replyCommentRef.current){
+
+replyCommentRef.current.classList.add(s.replyCommentAnim) 
+} else if(replyComment === null && replyCommentRef.current){
+	replyCommentRef.current.classList.remove(s.replyCommentAnim)
+
+}
+
+ },[replyComment])
+
+
+   const handleCommentChange = useCallback((postId, text) => {
+    setCommentText(prevState => ({
+      ...prevState,
+      [postId]: text
+    }));
+  }, []);
+
+
+     const handleReplyComment = useCallback((postId, comment) => {
+    localStorage.setItem("thisComment", JSON.stringify(comment));
+    setReplyComment({ ...replyComment, [postId]: comment });
+  }, []);
 
 
    const handleLikePost = async (postId, userId) => {
@@ -78,11 +112,12 @@ setActiveLink("/home")
   	}
   }
 
-  const addCommentToPost = async (postId,userId,thisUser,commentText) => {
+  const addCommentToPost = async (postId,userId,thisUser,commentText,replyComment) => {
   	try{
-  		await addCommentPostMutation.mutate({postId,userId,thisUser,commentText})
+  		await addCommentPostMutation.mutate({postId,userId,thisUser,commentText,replyComment})
   		setCommentText("")
   		setNotificText(t('NotificComment'))
+  		setReplyComment(null)
 
   	}catch (error) {
   		console.error("Ошибка при добовления комментари")
@@ -105,9 +140,10 @@ setActiveLink("/home")
 					<div className={s.postMiniContent1}>
 						<span className={s.postBlock1}>
 							<Link to={thisUser?.id !== m.userId ? `/home/user/profile/${m.userId}` : "/home/profile"}><img src={users?.find(user => user.id === m.userId).photo?.placed ? users?.find(user => user?.id === m.userId).photo?.placed : users?.find(user => user?.id === m.userId).photo?.default} alt="" /></Link>
+							<span>{users?.find(user => user.id === m.userId).onlineStatus  ? <MdCircle title="Online" size="11" color="limegreen"/> : <MdBrightness1 title="Offline" size="11" color="rgba(256,256,256,0.8)"/>}</span>
 						</span>
 						<span className={s.postBlock2}>
-							{m.user}
+							{users?.find(user => user.id === m.userId).username || "Deleted"}				
 						</span>
 						<span className={s.postBlock3}>
 							{calculateTimeDifference(m.timeAdded)}
@@ -122,7 +158,7 @@ setActiveLink("/home")
 						? <span className={s.item2} >
 							<Link to={`/home/profile/edit/post/${m.id}`} className={s.miniItem1}><MdEdit/><span>{t("Edit")}</span></Link> 
 							<span className={s.miniItem2} onClick={()=>{
-								copyToClipboard(`http://localhost:3000/home/comment/post/${m.id}`)
+								copyToClipboard(`https://cospulse.netlify.app//home/comment/post/${m.id}`)
 								setOpenSettings(false)
 							}}><IoCopySharp/>{t("CopyLink")}</span>
 							<span className={s.miniItem3} onClick={()=>{handleDeleteItem(m.id)}}><MdDeleteForever/><span>{t("Delete")}</span></span> 
@@ -131,7 +167,7 @@ setActiveLink("/home")
 						: openSettings === m.id
 						? <span className={s.item2} >
 							<span className={s.miniItem1} onClick={()=>{
-								copyToClipboard(`http://localhost:3000/home/comment/post/${m.id}`)
+								copyToClipboard(`https://cospulse.netlify.app//home/comment/post/${m.id}`)
 								setOpenSettings(false)
 							}}><IoCopySharp/>{t("CopyLink")}</span> 
 							
@@ -199,18 +235,37 @@ setActiveLink("/home")
 					        <div key={comment.id} className={s.Comment}>
 					          <div className={s.Block1}>
 					            <span className={s.item}>
-					             <img src={users?.find(user => user.id === comment.userId).photo?.placed  || users?.find(user => user?.id === comment.userId).photo?.default} alt="" />
+					             <Link to={thisUser?.id !== comment.userId ? `/home/user/profile/${comment.userId}` : "/home/profile"} ><img src={users?.find(user => user.id === comment.userId).photo?.placed  || users?.find(user => user?.id === comment.userId).photo?.default } alt="" /></Link>
+					             <span>{users?.find(user => user.id === comment.userId).onlineStatus  ? <MdCircle title="Online" size="9" color="limegreen"/> : <MdBrightness1 title="Offline" size="9" color="rgba(256,256,256,0.8)"/>}</span>
 					            </span>
 					          </div>
 					          <div className={s.Block2}>
 					            <span className={s.item1}>
-					              <span className={s.miniItem1}>{comment.userName}</span>
+					              <span className={s.miniItem1}>{users?.find(user => user.id === comment.userId).username || "Deleted"}</span>
 					              <span className={s.miniItem2}>{calculateTimeDifference(comment.timeAdded)}</span>
 
 					            </span>
 					            <span className={s.item2}>
+					            	{comment.replyComment !== undefined &&  comment.replyComment !== ""
+					            	?	<div className={s.miniItem1}>
+					            		<span className={s.miniBlock1}>
+					            			{users?.find(user => user.id === comment.replyComment.userId).username || ""}
+					            		</span>
+					            		<span className={s.miniBlock2}>
+					            			{comment.replyComment.commentText}
+					            		</span>
+					            	</div>
+					            	: "" }
+					            	<div className={s.miniItem2}>
 					              {comment.commentText}
+					              </div>
 					            </span>
+					          </div>
+					          <div className={s.Block3} onClick={()=>{
+					          handleReplyComment(m.id,comment)
+					          	
+					          }}>
+					          	<MdOutlineReply placeholder="reply" />
 					          </div>
 					        </div>
 					      ))
@@ -222,15 +277,35 @@ setActiveLink("/home")
 						: <div className={s.privateComment}>
 								<div className={s.item}>{t('ClosedComment')}<HiMiniLockClosed  size="52"/></div>
 							</div> }
+							
+							{replyComment !== null && replyComment[m.id] ? 
+							<div className={s.replyContainer} ref={replyCommentRef}>
+							<div className={s.replyMegaContent1}>
+							<div className={s.replyContent1}>
+								{t('inReply')} {users?.find(user => user.id === replyComment[m.id]?.userId).username}
+							</div>
+							<div className={s.replyContent2} onClick={()=>{
+								localStorage.removeItem("thisComment")
+								setReplyComment(null)
+							}}>
+								<MdOutlineClose />
+							</div>
+							</div>
+							<div className={s.replyMegaContent2}>
+								{replyComment[m.id]?.commentText}
+							</div>
+							</div>
+							:"" }
+						
 						<div className={s.postCommentBlock2}>
 							<span className={s.postCommentItem1}><img title={thisUser?.username} src={thisUser?.photo?.placed ? thisUser?.photo?.placed  : thisUser?.photo?.default } alt="" /></span>
 							<span className={s.postCommentItem2}>
 							{!m.privateComment 
-							? <input value={commentText} onChange={(e)=>{setCommentText(e.target.value)}} type="text" placeholder="Comment"/>
-							: <input value={commentText} disabled="true" onChange={(e)=>{setCommentText(e.target.value)}} type="text" placeholder="..."/>}
+							? <input value={commentText[m.id] || ""} onChange={(e)=>{handleCommentChange(m.id,e.target.value)}} type="text" placeholder="Comment"/>
+							: <input value={commentText[m.id] || ""}  disabled="true" onChange={(e)=>{handleCommentChange(m.id,e.target.value)}} type="text" placeholder="..."/>}
 							</span>
 							{!m.privateComment 
-							? <span className={s.postCommentItem3} onClick={()=>{addCommentToPost(m.id,thisUser?.id,thisUser,commentText)}}><RiSendPlaneFill title="Send"/></span>
+							? <span className={s.postCommentItem3} onClick={()=>{addCommentToPost(m.id,thisUser?.id,thisUser,commentText[m.id],replyComment)}}><RiSendPlaneFill title="Send"/></span>
 							: <span className={s.postCommentItem3} style={{opacity:"0.5"}}><RiSendPlaneFill title="Send"/></span> 
 							}	
 						</div>

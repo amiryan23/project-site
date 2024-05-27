@@ -41,6 +41,9 @@
 
 
 				.postBlock1{
+					display:flex;
+					flex-direction:row;
+					flex-wrap:no-wrap;
 
 					img{
 						width: 50px;
@@ -48,6 +51,23 @@
 						border: 2px solid rgba(256, 256, 256, 0.5);
 						border-radius: 50%;
 						user-select: none;
+					}
+
+					span{
+						align-self:flex-end;
+						position: relative;
+						left:-12px;
+						bottom: 1px;
+
+						
+
+
+						
+						svg{
+
+							filter:drop-shadow(1px 1px 3px #222)
+
+						}
 					}
 				}
 
@@ -179,12 +199,19 @@
 						gap: 5px;
 
 						.Block1{
+							padding-left:5px ;
 
 							img{
 								width: 30px;
 								height: 30px;
 								border-radius: 50%;
 								border: 2px solid #777;
+								cursor: pointer;
+							}
+
+							span{
+								position: relative;
+								margin-left: -10px;
 							}
 
 
@@ -224,13 +251,62 @@
 							}
 
 							.item2{
-
 								color: whitesmoke;
 								word-break: break-word;
+								display: flex;
+								flex-direction: column;
+								gap: 10px;
+
+
+								.miniItem1{
+									width: 80%;
+									border-left: 4px solid rgba(256, 256, 256, 0.7);
+									border-top: 1px dashed rgba(256, 256, 256, 0.2);
+									border-right: 1px dashed rgba(256, 256, 256, 0.2);
+									border-bottom: 1px dashed rgba(256, 256, 256, 0.2);
+									padding: 5px;
+									margin-left: 10px;
+									
+									background-color: rgba(0, 0, 0, 0.2);
+									border-radius: 0px 5px 5px 0px;
+									display: flex;
+									flex-direction: column;
+									gap: 10px;
+
+
+									.miniBlock1{
+										font-size: 12px;
+										font-weight: bold;
+										color: rgba(256, 256, 256, 0.7);
+
+									}
+
+									.miniBlock2 {
+										font-size: 14px;
+										font-weight: bold;
+										color: rgba(256, 256, 256, 0.5);
+									}
+								}
 							}
 
 
 						}
+
+						.Block3{
+							align-self: center;
+							svg{
+								font-size: 25px;
+								color: rgba(256, 256, 256, 0.5);
+								cursor: pointer;
+								transition: 250ms linear;
+							}
+
+							svg:hover {
+								color: rgba(256, 256, 256, 0.9);
+								transition: 250ms linear;
+							}
+						}	
+
 					}
 
 					.noComment{
@@ -269,6 +345,79 @@
 						color: rgba(256, 256, 256, 0.5);
 					}
 				}
+
+				.replyContainer{
+					width: 65%;
+					min-height: 50px;
+					padding: 0px 10px 0px 10px;
+					border: 1px dashed rgba(256, 256, 256, 0.2);
+					background-color: rgba(256, 256, 256, 0.1);
+					opacity: 0.7;
+					border-radius: 15px;
+					display: flex;
+					flex-direction: column;
+					gap: 5px;
+					margin-left: 10px;
+				
+
+				.replyMegaContent1{
+					display: flex;
+					flex-direction: row;
+					align-items: center;
+					justify-content: space-between;
+					gap: 5px;
+
+					.replyContent1{
+						color: rgba(256, 256, 256, 0.5);
+						font-weight: bold;
+
+					}
+
+					.replyContent2{
+						color: rgba(256, 256, 256, 0.5);
+						font-weight: bold;
+						font-size: 19px;
+
+						svg{
+							cursor: pointer;
+						}
+					}
+				}
+
+				.replyMegaContent2{
+					width: 70%;
+					padding: 10px;
+					border-top: 1px solid rgba(256, 256, 256, 0.3);
+					color: rgba(256, 256, 256, 0.7);
+					// border-rasdius: 9px;
+				}
+			}
+
+			.replyCommentAnim {
+				animation:replyCommentAnim 350ms linear forwards;
+
+			}
+
+			@keyframes replyCommentAnim {
+				0%{
+					opacity:0;
+					transform:translateX(-50px);
+					
+				}
+
+				50%{
+					border: 1px dashed rgba(256, 256, 256, 0.5);
+					background-color: rgba(256, 256, 256, 0.5);
+				}
+
+				100% {
+					opacity:1;
+					transform:translateX(0px);
+					border: 1px dashed rgba(256, 256, 256, 0.2);
+					background-color: rgba(256, 256, 256, 0.1);
+					
+				}
+			}
 
 				.postCommentBlock2{
 					width: 80%;
@@ -383,10 +532,24 @@
 					.postCommentBlock1{
 						.Comment{
 							.Block2{
-							width: 100%;
-						}
+								width: 90%;
+
+								.item2{
+
+									.miniItem1{
+										width: 100%;
+										margin: 0;
+									}
+								}
+							}
 					}
 				}
+				
+					.replyContainer{
+							width: 100%;
+							margin: 0;
+						}
+
 					.postCommentBlock2{
 						width:100%;
 						padding:0px 10px 0px 10px;
