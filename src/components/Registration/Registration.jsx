@@ -104,7 +104,7 @@ const Registration = ()=>{
         city:"",
         country:"",
         description:"",
-        onlineStatuse:"",
+        onlineStatus:"",
         private:"",
         userData: {
             followers: [],

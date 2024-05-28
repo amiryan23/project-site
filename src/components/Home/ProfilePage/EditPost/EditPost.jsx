@@ -40,6 +40,7 @@ const EditPost = () => {
 	const [accept,setAccept] = useState("")
 	const [privateComment,setPrivateComment] = useState(selectedPost?.privateComment ? selectedPost.privateComment : false)
 	const [privateForward,setPrivateForward] = useState(selectedPost?.privateForward ? selectedPost?.privateForward : false)
+	const [hideLikeDislike,setHideLikeDislike] = useState(selectedPost?.hideLikeDislike ? selectedPost?.hideLikeDislike : false)
 
 	const animBlock = useRef()
 
@@ -61,13 +62,13 @@ const EditPost = () => {
 
 const handlerChangeInfo = async () => {
     try {
-      if(text !== selectedPost.postText){
+      if(text !== selectedPost.postText || privateComment !== selectedPost.privateComment || privateForward !== selectedPost?.privateForward || hideLikeDislike !== selectedPost?.hideLikeDislike){
       const postDocRef = doc(db, "posts", docId);
 
-      // Создание обновленного массива arrayPosts с изменениями
+      
       const updatedArrayPosts = arrayPosts.map(post => {
         if (post.id === selectedPost.id) {
-          return { ...post, postText: text,postChanged:true,privateComment:privateComment,privateForward:privateForward}; // Обновление текста выбранного поста
+          return { ...post, postText: text,postChanged:true,privateComment:privateComment,privateForward:privateForward,hideLikeDislike:hideLikeDislike}; 
         }
         return post;
       });
@@ -76,14 +77,14 @@ const handlerChangeInfo = async () => {
       
       await updateDoc(postDocRef, { arrayPosts: updatedArrayPosts });
 
-      // Успешное обновление текста поста
+     
       setError("");
       setNotificText(t('NotificSettings'));
       setTimeout(()=>{window.history.back(-1)},50)
   }
     } catch (error) {
       console.error("Ошибка при обновлении данных поста:", error);
-      // Установка ошибки при обновлении текста поста
+      
       setError("Ошибка");
       
     }
@@ -120,6 +121,7 @@ const handlerChangeInfo = async () => {
 						<input className={s.item2} value={text} type="text" onChange={(e)=>{setText(e.target.value)}} /> 
 						<span className={s.item3} onClick={()=>{setPrivateComment((prevPrivateComment)=> !prevPrivateComment)}}>{t('DisableCom')} {privateComment ? <RiCheckboxCircleFill color="limegreen"/>  : <RiCheckboxBlankCircleLine/>}</span>
 						<span className={s.item3} onClick={()=>{setPrivateForward((prevPrivateForward)=> !prevPrivateForward)}}>{t('DisableForward')} {privateForward? <RiCheckboxCircleFill color="limegreen"/>  : <RiCheckboxBlankCircleLine/>}</span>
+						<span className={s.item3} onClick={()=>{setHideLikeDislike((prevHideLikeDislike)=> !prevHideLikeDislike)}}>{t('HideLikeDislike')} {hideLikeDislike? <RiCheckboxCircleFill color="limegreen"/>  : <RiCheckboxBlankCircleLine/>}</span>
 					</div>
 					</div>
 					: "" }

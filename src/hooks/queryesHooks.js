@@ -1,6 +1,6 @@
 import { useQuery,useMutation } from 'react-query';
 import { fetchData,fetchUsers,fetchThisUser} from './../api';
-import {likePostFunction,dislikePostFunction,addCommentPostFunction} from './../context/comment'
+import {likePostFunction,dislikePostFunction,addCommentPostFunction,deleteCommentPostFunction} from './../context/comment'
 import {deletePostFunction,addPostFunction} from './../context/posts'
 import {followFunction,unfollowFunction,accpetRequestFunction,cancelRequestFunction,changeInfoUserFunction} from './../context/users'
 import { useQueryClient } from 'react-query';
@@ -10,6 +10,7 @@ export const usePostsQuery = () => {
   const { data: arrayPosts, isLoading:postsisLoading, isError:postsisError } = useQuery('arrayPosts', fetchData, {
     refetchOnMount: false,
     refetchOnWindowFocus: false,
+    refetchInterval: 120000,
   });
 
   return { arrayPosts, postsisLoading, postsisError };
@@ -20,6 +21,7 @@ export const useUsersQuery = () => {
  const { data: users, isLoading:usersisLoading, isError:usersisError } = useQuery('users', fetchUsers, {
     refetchOnMount: false,
     refetchOnWindowFocus: false,
+    refetchInterval: 120000,
   });
 
   return { users, usersisLoading, usersisError };
@@ -29,6 +31,7 @@ export const useThisUserQuerry = () => {
   const {data:thisUser,isLoading:thisUseridLoading,isError:thisUserisError} = useQuery('thisUser',fetchThisUser,{
     refetchOnMount: false,
     refetchOnWindowFocus: false,
+    refetchInterval: 120000,
   });
 
   return { thisUser, thisUseridLoading, thisUserisError };
@@ -299,3 +302,27 @@ export const useLikePostMutation = () => {
 
   return cancelRequestmutation;
 };
+
+
+export const useDeleteComment = () => {
+  const queryClient = useQueryClient();
+
+  const deleteCommentMutation = useMutation(
+        async ({ postId,commentIdToDelete }) => {
+      const arrayPosts = queryClient.getQueryData('arrayPosts');
+
+      if (arrayPosts) {
+        return deleteCommentPostFunction(postId,arrayPosts,commentIdToDelete,queryClient);
+      } else {
+        return Promise.reject("Массив постов не определен.");
+      }
+    },
+    {
+      onSuccess: () => {
+        // Опционально: перезагрузить данные после успешного обновления
+        queryClient.invalidateQueries('arrayPosts');
+      },
+    }
+    )
+  return deleteCommentMutation;
+}

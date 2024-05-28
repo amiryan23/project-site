@@ -7,11 +7,11 @@ import { RiSendPlaneFill } from "react-icons/ri";
 import { AiOutlineRollback } from "react-icons/ai";
 import MiniLoader from './../../MiniLoader/MiniLoader'
 import { HiMiniLockClosed } from "react-icons/hi2";
-import {useLikePostMutation,usePostsQuery,useDislikePostMutation,useAddCommentToPostMutation,useDeletePostMutation} from './../../../hooks/queryesHooks'
+import {useLikePostMutation,usePostsQuery,useDislikePostMutation,useAddCommentToPostMutation,useDeletePostMutation,useDeleteComment} from './../../../hooks/queryesHooks'
 import { useQueryClient,useQuery } from 'react-query';
 import { LuReplyAll } from "react-icons/lu";
 import { MdOutlineReply,MdOutlineClose } from "react-icons/md";
-import { MdCircle,MdBrightness1 } from "react-icons/md";
+import { MdCircle,MdBrightness1,MdDelete } from "react-icons/md";
 
 
 
@@ -32,7 +32,7 @@ const CommentPage = () => {
 	const likePostMutation = useLikePostMutation();
   const dislikePostMutation = useDislikePostMutation()
   const addCommentPostMutation = useAddCommentToPostMutation()
-  // const deletePostMutation = useDeletePostMutation()
+  const deleteCommentMutation = useDeleteComment()
 
   const [replyComment,setReplyComment] = useState(null)
 
@@ -99,6 +99,7 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
   		await addCommentPostMutation.mutate({postId,userId,thisUser,commentText,replyComment})
   		setCommentText("")
   		setNotificText(t('NotificComment'))
+  		setReplyComment(null)
 
   	}catch (error) {
   		console.error("Ошибка при добовления комментари")
@@ -127,6 +128,17 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
   // 		console.error("Ошибка при удаления поста")
   // 	}
   // }
+
+   const handleDeleteComment = async (postId,commentIdToDelete) => {
+  	try{
+
+ 		await deleteCommentMutation.mutate({postId,commentIdToDelete})
+  		setNotificText(t('NotificComtDel'))
+
+  	}catch (error){
+  		console.error("Ошибка при удаления комментари",error)
+  	}
+  }
 
 	return (
 		<div className={s.megaContainer} ref={animBlock}>
@@ -162,21 +174,21 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
 						{selectedPost?.likes.includes(thisUser?.id) 
 						? <span onClick={()=>{handleLikePost(selectedPost?.id,thisUser?.id)}}>
 						<FaHeart title="Like" color="whitesmoke"/>
-						{Array.isArray(selectedPost?.likes) ? selectedPost?.likes.length : 0}
+						{!selectedPost.hideLikeDislike ? Array.isArray(selectedPost?.likes) ? selectedPost?.likes.length : 0 : ""}
 						</span>
 						:<span onClick={()=>{handleLikePost(selectedPost?.id,thisUser?.id)}}>
 						<FaHeart title="Like" />
-						{Array.isArray(selectedPost?.likes) ? selectedPost?.likes.length : 0}
+						{!selectedPost.hideLikeDislike ? Array.isArray(selectedPost?.likes) ? selectedPost?.likes.length : 0 : ""}
 						</span> 
 						}
 						{selectedPost.dislikes.includes(thisUser?.id) 
 						?  <span onClick={()=>{handleDislikePost(selectedPost?.id,thisUser?.id)}}>
 						<FaHeartBroken title="Dislike" color="whitesmoke"/>
-						{Array.isArray(selectedPost?.dislikes) ? selectedPost?.dislikes.length : 0}
+						{!selectedPost.hideLikeDislike ? Array.isArray(selectedPost?.dislikes) ? selectedPost?.dislikes.length : 0 : ""}
 						</span> 
 						: <span onClick={()=>{handleDislikePost(selectedPost?.id,thisUser?.id)}}>
 						<FaHeartBroken title="Dislike"/>
-						{Array.isArray(selectedPost?.dislikes) ? selectedPost?.dislikes.length : 0}
+						{!selectedPost.hideLikeDislike ? Array.isArray(selectedPost?.dislikes) ? selectedPost?.dislikes.length : 0 : ""}
 						</span> 
 						}
 						{!selectedPost?.privateComment 
@@ -233,12 +245,10 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
 					              </div>
 					            </span>
 					          </div>
-					          <div className={s.Block3} onClick={()=>{
-					          handleReplyComment(selectedPost?.id,comment)
-					          	
-					          }}>
-					          	<MdOutlineReply placeholder="reply" />
-					          </div>					          
+					         <div className={s.Block3} >
+					          <button onClick={()=>{ handleReplyComment(selectedPost.id,comment)}}><MdOutlineReply title="reply" /></button>
+					         {thisUser?.id === comment.userId || thisUser?.isAdmin || thisUser?.id === selectedPost.userId ? <button onClick={()=>{handleDeleteComment(selectedPost.id,comment.id)}}>	<MdDelete title="delete"/> </button> : ""}
+					          </div>				          
 					        </div>
 					      ))
 							

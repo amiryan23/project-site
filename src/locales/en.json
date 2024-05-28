@@ -59,6 +59,7 @@
 		"ChangePostText":"Change text",
 		"DisableCom":"Disable comments",
 		"DisableForward":"Disable post forwarding",
+		"HideLikeDislike":"Hide Like/Dislike",
 		"NoFolowers":"You have no subscribers",
 		"NoFollowing":"You're not following anyone",
 		"You":"You",
@@ -66,6 +67,7 @@
 		"NotificPostAdd":"New post added successfully",
 		"NotificPostDel":"Post successfully deleted",
 		"NotificComment":"Comment successfully added to post",
+		"NotificComtDel":"Comment successfully deleted",
 		"NotificLink":"Link copied successfully",
 		"ViewMore":"View More",
 		"Hide":"Hide",
@@ -73,7 +75,9 @@
 		"NotificReject":"Subscription request rejected",
 		"ActiveUsers":"Active users",
 		"Posts":"Posts",
-		"inReply":"In reply"
+		"inReply":"In reply",
+		"DontFollow":"You don't follow anyone",
+		"All":"All"
 
 		
 }

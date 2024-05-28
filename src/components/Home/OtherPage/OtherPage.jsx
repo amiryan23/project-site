@@ -15,10 +15,10 @@ import { HiLockClosed } from "react-icons/hi";
 import { HiMiniLockClosed } from "react-icons/hi2";
 import { Route, Routes  } from 'react-router-dom';
 import { useHandleFollow  } from './../../../context/auth';
-import {useLikePostMutation,usePostsQuery,useDislikePostMutation,useAddCommentToPostMutation,useDeletePostMutation,useFollowMutation,useUnfollowMutation} from './../../../hooks/queryesHooks'
+import {useLikePostMutation,usePostsQuery,useDislikePostMutation,useAddCommentToPostMutation,useDeletePostMutation,useFollowMutation,useUnfollowMutation,useDeleteComment} from './../../../hooks/queryesHooks'
 import { useQueryClient,useQuery } from 'react-query';
 import { LuReplyAll } from "react-icons/lu";
-import { MdOutlineCircle,MdCircle,MdOutlineReply,MdOutlineClose,MdBrightness1 } from "react-icons/md";
+import { MdOutlineCircle,MdCircle,MdOutlineReply,MdOutlineClose,MdBrightness1,MdDelete} from "react-icons/md";
 
 
 
@@ -44,6 +44,7 @@ const queryClient = useQueryClient();
   const dislikePostMutation = useDislikePostMutation()
   const addCommentPostMutation = useAddCommentToPostMutation()
   const deletePostMutation = useDeletePostMutation()
+  const deleteCommentMutation = useDeleteComment()
   
   const { data: users } = useQuery('users', () => queryClient.getQueryData('users'));
     const { data: arrayPosts } = useQuery('arrayPosts', () => queryClient.getQueryData('arrayPosts'));
@@ -119,6 +120,17 @@ const unfollowMutation = useUnfollowMutation()
       
   	}catch(error){
   		console.error("Ошибка при удаление подписки", error)
+  	}
+  }
+
+    const handleDeleteComment = async (postId,commentIdToDelete) => {
+  	try{
+
+ 		await deleteCommentMutation.mutate({postId,commentIdToDelete})
+  		setNotificText(t('NotificComtDel'))
+
+  	}catch (error){
+  		console.error("Ошибка при удаления комментари",error)
   	}
   }
 
@@ -253,21 +265,21 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
 						{m.likes.includes(thisUser?.id) 
 						? <span onClick={()=>{handleLikePost(m.id,thisUser?.id)}}>
 						<FaHeart title="Like" color="whitesmoke"/>
-						{Array.isArray(m.likes) ? m.likes.length : 0}
+						{!m.hideLikeDislike ? Array.isArray(m.likes) ? m.likes.length : 0 : ""}
 						</span>
 						:<span onClick={()=>{handleLikePost(m.id,thisUser?.id)}}>
 						<FaHeart title="Like" />
-						{Array.isArray(m.likes) ? m.likes.length : 0}
+						{!m.hideLikeDislike ? Array.isArray(m.likes) ? m.likes.length : 0 : ""}
 						</span> 
 						}
 						{m.dislikes.includes(thisUser?.id) 
 						?  <span onClick={()=>{handleDislikePost(m.id,thisUser?.id)}}>
 						<FaHeartBroken title="Dislike" color="whitesmoke"/>
-						{Array.isArray(m.dislikes) ? m.dislikes.length : 0}
+						{!m.hideLikeDislike ? Array.isArray(m.dislikes) ? m.dislikes.length : 0 : ""}
 						</span> 
 						: <span onClick={()=>{handleDislikePost(m.id,thisUser?.id)}}>
 						<FaHeartBroken title="Dislike"/>
-						{Array.isArray(m.dislikes) ? m.dislikes.length : 0}
+						{!m.hideLikeDislike ? Array.isArray(m.dislikes) ? m.dislikes.length : 0 : ""}
 						</span> 
 						}
 						{!m.privateComment 
@@ -324,11 +336,9 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
 					              </div>
 					            </span>
 					          </div>
-					          <div className={s.Block3} onClick={()=>{
-					          handleReplyComment(m.id,comment)
-					          	
-					          }}>
-					          	<MdOutlineReply placeholder="reply" />
+					         <div className={s.Block3} >
+					          <button onClick={()=>{ handleReplyComment(m.id,comment)}}><MdOutlineReply title="reply" /></button>
+					         {thisUser?.id === comment.userId || thisUser?.isAdmin ? <button onClick={()=>{handleDeleteComment(m.id,comment.id)}}>	<MdDelete title="delete"/> </button> : ""}
 					          </div>
 					        </div>
 					      ))

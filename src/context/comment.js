@@ -130,4 +130,30 @@ export const addCommentPostFunction = async (postId, userId, thisUser , commentT
 
 
 
+export const deleteCommentPostFunction = async (postId,arrayPosts,commentIdToDelete,queryClient) => {
+    try{
+
+        const postIndex = arrayPosts.findIndex(post => post.id === postId);
+
+        
+
+        const filterCommentArray = arrayPosts[postIndex].commentArray.filter(comment=> comment.id !== commentIdToDelete )
+
+            const updatedPosts = [...arrayPosts];
+    updatedPosts[postIndex] = {
+      ...updatedPosts[postIndex],
+      commentArray: filterCommentArray
+    };
+
+        queryClient.setQueryData('arrayPosts',updatedPosts);
+        await updateDoc(doc(db, "posts", docId), { arrayPosts: updatedPosts });
+
+    } catch (error) {
+        console.error("Ошибка при удалении Комментарий:", error)
+    }
+}
+
+
+
+
 

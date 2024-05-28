@@ -10,18 +10,18 @@ const Language = () => {
 
 	const languageStorage = JSON.parse(localStorage.getItem('language'))
     const [language,setLanguage] = useState("English")
-	const [activeLanguage,setActiveLanguage] = useState(languageStorage ? languageStorage : "En")
+	const [activeLanguage,setActiveLanguage] = useState(languageStorage ? languageStorage : "en")
     const [open,setOpen] = useState(false)
 
 
 	useEffect(()=>{
 changeTranslate(languageStorage)
 
-if(languageStorage && languageStorage === "en"){
+if(languageStorage && languageStorage === "en" || activeLanguage === "en"){
     changeLanguage("English")
-} else if(languageStorage && languageStorage === "ru") {
+} else if(languageStorage && languageStorage === "ru" || activeLanguage === "ru") {
     changeLanguage("Русский")
-} else if (languageStorage && languageStorage === "am") {
+} else if (languageStorage && languageStorage === "am" || activeLanguage === "am") {
     changeLanguage("Հայերեն")
 }
 

@@ -75,7 +75,7 @@ const Home = ()=> {
 const sortedUsers = usersWithPostCount?.sort((a, b) => b.postCount - a.postCount).slice(0,5);
 
 const topUsersList = sortedUsers?.map((user,index) => (
-  <Link to={`/home/user/profile/${user.id}`} key={user.id} className={s.topUserContainer}>
+  <Link to={thisUser?.id !== user.id ? `/home/user/profile/${user.id}` : "/home/profile"} key={user.id} className={s.topUserContainer}>
     <span className={s.miniItem1}>
        <span>#{index + 1}</span>
       <img src={user.photo?.placed ? user.photo?.placed : user.photo?.default} alt="" />

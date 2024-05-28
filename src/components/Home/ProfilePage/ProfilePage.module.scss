@@ -897,14 +897,14 @@
 
 								.miniItem1{
 									width: 80%;
-									border-left: 4px solid rgba(256, 256, 256, 0.7);
-									border-top: 1px dashed rgba(256, 256, 256, 0.2);
-									border-right: 1px dashed rgba(256, 256, 256, 0.2);
-									border-bottom: 1px dashed rgba(256, 256, 256, 0.2);
+									border-left: 2px solid rgba(137, 196, 244, 0.7);
+									border-top: 1px dashed rgba(137, 196, 244, 0.2);
+									border-right: 1px dashed rgba(137, 196, 244, 0.2);
+									border-bottom: 1px dashed rgba(137, 196, 244, 0.2);
 									padding: 5px;
 									margin-left: 10px;
 									
-									background-color: rgba(0, 0, 0, 0.2);
+									background-color: rgba(137, 196, 244, 0.1);
 									border-radius: 0px 5px 5px 0px;
 									display: flex;
 									flex-direction: column;
@@ -924,6 +924,12 @@
 										color: rgba(256, 256, 256, 0.5);
 									}
 								}
+
+								.miniItem2{
+									font-weight: bold;
+									font-size: 14px;
+									color: rgba(256, 256, 256, 0.8);
+								}
 							}
 
 
@@ -931,6 +937,14 @@
 
 						.Block3{
 							align-self: center;
+							display: flex;
+							flex-direction: column;
+
+							button{
+								background-color: transparent;
+								border: none;
+								outline: none;
+							}
 							svg{
 								font-size: 25px;
 								color: rgba(256, 256, 256, 0.5);

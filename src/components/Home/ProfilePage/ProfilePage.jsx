@@ -17,10 +17,10 @@ import { MdEdit,MdDeleteForever,MdOutlineClose} from "react-icons/md";
 import { IoCopySharp } from "react-icons/io5";
 import { HiMiniLockClosed } from "react-icons/hi2";
 import {firebaseConfig,db,storage,docId} from './../../../firebase'
-import {useLikePostMutation,usePostsQuery,useDislikePostMutation,useAddCommentToPostMutation,useDeletePostMutation,useAddPostMutation} from './../../../hooks/queryesHooks'
+import {useLikePostMutation,usePostsQuery,useDislikePostMutation,useAddCommentToPostMutation,useDeletePostMutation,useAddPostMutation,useDeleteComment} from './../../../hooks/queryesHooks'
 import { useQueryClient,useQuery } from 'react-query';
 import { AiOutlineRollback } from "react-icons/ai";
-import { MdOutlineReply,MdCircle,MdBrightness1 } from "react-icons/md";
+import { MdOutlineReply,MdCircle,MdBrightness1,MdDelete } from "react-icons/md";
 
 
 
@@ -48,6 +48,7 @@ const ProfilePage = ()=>{
   const addCommentPostMutation = useAddCommentToPostMutation()
   const deletePostMutation = useDeletePostMutation()
   const addPostMutation = useAddPostMutation()
+  const deleteCommentMutation = useDeleteComment()
 
   	const { data: users } = useQuery('users', () => queryClient.getQueryData('users'));
     const { data: thisUser } = useQuery('thisUser', () => queryClient.getQueryData('thisUser'));
@@ -134,6 +135,17 @@ const ProfilePage = ()=>{
   	}
   	}catch (error) {
   		console.error("Ошибка при добовления поста")
+  	}
+  }
+
+  const handleDeleteComment = async (postId,commentIdToDelete) => {
+  	try{
+
+ 		await deleteCommentMutation.mutate({postId,commentIdToDelete})
+  		setNotificText(t('NotificComtDel'))
+
+  	}catch (error){
+  		console.error("Ошибка при удаления комментари",error)
   	}
   }
 
@@ -316,12 +328,13 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
 					              </div>
 					            </span>
 					          </div>
-					         <div className={s.Block3} onClick={()=>{
-					          handleReplyComment(m.id,comment)
-					          	
-					          }}>
-					          	<MdOutlineReply placeholder="reply" />
+					         <div className={s.Block3} >
+					          <button onClick={()=>{ handleReplyComment(m.id,comment)}}><MdOutlineReply title="reply" /></button>
+					          <button onClick={()=>{handleDeleteComment(m.id,comment.id)}}>	<MdDelete title="delete"/> </button>
 					          </div>
+					          {/* <div onClick={()=>{handleDeleteComment(m.id,comment.id)}} className={s.Block4}> */}
+					          {/* 	<MdDelete /> */}
+					          {/* </div> */}
 					        </div>
 					      ))
 							.slice(m.commentArray.length - 2,m.commentArray.length )
