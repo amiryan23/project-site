@@ -152,6 +152,7 @@
 				}
 			}
 
+
 				.miniBlock {
 				min-width: 250px;
 				max-width: 100%;
@@ -164,6 +165,27 @@
 				border-radius: 25px 15px 25px 15px;
 				word-break: break-word;
 			}
+
+				.miniBlock5{
+				width: 100%;
+				display: flex;
+				flex-direction: row;
+				justify-content: center;
+				gap: 10px;
+				
+
+				svg{
+					color: rgba(256, 256, 256, 0.9);
+				}
+
+				a{
+					color: rgba(256, 256, 256, 0.8);
+					font-weight: bold;
+					font-size: 14px;
+				}
+
+			}
+
 
 				.miniBlock1{
 				width: 100%;
@@ -208,6 +230,7 @@
 					width: 100%;
 					display: flex;
 					flex-direction: row;
+					flex-wrap: no-wrap;
 					gap: 10px;
 					align-items: center;
 					justify-content: center;
@@ -500,7 +523,7 @@
 						align-self:flex-end;
 						position: relative;
 						left:-12px;
-						bottom: 1px;
+						bottom: 0px;
 
 						
 
@@ -739,6 +762,26 @@
 			}
 		}
 
+		.deletedPost{
+			width: 100%;
+			min-height: 100px;
+			// margin: 15px;
+			padding: 15px;
+			border-radius: 10px;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			gap: 15px;
+			background-color: rgba(60, 60, 60, 0.9);
+			margin-bottom: 25px;
+			text-decoration: none;
+			border: 2px dashed rgba(256, 256, 256, 0.2);
+			font-weight: bold;
+			color: rgba(256, 256, 256, 0.5);
+			font-size: 18px;
+			user-select: none;
+		}
+
 
 				.item1{
 					width:100%;
@@ -838,7 +881,14 @@
 						gap: 5px;
 
 						.Block1{
-							padding-left:5px ;
+							padding-left:1px ;
+
+
+							.item{
+								display: flex;
+								flex-direction: row;
+								flex-wrap: no-wrap;
+							
 
 							img{
 								width: 30px;
@@ -849,9 +899,12 @@
 							}
 
 							span{
+								align-self: flex-end;
 								position: relative;
 								margin-left: -10px;
 							}
+
+						}
 
 
 						}
@@ -1075,7 +1128,8 @@
 					gap:7px;
 					justify-content:flex-start;
 					align-items:center;
-					padding:0px 10px 10px 10px;
+					padding:0px 10px 0px 10px;
+
 
 
 
@@ -1106,6 +1160,13 @@
 						word-break: break-word;
 
 					}
+					
+					input::placeholder {
+						font-size: 10px;
+						font-weight: bold;
+						color: rgba(256, 256, 256, 0.3);
+						transition: 250ms linear;
+					}					
 
 					input:disabled{
 						opacity: 0.5;
@@ -1114,8 +1175,8 @@
 					.postCommentItem3{
 						
 						padding: 5px;
-						border: 2px solid rgba(256, 256, 256, 0.7);
-						border-radius: 7px;
+						border: 2px solid rgba(256, 256, 256, 0.3);
+						border-radius: 15px;
 						display: flex;
 						justify-content: center;
 						align-items: center;
@@ -1132,7 +1193,6 @@
 					.postCommentItem3:active{
 							background-color: rgba(256, 256, 256, 0.7);
 							transform: scale(1.09);
-							color:#222;
 						}
 				
 

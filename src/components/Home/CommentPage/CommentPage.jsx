@@ -220,7 +220,21 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
 					          <div className={s.Block1}>
 					            <span className={s.item}>
 					             <Link to={thisUser?.id !== comment.userId ? `/home/user/profile/${comment.userId}` : "/home/profile"} ><img src={users?.find(user => user.id === comment.userId).photo?.placed  || users?.find(user => user?.id === comment.userId).photo?.default } alt="" /></Link>
-					             <span>{users?.find(user => user.id === comment.userId).onlineStatus  ? <MdCircle title="Online" size="9" color="limegreen"/> : <MdBrightness1 title="Offline" size="9" color="rgba(256,256,256,0.8)"/>}</span>
+					             <span>
+												  {
+												    comment.userId === thisUser?.id
+												    ? (
+												      thisUser?.onlineStatus
+												      ? <MdCircle title="Online" size="11" color="limegreen"/>
+												      : <MdBrightness1 title="Offline" size="11" color="rgba(256,256,256,0.8)"/>
+												    )
+												    : (
+												      users?.filter(user => user.id !== thisUser?.id)?.find(user => user.id === comment.userId)?.onlineStatus
+												      ? <MdCircle title="Online" size="11" color="limegreen"/>
+												      : <MdBrightness1 title="Offline" size="11" color="rgba(256,256,256,0.8)"/>
+												    )
+												  }
+					             </span>
 					            </span>
 					          </div>
 					          <div className={s.Block2}>
@@ -283,7 +297,7 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
 							<span className={s.postCommentItem1}><img title={thisUser?.username} src={thisUser?.photo?.placed || thisUser?.photo?.default} alt="" /></span>
 							<span className={s.postCommentItem2}>
 							{!selectedPost?.privateComment 
-							? <input value={commentText[selectedPost?.id] || ""} onChange={(e)=>{handleCommentChange(selectedPost?.id,e.target.value)}} type="text" placeholder="Comment"/>
+							? <input value={commentText[selectedPost?.id] || ""} onChange={(e)=>{handleCommentChange(selectedPost?.id,e.target.value)}} type="text" placeholder={t('AddComment')}/>
 							: <input value={commentText[selectedPost?.id] || ""} disabled="true" onChange={(e)=>{handleCommentChange(selectedPost?.id,e.target.value)}} type="text" placeholder="..."/>}
 							</span>
 							{!selectedPost?.privateComment 

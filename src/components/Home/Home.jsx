@@ -59,10 +59,12 @@ const Home = ()=> {
     }
 
     const signOutHandler = () =>{
-        signOut(auth)
+        setLogined(false)
+       setTimeout(()=>{ signOut(auth)
         .then(()=> window.location.href = "/")
 
         localStorage.removeItem("saveMe")
+        },250)
     }
 
 

@@ -21,6 +21,7 @@ const SettingsPage = () =>{
  const [country,setCountry] = useState(thisUser?.country ? thisUser.country : "")
  const [city,setCity] = useState(thisUser?.city ? thisUser.city : "")
  const [description,setDescription] = useState(thisUser?.description ? thisUser.description : "")
+ const [link,setLink] = useState(thisUser?.link ? thisUser.link : "")
  const [error,setError] = useState("")
  const [accept,setAccept] = useState("")
  const [fileUrl, setFileUrl] = useState(null);
@@ -79,6 +80,9 @@ const queryClient = useQueryClient();
  //  };
 
 
+
+
+
 const handlerChangeInfo = async () => {
 	try {
 
@@ -117,6 +121,7 @@ const handlerChangeInfo = async () => {
     age: age,
     country:country,
     city:city,
+    link:link,
     photo:{
     	...thisUser.photo,
      placed: `https://firebasestorage.googleapis.com/v0/b/${firebaseConfig.storageBucket}/o/imageUsers%2F${encodeURIComponent(uniqueFilename)}?alt=media` 
@@ -141,6 +146,7 @@ const handlerChangeInfo = async () => {
     age: age,
     country: country,
     city: city,
+    link:link,
    	description: description,
     private:privateProfile
 
@@ -164,6 +170,8 @@ const handlerChangeInfo = async () => {
   
 }
 }
+
+
 
 	return (
 		<div className={s.megaContainer} ref={animBlock}>
@@ -198,7 +206,8 @@ const handlerChangeInfo = async () => {
 						<span><input value={city} onChange={(e)=>{setCity(e.target.value)}} type="text" /></span>
 					</span>
 					<span className={s.item1}>
-						
+						<span>{t('Link')}</span>
+						<span><input value={link} maxLength={90} onChange={(e)=>{setLink(e.target.value)}} type="text" /></span>
 					</span>
 
 				</span>

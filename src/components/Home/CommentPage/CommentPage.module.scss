@@ -439,7 +439,8 @@
 					gap:7px;
 					justify-content:flex-start;
 					align-items:center;
-					padding:0px 10px 10px 10px;
+					padding:0px 10px 0px 10px;
+
 
 
 
@@ -470,17 +471,23 @@
 						word-break: break-word;
 
 					}
+					
+					input::placeholder {
+						font-size: 10px;
+						font-weight: bold;
+						color: rgba(256, 256, 256, 0.3);
+						transition: 250ms linear;
+					}					
 
 					input:disabled{
 						opacity: 0.5;
 					}
-				
 				}
 					.postCommentItem3{
 						
 						padding: 5px;
-						border: 2px solid rgba(256, 256, 256, 0.7);
-						border-radius: 7px;
+						border: 2px solid rgba(256, 256, 256, 0.3);
+						border-radius: 15px;
 						display: flex;
 						justify-content: center;
 						align-items: center;

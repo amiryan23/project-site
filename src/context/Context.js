@@ -50,8 +50,11 @@ const queryClient = useQueryClient();
 useEffect(()=>{
     if( thisUser){
         setLogined(true);
+        localStorage.setItem('thisUserId', thisUser?.id)
     } else {
+        setTimeout(()=>{localStorage.removeItem('thisUserId')},50) 
         setLogined(false);
+
     }
 },[thisUser])
 
@@ -61,9 +64,11 @@ useEffect(()=>{
 
 useEffect(() => {
   const isSubscribedStorage = localStorage.getItem('isSubscribed') === "true";
+  const thisUserIdStorage = localStorage.getItem('thisUserId');
 
+console.log(thisUserIdStorage)
   const updateStatus = async (status) => {
-    if (isSubscribedStorage && thisUser) {
+    if (thisUser) {
       const userRef = doc(db, 'users', thisUser.id);
       await updateDoc(userRef, { onlineStatus: status });
       thisUser.onlineStatus = status;
@@ -77,35 +82,37 @@ useEffect(() => {
     localStorage.removeItem('location');
   };
 
-  const handlePageHide = (event) => {
-    if (event.persisted) {
-      return;
-    }
-    updateStatus(false);
-  };
+  // const handlePageHide = (event) => {
+  //   if (event.persisted) {
+  //     return;
+  //   }
+  //   updateStatus(false);
+  // };
 
   const handleVisibilityChange = () => {
     if (document.visibilityState === 'hidden' && isWideScreen) {
       updateStatus(false);
-    } else {
+    } else if(document.visibilityState === 'visible' && isWideScreen){
       updateStatus(true)
     }
   };
 
-  if (thisUser) {
+  if (logined) {
     updateStatus(true);
+  } else {
+    updateStatus(false);
   }
 
   window.addEventListener('beforeunload', handleBeforeUnload);
-  window.addEventListener('pagehide', handlePageHide);
+  // window.addEventListener('pagehide', handlePageHide);
   document.addEventListener('visibilitychange', handleVisibilityChange);
 
   return () => {
     window.removeEventListener('beforeunload', handleBeforeUnload);
-    window.removeEventListener('pagehide', handlePageHide);
+    // window.removeEventListener('pagehide', handlePageHide);
     document.removeEventListener('visibilitychange', handleVisibilityChange);
   };
-}, [thisUser, isWideScreen]);
+}, [thisUser, isWideScreen , logined]);
 
 
  useEffect(() => {
@@ -114,6 +121,9 @@ useEffect(() => {
     }
 
 localStorage.setItem('isSubscribed', 'true')
+
+
+
     
 
     window.addEventListener('resize', handleResize);

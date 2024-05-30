@@ -19,6 +19,7 @@ import {useLikePostMutation,usePostsQuery,useDislikePostMutation,useAddCommentTo
 import { useQueryClient,useQuery } from 'react-query';
 import { LuReplyAll } from "react-icons/lu";
 import { MdOutlineCircle,MdCircle,MdOutlineReply,MdOutlineClose,MdBrightness1,MdDelete} from "react-icons/md";
+import { FiLink } from "react-icons/fi";
 
 
 
@@ -229,13 +230,14 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
 					</span>
 					</div>
 					<div className={s.postMiniContent2}>
-						{m.forwardPost !== undefined &&  m.forwardPost !== ""
+						{m.forwardPost !== undefined &&  m.forwardPost !== "" 
+				? arrayPosts?.find(post => post.id === m.forwardPost.fwPostid) 
 				? <Link className={s.fwPost} to={`/home/comment/post/${m.forwardPost.fwPostid}`}>
 					<span className={s.fwItem1}>
 					<span className={s.miniFwitem1}>
 					{t("Forward")}
 					</span>
-					<Link to={`/home/user/profile/${arrayPosts?.find(post => post.id === m.forwardPost.fwPostid).userId}`} className={s.miniFwitem2}>
+					<Link to={`/home/user/profile/${arrayPosts?.find(post => post.id === m.forwardPost.fwPostid)?.userId ? arrayPosts?.find(post => post.id === m.forwardPost.fwPostid)?.userId : ""}`} className={s.miniFwitem2}>
 					{m.forwardPost?.fwPostUser}
 					</Link>
 
@@ -251,6 +253,7 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
 						</span> 
 					: "" }
 				</Link>
+				: <div className={s.deletedPost}>{t('ThisPostDeleted')}</div>
 				: "" }
 						{m.imageURL 
 						? <span className={s.item1}><img src={m.imageURL ? m.imageURL : <MiniLoader />} alt="" /></span>
@@ -311,7 +314,21 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
 					          <div className={s.Block1}>
 					            <span className={s.item}>
 					             <Link to={thisUser?.id !== comment.userId ? `/home/user/profile/${comment.userId}` : "/home/profile"} ><img src={users?.find(user => user.id === comment.userId).photo?.placed  || users?.find(user => user?.id === comment.userId).photo?.default } alt="" /></Link>
-					             <span>{users?.find(user => user.id === comment.userId).onlineStatus  ? <MdCircle title="Online" size="9" color="limegreen"/> : <MdBrightness1 title="Offline" size="9" color="rgba(256,256,256,0.8)"/>}</span>
+					             <span>
+												  {
+												    comment.userId === thisUser?.id
+												    ? (
+												      thisUser?.onlineStatus
+												      ? <MdCircle title="Online" size="11" color="limegreen"/>
+												      : <MdBrightness1 title="Offline" size="11" color="rgba(256,256,256,0.8)"/>
+												    )
+												    : (
+												      users?.filter(user => user.id !== thisUser?.id)?.find(user => user.id === comment.userId)?.onlineStatus
+												      ? <MdCircle title="Online" size="11" color="limegreen"/>
+												      : <MdBrightness1 title="Offline" size="11" color="rgba(256,256,256,0.8)"/>
+												    )
+												  }					             
+					             </span>
 					            </span>
 					          </div>
 					          <div className={s.Block2}>
@@ -374,7 +391,7 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
 							<span className={s.postCommentItem1}><img title={thisUser?.username} src={thisUser?.photo?.placed ||  thisUser?.photo?.default } alt="" /></span>
 							<span className={s.postCommentItem2}>
 							{!m.privateComment 
-							? <input value={commentText[m.id] || ""} onChange={(e)=>{handleCommentChange(m.id,e.target.value)}} type="text" placeholder="Comment"/>
+							? <input value={commentText[m.id] || ""} onChange={(e)=>{handleCommentChange(m.id,e.target.value)}} type="text" placeholder={t('AddComment')}/>
 							: <input value={commentText[m.id] || ""} disabled="true" onChange={(e)=>{handleCommentChange(m.id,e.target.value)}} type="text" placeholder="..."/>}
 							</span>
 							{!m.privateComment 
@@ -462,6 +479,12 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
 					<span className={s.miniBlock3}>
 				<span className={s.miniBlock}>{selectedUser?.description ? selectedUser.description : "..."}</span>
 					</span>
+				{selectedUser?.link && selectedUser?.link !== ""
+				? <span className={s.miniBlock5}>
+					<span><FiLink /></span>
+					<a href={selectedUser?.link} target="_blank">{selectedUser?.link}</a> 
+				</span>
+				: ""}
 					{selectedUser ? 
 					<span className={s.miniBlock1}>
 					

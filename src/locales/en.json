@@ -23,6 +23,7 @@
 		"Publication":"Recent publications",
 		"ClosedComment":"Comments are closed",
 		"NоComments":"No comments yet",
+		"AddComment":"Add a comment",
 		"Changed":"changed",
 		"Forward":"Forwarded from",
 		"Now":"Now",
@@ -42,6 +43,7 @@
 		"Online":"Online",
 		"Country":"Country",
 		"City":"City",
+		"Link":"Link",
 		"AddPost":"Add post",
 		"NoPosts":"You don't have any posts yet",
 		"ClosedProfile":"This account is private ",
@@ -77,7 +79,8 @@
 		"Posts":"Posts",
 		"inReply":"In reply",
 		"DontFollow":"You don't follow anyone",
-		"All":"All"
+		"All":"All",
+		"ThisPostDeleted":"This post has been deleted"
 
 		
 }
