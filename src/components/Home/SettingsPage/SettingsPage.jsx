@@ -26,6 +26,7 @@ const SettingsPage = () =>{
  const [accept,setAccept] = useState("")
  const [fileUrl, setFileUrl] = useState(null);
  const [privateProfile,setPrivateProfile] = useState(thisUser?.private ? thisUser.private : false)
+ const [privateOnline,setPrivateOnline] = useState(thisUser?.disableOnlineStatus ? thisUser?.disableOnlineStatus : false)
 
 const queryClient = useQueryClient();
 
@@ -127,7 +128,8 @@ const handlerChangeInfo = async () => {
      placed: `https://firebasestorage.googleapis.com/v0/b/${firebaseConfig.storageBucket}/o/imageUsers%2F${encodeURIComponent(uniqueFilename)}?alt=media` 
   },
     description:description,
-    private:privateProfile
+    private:privateProfile,
+    disableOnlineStatus:privateOnline
   }
         
        const updatedThisUser = { ...thisUser, ...newData };
@@ -148,7 +150,8 @@ const handlerChangeInfo = async () => {
     city: city,
     link:link,
    	description: description,
-    private:privateProfile
+    private:privateProfile,
+    disableOnlineStatus:privateOnline
 
   }
 
@@ -220,6 +223,13 @@ const handlerChangeInfo = async () => {
 			<div className={s.content4}>
 				<span className={s.item3} onClick={()=>{setPrivateProfile((prevPrivateProfile)=> !prevPrivateProfile)}}>
 			{t('MakePrfPrvt')} {privateProfile ? <RiCheckboxCircleFill color="limegreen"/>  : <RiCheckboxBlankCircleLine/>}</span>
+				<span className={s.item4}>
+					{/* <button onClick={()=>setTheme((prevTheme)=>prevTheme === "dark" ? "light" : "dark")}>Change theme</button> */}
+				</span>
+			</div>
+			<div className={s.content4}>
+				<span className={s.item3} onClick={()=>{setPrivateOnline((prevPrivateOnline)=> !prevPrivateOnline)}}>
+			{t('DsbOnleStat')} {privateOnline ? <RiCheckboxCircleFill color="limegreen"/>  : <RiCheckboxBlankCircleLine/>}</span>
 				<span className={s.item4}>
 					{/* <button onClick={()=>setTheme((prevTheme)=>prevTheme === "dark" ? "light" : "dark")}>Change theme</button> */}
 				</span>
