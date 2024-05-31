@@ -16,7 +16,7 @@ import { LuReplyAll } from "react-icons/lu";
 import {useLikePostMutation,usePostsQuery,useDislikePostMutation,useAddCommentToPostMutation,useDeletePostMutation,useDeleteComment} from './../../../hooks/queryesHooks'
 import { useQueryClient,useQuery } from 'react-query';
 import { MdOutlineReply,MdOutlineCircle,MdCircle,MdBrightness1,MdDelete} from "react-icons/md";
-
+import {parseTextWithLinks} from './../../../helper/linkFunction.js'
 
 
 
@@ -164,7 +164,8 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
 					<div className={s.postMiniContent1}>
 						<span className={s.postBlock1}>
 							<Link to={thisUser?.id !== m.userId ? `/home/user/profile/${m.userId}` : "/home/profile"}><img src={users?.find(user => user.id === m.userId).photo?.placed ? users?.find(user => user?.id === m.userId).photo?.placed : users?.find(user => user?.id === m.userId).photo?.default} alt="" /></Link>
-							<span>
+						{!users?.find(user => user.id === m.userId).disableOnlineStatus || thisUser?.isAdmin 
+							? <span>
 								  {
 								    m.userId === thisUser?.id
 								    ? (
@@ -179,6 +180,7 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
 								    )
 								  }
 							</span>
+							: "" }
 						</span>
 						<span className={s.postBlock2}>
 							{users?.find(user => user.id === m.userId).username || "Deleted"}				
@@ -220,7 +222,7 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
 						: "" }
 						{m.postText 
 						? <span className={s.item2}>
-						{m.postText}
+						{parseTextWithLinks(m.postText)}
 						</span>
 						: "" }
 					</div>
@@ -274,7 +276,8 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
 					          <div className={s.Block1}>
 					            <span className={s.item}>
 					             <Link to={thisUser?.id !== comment.userId ? `/home/user/profile/${comment.userId}` : "/home/profile"} ><img src={users?.find(user => user.id === comment.userId).photo?.placed  || users?.find(user => user?.id === comment.userId).photo?.default } alt="" /></Link>
-					             <span>
+					             {!users?.find(user => user.id === comment.userId).disableOnlineStatus || thisUser?.isAdmin 
+					             ? <span>
 												  {
 												    comment.userId === thisUser?.id
 												    ? (
@@ -287,8 +290,9 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
 												      ? <MdCircle title="Online" size="11" color="limegreen"/>
 												      : <MdBrightness1 title="Offline" size="11" color="rgba(256,256,256,0.8)"/>
 												    )
-												  }					             
-					             </span>
+												  }	
+					            </span>
+					            : "" }
 					            </span>
 					          </div>
 					          <div className={s.Block2}>
@@ -374,7 +378,8 @@ const onlyFollowing = arrayPosts
 					<div className={s.postMiniContent1}>
 						<span className={s.postBlock1}>
 							<Link to={thisUser?.id !== m.userId ? `/home/user/profile/${m.userId}` : "/home/profile"}><img src={users?.find(user => user.id === m.userId).photo?.placed ? users?.find(user => user?.id === m.userId).photo?.placed : users?.find(user => user?.id === m.userId).photo?.default} alt="" /></Link>
-							<span>
+						{!users?.find(user => user.id === m.userId).disableOnlineStatus || thisUser?.isAdmin 
+							? <span>
 								  {
 								    m.userId === thisUser?.id
 								    ? (
@@ -389,6 +394,7 @@ const onlyFollowing = arrayPosts
 								    )
 								  }
 							</span>
+							: "" }
 						</span>
 						<span className={s.postBlock2}>
 							{users?.find(user => user.id === m.userId).username || "Deleted"}				
@@ -484,7 +490,8 @@ const onlyFollowing = arrayPosts
 					          <div className={s.Block1}>
 					            <span className={s.item}>
 					             <Link to={thisUser?.id !== comment.userId ? `/home/user/profile/${comment.userId}` : "/home/profile"} ><img src={users?.find(user => user.id === comment.userId).photo?.placed  || users?.find(user => user?.id === comment.userId).photo?.default } alt="" /></Link>
-					             <span>
+					             {!users?.find(user => user.id === comment.userId).disableOnlineStatus || thisUser?.isAdmin 
+					             ? <span>
 												  {
 												    comment.userId === thisUser?.id
 												    ? (
@@ -499,6 +506,7 @@ const onlyFollowing = arrayPosts
 												    )
 												  }	
 					            </span>
+					            : "" }
 					            </span>
 					          </div>
 					          <div className={s.Block2}>

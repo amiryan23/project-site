@@ -12,7 +12,7 @@ import { useQueryClient,useQuery } from 'react-query';
 import { LuReplyAll } from "react-icons/lu";
 import { MdOutlineReply,MdOutlineClose } from "react-icons/md";
 import { MdCircle,MdBrightness1,MdDelete } from "react-icons/md";
-
+import {parseTextWithLinks} from './../../../helper/linkFunction.js'
 
 
 
@@ -166,7 +166,7 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
 						: "" }
 						{selectedPost?.postText 
 						? <span className={s.item2}>
-						{selectedPost?.postText}
+						{parseTextWithLinks(selectedPost?.postText)}
 						</span>
 						: "" }
 					</div>
@@ -220,7 +220,8 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
 					          <div className={s.Block1}>
 					            <span className={s.item}>
 					             <Link to={thisUser?.id !== comment.userId ? `/home/user/profile/${comment.userId}` : "/home/profile"} ><img src={users?.find(user => user.id === comment.userId).photo?.placed  || users?.find(user => user?.id === comment.userId).photo?.default } alt="" /></Link>
-					             <span>
+					            {!users?.find(user => user.id === comment.userId).disableOnlineStatus || thisUser?.isAdmin 
+					            ? <span>
 												  {
 												    comment.userId === thisUser?.id
 												    ? (
@@ -235,6 +236,7 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
 												    )
 												  }
 					             </span>
+					             : ""}
 					            </span>
 					          </div>
 					          <div className={s.Block2}>

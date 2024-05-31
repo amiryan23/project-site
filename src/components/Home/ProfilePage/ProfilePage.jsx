@@ -22,7 +22,7 @@ import { useQueryClient,useQuery } from 'react-query';
 import { AiOutlineRollback } from "react-icons/ai";
 import { MdOutlineReply,MdCircle,MdBrightness1,MdDelete } from "react-icons/md";
 import { FiLink } from "react-icons/fi";
-
+import {parseTextWithLinks} from './../../../helper/linkFunction.js'
 
 
 
@@ -262,7 +262,7 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
 						: "" }
 						{m.postText 
 						? <span className={s.item2}>
-						{m.postText}
+						{parseTextWithLinks(m.postText)}
 						</span>
 						: "" }
 					</div>

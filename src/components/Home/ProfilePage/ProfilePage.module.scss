@@ -54,6 +54,8 @@
 		gap:15px;
 		// background: linear-gradient(0deg, rgba(209,209,209,0.3) 15%, rgba(162,162,162,0.3) 84%);
 
+		
+
 
 		.Block1{
 			width: 100%;
@@ -289,6 +291,9 @@
 		.miniBlock3{
 			padding: 5px;
 			// border-bottom: 2px solid whitesmoke;
+			color: rgba(256, 256, 256, 0.7);
+			font-weight: bold;
+			font-size: 15px;
 		}
 
 		.fwPost{
@@ -803,7 +808,12 @@
 					border: 2px solid rgba(256, 256, 256, 0.2) ;
 				background-color: rgba(256, 256, 256, 0.1);
 				border-radius: 13px;
+				color: rgba(256, 256, 256, 0.9);
 
+					a{
+						color: rgba(256, 256, 256, 0.7);
+						font-weight: bold;
+					}
 				}
 
 			}

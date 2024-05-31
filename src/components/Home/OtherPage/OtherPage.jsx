@@ -20,7 +20,7 @@ import { useQueryClient,useQuery } from 'react-query';
 import { LuReplyAll } from "react-icons/lu";
 import { MdOutlineCircle,MdCircle,MdOutlineReply,MdOutlineClose,MdBrightness1,MdDelete} from "react-icons/md";
 import { FiLink } from "react-icons/fi";
-
+import {parseTextWithLinks} from './../../../helper/linkFunction.js'
 
 
 
@@ -191,7 +191,11 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
 					<div className={s.postMiniContent1}>
 						<span className={s.postBlock1}>
 							<img src={selectedUser?.photo?.placed || selectedUser?.photo?.default} alt="" />
-							<span>{selectedUser.onlineStatus  ? <MdCircle title="Online" size="11" color="limegreen"/> : <MdBrightness1 title="Offline" size="11" color="rgba(256,256,256,0.8)"/>}</span>
+							<span>
+							{!selectedUser.disableOnlineStatus || thisUser?.isAdmin 
+							? selectedUser.onlineStatus  ? <MdCircle title="Online" size="11" color="limegreen"/> : <MdBrightness1 title="Offline" size="11" color="rgba(256,256,256,0.8)"/>
+							: "" }
+							</span>
 						</span>
 						<span className={s.postBlock2}>
 							{selectedUser.username}
@@ -260,7 +264,7 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
 						: "" }
 						{m.postText 
 						? <span className={s.item2}>
-						{m.postText}
+						{parseTextWithLinks(m.postText)}
 						</span>
 						: "" }
 					</div>
@@ -314,7 +318,8 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
 					          <div className={s.Block1}>
 					            <span className={s.item}>
 					             <Link to={thisUser?.id !== comment.userId ? `/home/user/profile/${comment.userId}` : "/home/profile"} ><img src={users?.find(user => user.id === comment.userId).photo?.placed  || users?.find(user => user?.id === comment.userId).photo?.default } alt="" /></Link>
-					             <span>
+					            {!users?.find(user => user.id === comment.userId).disableOnlineStatus || thisUser?.isAdmin 
+					             ? <span>
 												  {
 												    comment.userId === thisUser?.id
 												    ? (
@@ -328,7 +333,8 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
 												      : <MdBrightness1 title="Offline" size="11" color="rgba(256,256,256,0.8)"/>
 												    )
 												  }					             
-					             </span>
+					             </span> 
+					             : "" }
 					            </span>
 					          </div>
 					          <div className={s.Block2}>
@@ -493,7 +499,8 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
 					<span>{t("Country")}:<span className={s.item}> {selectedUser.country  ? selectedUser.country : t('NotIndicated')}</span></span> 
 					<span>{t("City")}: <span className={s.item}> {selectedUser.city  ? selectedUser.city : t('NotIndicated')}</span></span> 
 					</span>
-					<span className={s.statusContent}>
+					{!selectedUser.disableOnlineStatus || thisUser?.isAdmin 
+					? <span className={s.statusContent}>
 						{selectedUser.onlineStatus
 						? <span className={s.onlineStatus}>
 						{t("Online")} <MdCircle />
@@ -502,6 +509,7 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
 					 	{t("Oflline")} <MdOutlineCircle />
 					 	</span> }
 					</span>
+					: "" }
 					</span>
 					: <MiniLoader/>}
 					{/* <span className={s.miniBlock2}> */}
