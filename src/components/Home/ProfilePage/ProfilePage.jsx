@@ -23,7 +23,7 @@ import { AiOutlineRollback } from "react-icons/ai";
 import { MdOutlineReply,MdCircle,MdBrightness1,MdDelete } from "react-icons/md";
 import { FiLink } from "react-icons/fi";
 import {parseTextWithLinks} from './../../../helper/linkFunction.js'
-
+import { GoBookmarkFill } from "react-icons/go";
 
 
 
@@ -402,7 +402,10 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
 			<div className={s.content1}>
 			<div className={s.megaBlock}>
 			<button onClick={() => window.history.back(-1)}><AiOutlineRollback size="30" color="whitesmoke"/></button>
+			<span>
+			<Link to="/home/save"><GoBookmarkFill title="Save"/></Link> 
 			<Link  to="/home/settings"><IoSettingsSharp title="Edit profile"/></Link>
+			</span>
 			</div>
 				<span className={s.Block1}>
 

@@ -80,5 +80,12 @@
 	"DontFollow": "You don't follow anyone",
 	"All": "All",
 	"ThisPostDeleted": "This post has been deleted",
-	"DsbOnleStat": "Disable online status"
+	"DsbOnleStat": "Disable online status",
+	"Save":"Save",
+	"Remove":"Remove",
+	"Saved":"Saved posts",
+	"NoSaved":"You haven't saved any posts yet",
+	"AddSaved":"Added to saved",
+	"RemoveSaved":"Removed from saved",
+	"RemoveFromSaved":"Remove from saved"
 }

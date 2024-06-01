@@ -13,10 +13,13 @@ import { MdReport } from "react-icons/md";
 import { FaArrowTurnDown,FaArrowTurnUp  } from "react-icons/fa6";
 import { HiMiniLockClosed } from "react-icons/hi2";
 import { LuReplyAll } from "react-icons/lu";
-import {useLikePostMutation,usePostsQuery,useDislikePostMutation,useAddCommentToPostMutation,useDeletePostMutation,useDeleteComment} from './../../../hooks/queryesHooks'
+import {useLikePostMutation,usePostsQuery,useDislikePostMutation,useAddCommentToPostMutation,useDeletePostMutation,useDeleteComment,useSavePostToFavorite} from './../../../hooks/queryesHooks'
 import { useQueryClient,useQuery } from 'react-query';
 import { MdOutlineReply,MdOutlineCircle,MdCircle,MdBrightness1,MdDelete} from "react-icons/md";
 import {parseTextWithLinks} from './../../../helper/linkFunction.js'
+import { MdBookmarkAdd } from "react-icons/md";
+import { BsBookmarkPlus,BsBookmarkCheckFill } from "react-icons/bs";
+
 
 
 
@@ -34,6 +37,7 @@ const HomePage = ()=>{
   const addCommentPostMutation = useAddCommentToPostMutation()
   const deletePostMutation = useDeletePostMutation()
   const deleteCommentMutation = useDeleteComment()
+  const savePostToFavoriteMutation = useSavePostToFavorite()
   
   	const { data: users } = useQuery('users', () => queryClient.getQueryData('users'));
     const { data: arrayPosts } = useQuery('arrayPosts', () => queryClient.getQueryData('arrayPosts'));
@@ -116,13 +120,25 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
   	}
   }
 
+  const handleSaveToFavorite = async (postId,userId) => {
+  	try {
+  		await savePostToFavoriteMutation.mutate({postId,userId})
+  		console.log("Успешно добавлен в сохранение")
+
+  		
+  	} catch	(error) {
+  		console.log("Ошибка при добовления поста в избранное")
+  	}
+  }
+
   const addCommentToPost = async (postId,userId,thisUser,commentText,replyComment) => {
   	try{
+  		if(commentText[postId]!== null){
   		await addCommentPostMutation.mutate({postId,userId,thisUser,commentText,replyComment})
   		setCommentText("")
   		setNotificText(t('NotificComment'))
   		setReplyComment(null)
-
+  	}
   	}catch (error) {
   		console.error("Ошибка при добовления комментари")
   	}
@@ -201,6 +217,19 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
 								copyToClipboard(`https://cospulse.netlify.app//home/comment/post/${m.id}`)
 								setOpenSettings(false)
 							}}><IoCopySharp/>{t("CopyLink")}</span>
+							<span className={s.miniItem4} onClick={()=>{
+								handleSaveToFavorite(m.id,thisUser?.id)
+								if(m.savingThisPost?.includes(thisUser?.id)){
+									setNotificText(t('RemoveSaved'))
+								} else{
+									setNotificText(t('AddSaved'))
+								}
+								setOpenSettings(false)
+							}}>
+							{m.savingThisPost?.includes(thisUser?.id) 
+							?<span><BsBookmarkCheckFill />{t('Remove')}</span>
+							:<span><BsBookmarkPlus />{t('Save')}</span>}
+							</span>
 							<span className={s.miniItem3} onClick={()=>{handleDeleteItem(m.id)}}><MdDeleteForever/><span>{t("Delete")}</span></span> 
 						</span> 
 						: "" 
@@ -210,7 +239,19 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
 								copyToClipboard(`https://cospulse.netlify.app//home/comment/post/${m.id}`)
 								setOpenSettings(false)
 							}}><IoCopySharp/>{t("CopyLink")}</span> 
-							
+							<span className={s.miniItem4} onClick={()=>{
+								handleSaveToFavorite(m.id,thisUser?.id)
+								if(m.savingThisPost?.includes(thisUser?.id)){
+									setNotificText(t('RemoveSaved'))
+								} else{
+									setNotificText(t('AddSaved'))
+								}
+								setOpenSettings(false)
+							}}>
+							{m.savingThisPost?.includes(thisUser?.id) 
+							?<span><BsBookmarkCheckFill />{t('Remove')}</span>
+							:<span><BsBookmarkPlus />{t('Save')}</span>}
+							</span>
 							<span className={s.miniItem3} ><MdReport/><span>{t("Report")}</span></span> 
 						</span> 
 						: "" }

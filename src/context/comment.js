@@ -81,6 +81,40 @@ export const dislikePostFunction = async (postId, userId , arrayPosts , queryCli
     }
 };
 
+export const savePostToFavorite = async (postId,userId,arrayPosts,queryClient) => {
+    try {
+        const postIndex = arrayPosts.findIndex(post => post.id === postId)
+
+        if(postIndex !== -1) {
+            const post = arrayPosts[postIndex];
+
+            if (!post.savingThisPost) {
+                post.savingThisPost = [];
+            }
+
+            const save = post.savingThisPost?.includes(userId);
+
+            const updatedPosts = [...arrayPosts];
+
+            if(save){
+                const updatedSave = post.savingThisPost.filter(id => id !== userId);
+                updatedPosts[postIndex].savingThisPost = updatedSave
+            } else {
+                updatedPosts[postIndex].savingThisPost.push(userId)
+            }
+
+            queryClient.setQueryData('arrayPosts' , updatedPosts);
+            const postDocRef = doc(db,"posts",docId);
+            await updateDoc(postDocRef, {arrayPosts:updatedPosts });
+            console.log("Добовлена в избранное")
+        } else{
+            console.log("Пост не найден")
+        }
+
+    } catch (error){
+        console.error("Ошибка при сохранени поста")
+    }
+}
 
 
 export const addCommentPostFunction = async (postId, userId, thisUser , commentText , arrayPosts , replyComment , queryClient) => {

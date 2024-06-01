@@ -6,11 +6,11 @@ import { getStorage,ref, uploadBytes } from "firebase/storage";
 
 export const followFunction = async (thisUser, user, queryClient) => {
   try {
-    // Получаем ссылки на документы пользователя и текущего пользователя
+
     const userDocRef = doc(db, 'users', user.id);
     const thisUserDocRef = doc(db, 'users', thisUser.id);
 
-    // Получаем текущие данные из кэша queryClient
+
     const usersArray = queryClient.getQueryData('users');
     const thisUserSnapshot = queryClient.getQueryData('thisUser');
 
@@ -18,7 +18,6 @@ export const followFunction = async (thisUser, user, queryClient) => {
       throw new Error('User data not found in cache.');
     }
 
-    // Находим пользователя в массиве пользователей
     const userIndex = usersArray.findIndex(u => u.id === user.id);
     if (userIndex === -1) {
       throw new Error('User not found in cache.');
@@ -79,10 +78,6 @@ export const unfollowFunction = async (thisUser, user, usersArray, queryClient) 
         
          const userDocRef = doc(db, 'users', user.id);
     const thisUserDocRef = doc(db, 'users', thisUser.id);
-
-    // Получаем текущие данные из кэша queryClient
-    // const usersArray = queryClient.getQueryData('users');
-    // const thisUserSnapshot = queryClient.getQueryData('thisUser');
 
     if (!usersArray || !thisUser) {
       throw new Error('User data not found in cache.');
@@ -147,7 +142,7 @@ export const accpetRequestFunction = async (thisUser, user, usersArray, queryCli
 
 
 
-    // arrayRequestThis = arrayRequest.filter(id => id !== user.id)
+
 
         thisUser.userData.requests = arrayRequestThis.filter(id => id !== user.id)
 

@@ -30,6 +30,7 @@ const OtherFollowing = React.lazy(()=> import('./OtherPage/OtherFollowing/OtherF
 const MyFollowers = React.lazy(()=> import('./ProfilePage/MyFollowers/MyFollowers'))
 const MyFollowing = React.lazy(()=> import('./ProfilePage/MyFollowing/MyFollowing'))
 const UpdatedSitePage = React.lazy(()=>import('./../UpdatedSitePage/UpdatedSitePage'))
+const SavePage = React.lazy(()=>import('./SavePage/SavePage'))
 
 
 
@@ -204,6 +205,7 @@ const topUsersList = sortedUsers?.map((user,index) => (
             <Route path="profile/followers" element={<MyFollowers />} />
             <Route path="profile/following" element={<MyFollowing />} />
             <Route path="updated" element={<UpdatedSitePage />} />
+            <Route path="save" element={<SavePage />} />
             </Routes>
             </Suspense> 
             </div>

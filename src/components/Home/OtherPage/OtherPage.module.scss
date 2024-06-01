@@ -594,6 +594,33 @@
 					color: #222;
 				}
 				
+				.miniItem4{
+					color: rgba(256, 256, 256, 0.6);
+				
+					padding: 13px;
+					
+					font-weight: bold;
+					border-bottom:1px solid #999;
+					cursor:pointer;
+					background-color:rgba(256, 256, 256, 0.1);
+
+					span{
+					display: flex;
+					flex-direction: row;
+					align-items: center;
+				
+					gap: 5px;
+					}
+
+					svg{
+						font-size: 23px;
+					}
+				}
+
+				.miniItem4:hover{
+					background-color: rgba(256, 256, 256, 0.5);
+					color: #222;
+				}				
 				
 			}
 		}

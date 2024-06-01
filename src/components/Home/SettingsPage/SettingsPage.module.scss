@@ -166,13 +166,18 @@
 	.content4{
 		width: 100%;
 		padding:15px;
+		display: flex;
+		flex-direction: row;
+		justify-content: space-around;
 
 		.item3{
+			width: 100%;
 			color: whitesmoke;
 			font-weight: bold;
 			font-size: 17px;
 			display: flex;
 			align-items: center;
+			justify-content: space-between;
 			gap: 25px;
 			padding: 10px;
 			border-bottom: 2px solid rgba(256, 256, 256, 0.5);

@@ -1,6 +1,6 @@
 import { useQuery,useMutation } from 'react-query';
 import { fetchData,fetchUsers,fetchThisUser} from './../api';
-import {likePostFunction,dislikePostFunction,addCommentPostFunction,deleteCommentPostFunction} from './../context/comment'
+import {likePostFunction,dislikePostFunction,savePostToFavorite,addCommentPostFunction,deleteCommentPostFunction} from './../context/comment'
 import {deletePostFunction,addPostFunction} from './../context/posts'
 import {followFunction,unfollowFunction,accpetRequestFunction,cancelRequestFunction,changeInfoUserFunction} from './../context/users'
 import { useQueryClient } from 'react-query';
@@ -55,7 +55,7 @@ export const useLikePostMutation = () => {
     },
     {
       onSuccess: () => {
-        // Опционально: перезагрузить данные после успешного обновления
+     
         queryClient.invalidateQueries('arrayPosts');
       },
     }
@@ -81,7 +81,7 @@ export const useLikePostMutation = () => {
     },
     {
       onSuccess: () => {
-        // Опционально: перезагрузить данные после успешного обновления
+        
         queryClient.invalidateQueries('arrayPosts');
       },
     }
@@ -89,6 +89,30 @@ export const useLikePostMutation = () => {
 
   return dislikePostMutation;
 };
+
+export const useSavePostToFavorite = () => {
+  const queryClient = useQueryClient();
+
+  const savePostToFavoriteMutation = useMutation(
+    async ({postId,userId}) => {
+      const arrayPosts = queryClient.getQueryData('arrayPosts');
+
+      if(arrayPosts) {
+        return savePostToFavorite(postId,userId,arrayPosts,queryClient);
+
+      } else {
+        return Promise.reject("Массив поста не определен")
+      }
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries('arrayPosts');
+      },
+    }
+    );
+
+  return savePostToFavoriteMutation
+}
 
 
   export const useAddCommentToPostMutation = () => {
@@ -106,7 +130,7 @@ export const useLikePostMutation = () => {
     },
     {
       onSuccess: () => {
-        // Опционально: перезагрузить данные после успешного обновления
+       
         queryClient.invalidateQueries('arrayPosts');
       },
     }
@@ -131,7 +155,7 @@ export const useLikePostMutation = () => {
     },
     {
       onSuccess: () => {
-        // Опционально: перезагрузить данные после успешного обновления
+        
         queryClient.invalidateQueries('arrayPosts');
       },
     }
@@ -157,7 +181,7 @@ export const useLikePostMutation = () => {
     },
     {
       onSuccess: () => {
-        // Опционально: перезагрузить данные после успешного обновления
+       
         queryClient.invalidateQueries('arrayPosts');
       },
     }
@@ -183,7 +207,7 @@ export const useLikePostMutation = () => {
     },
     {
       onSuccess: () => {
-        // Опционально: перезагрузить данные после успешного обновления
+        
         queryClient.invalidateQueries('users');
         queryClient.invalidateQueries('thisUser');
       },
@@ -210,7 +234,7 @@ export const useLikePostMutation = () => {
     },
     {
       onSuccess: () => {
-        // Опционально: перезагрузить данные после успешного обновления
+        
         queryClient.invalidateQueries('users');
         queryClient.invalidateQueries('thisUser');
       },
@@ -238,7 +262,7 @@ export const useLikePostMutation = () => {
     },
     {
       onSuccess: () => {
-        // Опционально: перезагрузить данные после успешного обновления
+       
         queryClient.invalidateQueries('users');
         queryClient.invalidateQueries('thisUser');
       },
@@ -293,7 +317,7 @@ export const useLikePostMutation = () => {
     },
     {
       onSuccess: () => {
-        // Опционально: перезагрузить данные после успешного обновления
+       
         
         queryClient.invalidateQueries('thisUser');
       },
@@ -319,7 +343,7 @@ export const useDeleteComment = () => {
     },
     {
       onSuccess: () => {
-        // Опционально: перезагрузить данные после успешного обновления
+        
         queryClient.invalidateQueries('arrayPosts');
       },
     }
