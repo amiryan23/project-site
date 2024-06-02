@@ -45,6 +45,7 @@
 	"Link": "Link",
 	"AddPost": "Add post",
 	"NoPosts": "You don't have any posts yet",
+	"UserNoPosts":"hasn't published a post yet",
 	"ClosedProfile": "This account is private",
 	"Req": "Requested",
 	"Flw": "Follow",

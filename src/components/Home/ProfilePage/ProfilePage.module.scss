@@ -879,7 +879,7 @@
 				.postCommentBlock1{
 					width: 100%;
 					min-height:100px;
-					max-height: 300px;
+					max-height: 1000px;
 					border-top: 1px solid rgba(256, 256, 256, 0.9);
 
 					border-bottom: 1px solid #999;
@@ -993,11 +993,27 @@
 									}
 								}
 
+								.miniItem{
+									width: 100%;
+							
+									box-sizing: border-box;
+
+									img{
+										
+										max-width: 100%;
+										width: auto;
+										height: auto;
+										max-height: 450px;
+										border-radius: 9px;
+										border: 2px solid rgba(256, 256, 256, 0.3);
+									}
+								}
+
 								.miniItem2{
 									font-weight: bold;
 									font-size: 14px;
 									color: rgba(256, 256, 256, 0.8);
-								}
+								}								
 							}
 
 
@@ -1135,6 +1151,41 @@
 					
 				}
 			}
+			.imgContainer{
+					width: 400px;
+					min-height: 50px;
+					padding: 0px 10px 0px 10px;
+					border: 1px dashed rgba(256, 256, 256, 0.2);
+					background-color: rgba(256, 256, 256, 0.1);
+					opacity: 0.7;
+					border-radius: 15px;
+					display: flex;
+					flex-direction: row;
+					justify-content: space-around;
+					gap: 5px;
+					margin-left: 10px;
+					padding: 5px;
+
+					span{
+						color: rgba(256, 256, 256, 0.5);
+						font-weight: bold;
+						font-size: 19px;
+
+						svg{
+							cursor: pointer;
+						}
+					}
+
+					
+
+					img{
+						width: auto;
+						max-height: 150px;
+						border-radius: 9px;
+						border: 2px solid rgba(256, 256, 256, 0.3);
+
+					}
+			}
 
 				.postCommentBlock2{
 					width: 80%;
@@ -1161,11 +1212,12 @@
 					}
 
 					.postCommentItem2{
+						width: 100%;
 						flex:1 0 ;
 
-					input{
+					textarea{
 						width: 100%;
-						
+						max-height: 75px;
 						padding: 7px;
 						background-color: rgba(0, 0, 0, 0.3);
 						color: whitesmoke;
@@ -1173,39 +1225,73 @@
 						border: 2px solid rgba(256, 256, 256, 0.3);
 						outline: none;
 						word-break: break-word;
+						overflow-wrap: break-word;
+						resize: none;
 
 					}
 					
-					input::placeholder {
-						font-size: 10px;
+					textarea::placeholder {
+						font-size: 11px;
 						font-weight: bold;
 						color: rgba(256, 256, 256, 0.3);
 						transition: 250ms linear;
+						
+
+						margin-top: 25px;
 					}					
 
-					input:disabled{
+					textarea:disabled{
 						opacity: 0.5;
 					}
 				}
 					.postCommentItem3{
 						
-						padding: 5px;
-						border: 2px solid rgba(256, 256, 256, 0.3);
-						border-radius: 15px;
+
+						display: flex;
+						flex-direction: row;
+						gap: 5px;
+						flex-wrap: no-wrap;
+						justify-content: center;
+						align-items: center;
+
+						input{
+							display: none;
+							visibility: hidden;
+						}
+						
+
+						.item1{
 						display: flex;
 						justify-content: center;
 						align-items: center;
+						padding: 5px;
+
 						cursor:pointer;
 
 
+							svg{
+								color: rgba(256, 256, 256, 0.3);
+								font-size: 20px;
+							}
+						}
 
-						svg {
-							color: #999;
+						.item2{
+							display: flex;
+						justify-content: center;
+						align-items: center;
+						padding: 5px;
+						border: 2px solid rgba(256, 256, 256, 0.3);
+						border-radius: 15px;
+						cursor:pointer;
+
+							svg{
+								color: rgba(256, 256, 256, 0.3);
+							}
 						}
 
 					}
 
-					.postCommentItem3:active{
+					.item2:active{
 							background-color: rgba(256, 256, 256, 0.7);
 							transform: scale(1.09);
 						}
@@ -1336,6 +1422,11 @@
 							width: 100%;
 							margin: 0;
 						}
+
+					.imgContainer{
+						width: 100%;
+						margin: 0s;
+					}
 											
 					.postCommentBlock2{
 						width:100%;

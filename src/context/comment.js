@@ -1,6 +1,7 @@
-import {db,docId} from './../firebase'
+import {db,docId,firebaseConfig,storage} from './../firebase'
 import { doc, updateDoc  } from "firebase/firestore";
-
+import Resizer from 'react-image-file-resizer';
+import { getStorage,ref, uploadBytes } from "firebase/storage";
 
 
 
@@ -117,11 +118,41 @@ export const savePostToFavorite = async (postId,userId,arrayPosts,queryClient) =
 }
 
 
-export const addCommentPostFunction = async (postId, userId, thisUser , commentText , arrayPosts , replyComment , queryClient) => {
+export const addCommentPostFunction = async (postId, userId, thisUser , commentText   , replyComment , file ,arrayPosts, queryClient) => {
     try {
-        if(commentText !== ""){
+        if(arrayPosts){
         const postIndex = arrayPosts.findIndex(post => post.id === postId);
         if (postIndex !== -1) {
+
+               const thisFile = file.current ? file.current.files[0] : ""
+
+
+            if(thisFile){ 
+                  const compressedFile = await new Promise((resolve) => {
+          Resizer.imageFileResizer(
+            thisFile,
+            thisFile.width, 
+            thisFile.height, 
+            'JPEG', 
+            80, 
+            0, 
+            (uri) => {
+              resolve(uri);
+            },
+            'file'
+          );
+        });
+
+        const timestamp = new Date().getTime();
+            const uniqueFilename = `post_${timestamp}_${thisFile.name}`;
+            
+            
+            
+            const storageRef = ref(storage, `imageComments/${uniqueFilename}`);
+
+            
+            await uploadBytes(storageRef, compressedFile);
+
         
             const post = arrayPosts[postIndex];
            
@@ -129,19 +160,27 @@ export const addCommentPostFunction = async (postId, userId, thisUser , commentT
 
             const thisRepleyPost = replyComment ? replyComment[postId] : ""
           
+       
+
             const comment = 
             { 
             id:new Date().getTime(),
             userId: userId, 
             userName:thisUser.username,
             commentText: commentText ,
-            imgUrl:"",
+            imgUrl: `https://firebasestorage.googleapis.com/v0/b/${firebaseConfig.storageBucket}/o/imageComments%2F${encodeURIComponent(uniqueFilename)}?alt=media`  ,
             timeAdded: new Date().toLocaleString() ,
             replyComment:thisRepleyPost
             };
+
+
+
+
+        
             updatedPosts[postIndex].commentArray.push(comment);
   
             // setCommentText("")
+
             
             queryClient.setQueryData('arrayPosts', updatedPosts);
             const postDocRef = doc(db, "posts", docId);
@@ -150,7 +189,34 @@ export const addCommentPostFunction = async (postId, userId, thisUser , commentT
             console.log("Комментарий успешно добавлен к посту.");
             // setNotificText("Комментарий успешно добавлен к посту")
 
+                } else if(commentText !== "") {
 
+            const updatedPosts = [...arrayPosts];
+
+            const thisRepleyPost = replyComment ? replyComment[postId] : ""
+
+            const comment = 
+            { 
+            id:new Date().getTime(),
+            userId: userId, 
+            userName:thisUser.username,
+            commentText: commentText ,
+            timeAdded: new Date().toLocaleString() ,
+            replyComment:thisRepleyPost
+            };
+
+
+
+
+        
+            updatedPosts[postIndex].commentArray.push(comment);
+  
+            queryClient.setQueryData('arrayPosts', updatedPosts);
+            const postDocRef = doc(db, "posts", docId);
+            await updateDoc(postDocRef, { arrayPosts: updatedPosts });
+
+            console.log("Комментарий успешно добавлен к посту.");
+                }
         } else {
             console.log("Пост не найден.");
         }

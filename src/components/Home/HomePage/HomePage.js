@@ -19,6 +19,7 @@ import { MdOutlineReply,MdOutlineCircle,MdCircle,MdBrightness1,MdDelete} from "r
 import {parseTextWithLinks} from './../../../helper/linkFunction.js'
 import { MdBookmarkAdd } from "react-icons/md";
 import { BsBookmarkPlus,BsBookmarkCheckFill } from "react-icons/bs";
+import { IoMdPhotos } from "react-icons/io";
 
 
 
@@ -26,7 +27,7 @@ import { BsBookmarkPlus,BsBookmarkCheckFill } from "react-icons/bs";
 
 const HomePage = ()=>{
 
- const {  thisUser,calculateTimeDifference,commentText,setCommentText,setNotificText,copyToClipboard,t,setActiveLink} = useContext(MyContext);
+ const {  thisUser,calculateTimeDifference,commentText,setCommentText,setNotificText,copyToClipboard,t,setActiveLink,fileUrls, setFileUrls,file} = useContext(MyContext);
 
  const queryClient = useQueryClient();
 
@@ -38,6 +39,7 @@ const HomePage = ()=>{
   const deletePostMutation = useDeletePostMutation()
   const deleteCommentMutation = useDeleteComment()
   const savePostToFavoriteMutation = useSavePostToFavorite()
+
   
   	const { data: users } = useQuery('users', () => queryClient.getQueryData('users'));
     const { data: arrayPosts } = useQuery('arrayPosts', () => queryClient.getQueryData('arrayPosts'));
@@ -48,12 +50,13 @@ const HomePage = ()=>{
   const [arrayLength,setArrayLength] = useState(4)
   const [replyComment,setReplyComment] = useState(null)
   const [pathAllActive,setAllActive] = useState(true)
-
+  
 
  const animBlock = useRef()
  const btn1 = useRef()
  const btn2 = useRef()
  
+
 
  let timer;
 
@@ -131,10 +134,10 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
   	}
   }
 
-  const addCommentToPost = async (postId,userId,thisUser,commentText,replyComment) => {
+  const addCommentToPost = async (postId,userId,thisUser,commentText,replyComment,file) => {
   	try{
   		if(commentText[postId]!== null){
-  		await addCommentPostMutation.mutate({postId,userId,thisUser,commentText,replyComment})
+  		await addCommentPostMutation.mutate({postId,userId,thisUser,commentText,replyComment,file})
   		setCommentText("")
   		setNotificText(t('NotificComment'))
   		setReplyComment(null)
@@ -164,6 +167,21 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
   	}
   }
 
+const handleFileChange = useCallback((e, postId) => {
+ 
+  if (e.target.files && e.target.files.length > 0) {
+ 
+    const file = e.target.files[0];
+    const url = URL.createObjectURL(file);
+
+    setFileUrls(prevState => ({
+      ...prevState,
+      [postId]: url
+    }));
+  }
+}, []);
+
+
 
   const changePath = useCallback((button1,button2,path) => {
   	button1.current.classList.add(s.active)
@@ -173,10 +191,12 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
 
 
 
+
+
 	const allPosts = arrayPosts 
   ? arrayPosts
  	.filter(post => !users?.some(user => user.id === post.userId && user.private ) && !post.forwardPost)
- 	.map(m => 		<div className={s.postMegaContent} key={m.id}>
+ 	.map((m,index) => 		<div className={s.postMegaContent} key={m.id}>
 					<div className={s.postMiniContent1}>
 						<span className={s.postBlock1}>
 							<Link to={thisUser?.id !== m.userId ? `/home/user/profile/${m.userId}` : "/home/profile"}><img src={users?.find(user => user.id === m.userId).photo?.placed ? users?.find(user => user?.id === m.userId).photo?.placed : users?.find(user => user?.id === m.userId).photo?.default} alt="" /></Link>
@@ -353,6 +373,11 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
 					            		</span>
 					            	</div>
 					            	: "" }
+					            	{comment.imgUrl !== undefined && comment.imgUrl !== "" ? 
+					            	<div className={s.miniItem}>
+					            		<img src={comment.imgUrl} alt="" width="100px"/>
+					            	</div>
+					            	: ""}
 					            	<div className={s.miniItem2}>
 					              {comment.commentText}
 					              </div>
@@ -391,17 +416,44 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
 							</div>
 							</div>
 							:"" }
-						
+							{fileUrls[m.id] 
+							? <div className={s.imgContainer}>
+							 <img src={fileUrls[m.id]} alt="Preview" width="100px" /> 
+							 <span onClick={() => {
+				 				 setFileUrls(prevFileUrls => {
+		   						 const updatedFileUrl = { ...prevFileUrls };
+		   						 delete updatedFileUrl[m.id];
+								   return updatedFileUrl;
+								  });
+								}}>
+							 <MdOutlineClose />
+							 </span>
+							 </div>
+							: "" }
 						<div className={s.postCommentBlock2}>
 							<span className={s.postCommentItem1}><img title={thisUser?.username} src={thisUser?.photo?.placed ? thisUser?.photo?.placed  : thisUser?.photo?.default } alt="" /></span>
 							<span className={s.postCommentItem2}>
 							{!m.privateComment 
-							? <input value={commentText[m.id] || ""} onChange={(e)=>{handleCommentChange(m.id,e.target.value)}} type="text" placeholder={t('AddComment')}/>
-							: <input value={commentText[m.id] || ""}  disabled="true" onChange={(e)=>{handleCommentChange(m.id,e.target.value)}} type="text" placeholder="..."/>}
+							? <textarea value={commentText[m.id] || ""} onChange={(e)=>{handleCommentChange(m.id,e.target.value)}} type="text" placeholder={t('AddComment')}/>
+							: <textarea value={commentText[m.id] || ""}  disabled="true" onChange={(e)=>{handleCommentChange(m.id,e.target.value)}} type="text" placeholder="..."/>}
 							</span>
 							{!m.privateComment 
-							? <span className={s.postCommentItem3} onClick={()=>{addCommentToPost(m.id,thisUser?.id,thisUser,commentText[m.id],replyComment)}}><RiSendPlaneFill title="Send"/></span>
-							: <span className={s.postCommentItem3} style={{opacity:"0.5"}}><RiSendPlaneFill title="Send"/></span> 
+							? <span className={s.postCommentItem3}>
+							<input ref={file} id={`fileUrl-${[m.id]}`} type="file" onChange={(e)=>{handleFileChange(e,m.id)}}  />
+							<label htmlFor={`fileUrl-${[m.id]}`} className={s.item1}><IoMdPhotos/></label>
+							<span  onClick={()=>{
+								addCommentToPost(m.id,thisUser?.id,thisUser,commentText[m.id],replyComment,file)
+								 setFileUrls(prevFileUrls => {
+		   						 const updatedFileUrl = { ...prevFileUrls };
+		   						 delete updatedFileUrl[m.id];
+								   return updatedFileUrl;
+								  });
+							}} className={s.item2}><RiSendPlaneFill title="Send"/></span>
+							</span>
+							: <span className={s.postCommentItem3}  style={{opacity:"0.5"}}>
+							<span className={s.item1}><IoMdPhotos/></span>
+							<span className={s.item2}><RiSendPlaneFill  title="Send"/></span>
+							</span> 
 							}	
 						</div>
 
@@ -567,6 +619,11 @@ const onlyFollowing = arrayPosts
 					            		</span>
 					            	</div>
 					            	: "" }
+					            	{comment.imgUrl !== undefined && comment.imgUrl !== "" ? 
+					            	<div className={s.miniItem}>
+					            		<img src={comment.imgUrl} alt="" width="100px"/>
+					            	</div>
+					            	: ""}
 					            	<div className={s.miniItem2}>
 					              {comment.commentText}
 					              </div>
@@ -605,17 +662,45 @@ const onlyFollowing = arrayPosts
 							</div>
 							</div>
 							:"" }
+								{fileUrls[m.id] 
+							? <div className={s.imgContainer}>
+							 <img src={fileUrls[m.id]} alt="Preview" width="100px" /> 
+							 <span onClick={() => {
+				 				 setFileUrls(prevFileUrls => {
+		   						 const updatedFileUrl = { ...prevFileUrls };
+		   						 delete updatedFileUrl[m.id];
+								   return updatedFileUrl;
+								  });
+								}}>
+							 <MdOutlineClose />
+							 </span>
+							 </div>
+							: "" }
 						
 						<div className={s.postCommentBlock2}>
 							<span className={s.postCommentItem1}><img title={thisUser?.username} src={thisUser?.photo?.placed ? thisUser?.photo?.placed  : thisUser?.photo?.default } alt="" /></span>
 							<span className={s.postCommentItem2}>
 							{!m.privateComment 
-							? <input value={commentText[m.id] || ""} onChange={(e)=>{handleCommentChange(m.id,e.target.value)}} type="text" placeholder={t('AddComment')}/>
-							: <input value={commentText[m.id] || ""}  disabled="true" onChange={(e)=>{handleCommentChange(m.id,e.target.value)}} type="text" placeholder="..."/>}
+							? <textarea value={commentText[m.id] || ""} onChange={(e)=>{handleCommentChange(m.id,e.target.value)}} type="text" placeholder={t('AddComment')}/>
+							: <textarea value={commentText[m.id] || ""}  disabled="true" onChange={(e)=>{handleCommentChange(m.id,e.target.value)}} type="text" placeholder="..."/>}
 							</span>
 							{!m.privateComment 
-							? <span className={s.postCommentItem3} onClick={()=>{addCommentToPost(m.id,thisUser?.id,thisUser,commentText[m.id],replyComment)}}><RiSendPlaneFill title="Send"/></span>
-							: <span className={s.postCommentItem3} style={{opacity:"0.5"}}><RiSendPlaneFill title="Send"/></span> 
+							? <span className={s.postCommentItem3}>
+							<input ref={file} id={`fileUrl-${[m.id]}`} type="file" onChange={(e)=>{handleFileChange(e,m.id)}}  />
+							<label htmlFor={`fileUrl-${[m.id]}`} className={s.item1}><IoMdPhotos/></label>
+							<span  onClick={()=>{
+								addCommentToPost(m.id,thisUser?.id,thisUser,commentText[m.id],replyComment,file)
+								 setFileUrls(prevFileUrls => {
+		   						 const updatedFileUrl = { ...prevFileUrls };
+		   						 delete updatedFileUrl[m.id];
+								   return updatedFileUrl;
+								  });
+							}} className={s.item2}><RiSendPlaneFill title="Send"/></span>
+							</span>
+							: <span className={s.postCommentItem3}  style={{opacity:"0.5"}}>
+							<span className={s.item1}><IoMdPhotos/></span>
+							<span className={s.item2}><RiSendPlaneFill  title="Send"/></span>
+							</span> 
 							}	
 						</div>
 

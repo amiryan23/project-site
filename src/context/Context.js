@@ -32,11 +32,13 @@ const MyContextProvider = ({ children }) => {
   const [notificText,setNotificText] = useState("")
   const [isStatusUpdated, setStatusUpdated] = useState(false);
   const [openUpdate,setOpenUpdate] = useState(true)
-  
+  const [fileUrls, setFileUrls] = useState({});
 
 const [activeLink,setActiveLink] = useState(locationStorage ? locationStorage : "/home")
 
   const {t} = useTranslation()
+
+   const file = useRef({})
 
 const queryClient = useQueryClient();
 
@@ -216,7 +218,10 @@ const calculateTimeDifference = (timeAdded) => {
         setOpenUpdate,
         // replyComment,
         // setReplyComment
-    }), [logined, authUser, isWideScreen, openMenu, commentText,notificText,theme,t,activeLink,setActiveLink,openUpdate]);
+        fileUrls, 
+        setFileUrls,
+        file
+    }), [logined, authUser, isWideScreen, openMenu, commentText,notificText,theme,t,activeLink,setActiveLink,openUpdate,fileUrls,file]);
 
   return (
     <MyContext.Provider 

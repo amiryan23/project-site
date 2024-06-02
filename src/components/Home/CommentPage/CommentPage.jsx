@@ -13,12 +13,13 @@ import { LuReplyAll } from "react-icons/lu";
 import { MdOutlineReply,MdOutlineClose } from "react-icons/md";
 import { MdCircle,MdBrightness1,MdDelete } from "react-icons/md";
 import {parseTextWithLinks} from './../../../helper/linkFunction.js'
+import { IoMdPhotos } from "react-icons/io";
 
 
 
 const CommentPage = () => {
 
- const {  thisUser  ,calculateTimeDifference,commentText,setCommentText,setNotificText,t,setActiveLink} = useContext(MyContext);
+ const {  thisUser  ,calculateTimeDifference,commentText,setCommentText,setNotificText,t,setActiveLink,fileUrls, setFileUrls,file} = useContext(MyContext);
 
  const queryClient = useQueryClient();
 
@@ -94,13 +95,14 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
   	}
   }
 
-  const addCommentToPost = async (postId,userId,thisUser,commentText,replyComment) => {
+  const addCommentToPost = async (postId,userId,thisUser,commentText,replyComment,file) => {
   	try{
-  		await addCommentPostMutation.mutate({postId,userId,thisUser,commentText,replyComment})
+  		if(commentText[postId]!== null){
+  		await addCommentPostMutation.mutate({postId,userId,thisUser,commentText,replyComment,file})
   		setCommentText("")
   		setNotificText(t('NotificComment'))
   		setReplyComment(null)
-
+  	}
   	}catch (error) {
   		console.error("Ошибка при добовления комментари")
   	}
@@ -139,6 +141,22 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
   		console.error("Ошибка при удаления комментари",error)
   	}
   }
+
+  const handleFileChange = useCallback((e, postId) => {
+ 
+  if (e.target.files && e.target.files.length > 0) {
+ 
+    const file = e.target.files[0];
+    const url = URL.createObjectURL(file);
+
+    setFileUrls(prevState => ({
+      ...prevState,
+      [postId]: url
+    }));
+  }
+}, []);
+
+
 
 	return (
 		<div className={s.megaContainer} ref={animBlock}>
@@ -256,6 +274,11 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
 					            		</span>
 					            	</div>
 					            	: "" }
+					            	{comment.imgUrl !== undefined && comment.imgUrl !== "" ? 
+					            	<div className={s.miniItem}>
+					            		<img src={comment.imgUrl} alt="" width="100px"/>
+					            	</div>
+					            	: ""}
 					         				<div className={s.miniItem2}>
 					              {comment.commentText}
 					              </div>
@@ -294,18 +317,46 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
 							</div>
 							</div>
 							:"" }
+							{fileUrls[selectedPost.id] 
+							? <div className={s.imgContainer}>
+							 <img src={fileUrls[selectedPost.id]} alt="Preview" width="100px" /> 
+							 <span onClick={() => {
+				 				 setFileUrls(prevFileUrls => {
+		   						 const updatedFileUrl = { ...prevFileUrls };
+		   						 delete updatedFileUrl[selectedPost.id];
+								   return updatedFileUrl;
+								  });
+								}}>
+							 <MdOutlineClose />
+							 </span>
+							 </div>
+							: "" }
 
 						<div className={s.postCommentBlock2}>
-							<span className={s.postCommentItem1}><img title={thisUser?.username} src={thisUser?.photo?.placed || thisUser?.photo?.default} alt="" /></span>
+							<span className={s.postCommentItem1}><img title={thisUser?.username} src={thisUser?.photo?.placed ? thisUser?.photo?.placed  : thisUser?.photo?.default } alt="" /></span>
 							<span className={s.postCommentItem2}>
-							{!selectedPost?.privateComment 
-							? <input value={commentText[selectedPost?.id] || ""} onChange={(e)=>{handleCommentChange(selectedPost?.id,e.target.value)}} type="text" placeholder={t('AddComment')}/>
-							: <input value={commentText[selectedPost?.id] || ""} disabled="true" onChange={(e)=>{handleCommentChange(selectedPost?.id,e.target.value)}} type="text" placeholder="..."/>}
+							{!selectedPost.privateComment 
+							? <textarea value={commentText[selectedPost.id] || ""} onChange={(e)=>{handleCommentChange(selectedPost.id,e.target.value)}} type="text" placeholder={t('AddComment')}/>
+							: <textarea value={commentText[selectedPost.id] || ""}  disabled="true" onChange={(e)=>{handleCommentChange(selectedPost.id,e.target.value)}} type="text" placeholder="..."/>}
 							</span>
-							{!selectedPost?.privateComment 
-							? <span className={s.postCommentItem3} onClick={()=>{addCommentToPost(selectedPost?.id,thisUser?.id,thisUser,commentText[selectedPost?.id],replyComment)}}><RiSendPlaneFill title="Send"/></span>
-							: <span className={s.postCommentItem3} style={{opacity:"0.5"}}><RiSendPlaneFill title="Send"/></span> 
-							}
+							{!selectedPost.privateComment 
+							? <span className={s.postCommentItem3}>
+							<input ref={file} id={`fileUrl-${[selectedPost.id]}`} type="file" onChange={(e)=>{handleFileChange(e,selectedPost.id)}}  />
+							<label htmlFor={`fileUrl-${[selectedPost.id]}`} className={s.item1}><IoMdPhotos/></label>
+							<span  onClick={()=>{
+								addCommentToPost(selectedPost.id,thisUser?.id,thisUser,commentText[selectedPost.id],replyComment,file)
+								 setFileUrls(prevFileUrls => {
+		   						 const updatedFileUrl = { ...prevFileUrls };
+		   						 delete updatedFileUrl[selectedPost.id];
+								   return updatedFileUrl;
+								  });
+							}} className={s.item2}><RiSendPlaneFill title="Send"/></span>
+							</span>
+							: <span className={s.postCommentItem3}  style={{opacity:"0.5"}}>
+							<span className={s.item1}><IoMdPhotos/></span>
+							<span className={s.item2}><RiSendPlaneFill  title="Send"/></span>
+							</span> 
+							}	
 						</div>
 
 					</div>
