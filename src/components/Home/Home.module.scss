@@ -168,7 +168,7 @@
         border-radius: 15px;
         display: flex;
         flex-direction: column;
-        justify-content: space-between;
+        // justify-content: space-between;
         gap: 10px;
         font-family: "Josefin Sans","Source Code Pro", sans-serif;
         
@@ -235,7 +235,10 @@
                 flex-direction: row;
                 gap:5px;
                 align-self:flex-start;
-                margin-bottom:125px;
+                // margin-bottom:125px;
+                margin-top: 20px;
+                border-top: 3px solid whitesmoke;
+                padding-top: 20px;
 
                 .settings{
                     padding: 7px;

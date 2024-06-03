@@ -416,8 +416,8 @@ const handleFileChange = useCallback((e, postId) => {
 							</div>
 							</div>
 							:"" }
-							{fileUrls[m.id] 
-							? <div className={s.imgContainer}>
+							{fileUrls[m.id] && 
+							 <div className={s.imgContainer}>
 							 <img src={fileUrls[m.id]} alt="Preview" width="100px" /> 
 							 <span onClick={() => {
 				 				 setFileUrls(prevFileUrls => {
@@ -429,7 +429,7 @@ const handleFileChange = useCallback((e, postId) => {
 							 <MdOutlineClose />
 							 </span>
 							 </div>
-							: "" }
+							 }
 						<div className={s.postCommentBlock2}>
 							<span className={s.postCommentItem1}><img title={thisUser?.username} src={thisUser?.photo?.placed ? thisUser?.photo?.placed  : thisUser?.photo?.default } alt="" /></span>
 							<span className={s.postCommentItem2}>
@@ -662,8 +662,8 @@ const onlyFollowing = arrayPosts
 							</div>
 							</div>
 							:"" }
-								{fileUrls[m.id] 
-							? <div className={s.imgContainer}>
+								{fileUrls[m.id] &&
+							 <div className={s.imgContainer}>
 							 <img src={fileUrls[m.id]} alt="Preview" width="100px" /> 
 							 <span onClick={() => {
 				 				 setFileUrls(prevFileUrls => {
@@ -675,7 +675,7 @@ const onlyFollowing = arrayPosts
 							 <MdOutlineClose />
 							 </span>
 							 </div>
-							: "" }
+							 }
 						
 						<div className={s.postCommentBlock2}>
 							<span className={s.postCommentItem1}><img title={thisUser?.username} src={thisUser?.photo?.placed ? thisUser?.photo?.placed  : thisUser?.photo?.default } alt="" /></span>

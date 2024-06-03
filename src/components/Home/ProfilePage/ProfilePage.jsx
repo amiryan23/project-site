@@ -25,7 +25,7 @@ import { FiLink } from "react-icons/fi";
 import {parseTextWithLinks} from './../../../helper/linkFunction.js'
 import { GoBookmarkFill } from "react-icons/go";
 import { IoMdPhotos } from "react-icons/io";
-
+import { FaStar } from "react-icons/fa";
 
 
 
@@ -400,8 +400,8 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
 							</div>
 							</div>
 							:"" }
-							{fileUrls[m.id] 
-							? <div className={s.imgContainer}>
+							{fileUrls[m.id] &&
+							<div className={s.imgContainer}>
 							 <img src={fileUrls[m.id]} alt="Preview" width="100px" /> 
 							 <span onClick={() => {
 				 				 setFileUrls(prevFileUrls => {
@@ -413,7 +413,7 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
 							 <MdOutlineClose />
 							 </span>
 							 </div>
-							: "" }
+							 }
 
 						<div className={s.postCommentBlock2}>
 							<span className={s.postCommentItem1}><img title={thisUser?.username} src={thisUser?.photo?.placed ? thisUser?.photo?.placed  : thisUser?.photo?.default } alt="" /></span>
@@ -470,7 +470,11 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
 				} src={thisUser?.photo?.placed ? thisUser?.photo?.placed : thisUser?.photo?.default} alt="" />
 				</span>
 				<span className={s.miniBlock2}>
-					{thisUser ? thisUser.username : <MiniLoader/>}
+					{thisUser ? 
+					!thisUser.premiumUser 
+					? thisUser.username 
+					: <span>{thisUser.username}<FaStar/></span>
+					: <MiniLoader/>}
 				</span>
 				{/* <span className={s.miniBlock}>{thisUser ? thisUser.description : ""}</span> */}
 				</span>

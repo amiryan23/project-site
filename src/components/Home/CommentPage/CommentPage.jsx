@@ -317,8 +317,8 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
 							</div>
 							</div>
 							:"" }
-							{fileUrls[selectedPost.id] 
-							? <div className={s.imgContainer}>
+							{fileUrls[selectedPost.id] &&
+							 <div className={s.imgContainer}>
 							 <img src={fileUrls[selectedPost.id]} alt="Preview" width="100px" /> 
 							 <span onClick={() => {
 				 				 setFileUrls(prevFileUrls => {
@@ -330,7 +330,7 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
 							 <MdOutlineClose />
 							 </span>
 							 </div>
-							: "" }
+							 }
 
 						<div className={s.postCommentBlock2}>
 							<span className={s.postCommentItem1}><img title={thisUser?.username} src={thisUser?.photo?.placed ? thisUser?.photo?.placed  : thisUser?.photo?.default } alt="" /></span>

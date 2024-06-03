@@ -152,11 +152,7 @@ const handlerChangeInfo = async () => {
     country: country,
     city: city,
     link:link,
-    photo:{
-    	...thisUser.photo,
-     placed:deleteThisPhoto && "" 
-  },
-   	description: description,
+		description: description,
     private:privateProfile,
     disableOnlineStatus:privateOnline
 
