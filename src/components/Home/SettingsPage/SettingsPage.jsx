@@ -8,6 +8,7 @@ import {firebaseConfig,db,storage,docId} from './../../../firebase'
 import { useQueryClient,useQuery } from 'react-query';
 import Resizer from 'react-image-file-resizer';
 // import {useChangeInfoUser} from './../../../hooks/queryesHooks'
+import { MdDeleteForever } from "react-icons/md";
 
 
 
@@ -27,6 +28,7 @@ const SettingsPage = () =>{
  const [fileUrl, setFileUrl] = useState(null);
  const [privateProfile,setPrivateProfile] = useState(thisUser?.private ? thisUser.private : false)
  const [privateOnline,setPrivateOnline] = useState(thisUser?.disableOnlineStatus ? thisUser?.disableOnlineStatus : false)
+ const [deleteThisPhoto,setDeleteThisPhoto] = useState(false)
 
 const queryClient = useQueryClient();
 
@@ -62,6 +64,7 @@ const queryClient = useQueryClient();
       const file = e.target.files[0];
       const url = URL.createObjectURL(file);
       setFileUrl(url);
+      setDeleteThisPhoto(false)
     
     }
   };
@@ -125,7 +128,7 @@ const handlerChangeInfo = async () => {
     link:link,
     photo:{
     	...thisUser.photo,
-     placed: `https://firebasestorage.googleapis.com/v0/b/${firebaseConfig.storageBucket}/o/imageUsers%2F${encodeURIComponent(uniqueFilename)}?alt=media` 
+     placed:!deleteThisPhoto ? `https://firebasestorage.googleapis.com/v0/b/${firebaseConfig.storageBucket}/o/imageUsers%2F${encodeURIComponent(uniqueFilename)}?alt=media` : "" 
   },
     description:description,
     private:privateProfile,
@@ -149,6 +152,10 @@ const handlerChangeInfo = async () => {
     country: country,
     city: city,
     link:link,
+    photo:{
+    	...thisUser.photo,
+     placed:deleteThisPhoto && "" 
+  },
    	description: description,
     private:privateProfile,
     disableOnlineStatus:privateOnline
@@ -185,10 +192,14 @@ const handlerChangeInfo = async () => {
 				<span className={s.Block1}>
 					<span className={s.item1}>
 						<input ref={imageRef} id="userPhoto" type="file" style={{display:'none'}} onChange={handleFileChange}/>
-						<label style={{backgroundImage: `url(${fileUrl || thisUser?.photo?.placed || thisUser?.photo?.default})`}} htmlFor="userPhoto">{t('addPhoto')}</label>
+						<label style={{backgroundImage: `url(${!deleteThisPhoto  ? fileUrl || thisUser?.photo?.placed : thisUser?.photo?.default})`}} htmlFor="userPhoto">{t('addPhoto')}</label>
 					</span>
 					<span className={s.item2}>
-					{t('ChangePhoto')}
+					<span>{t('ChangePhoto')}</span>
+					<span onClick={()=>{
+						setDeleteThisPhoto(true)
+						console.log(deleteThisPhoto)
+					}}><MdDeleteForever /></span>
 					</span>
 				</span>
 				<span className={s.Block2}>

@@ -97,12 +97,12 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
 
   const addCommentToPost = async (postId,userId,thisUser,commentText,replyComment,file) => {
   	try{
-  		if(commentText[postId]!== null){
+  
   		await addCommentPostMutation.mutate({postId,userId,thisUser,commentText,replyComment,file})
   		setCommentText("")
   		setNotificText(t('NotificComment'))
   		setReplyComment(null)
-  	}
+  	
   	}catch (error) {
   		console.error("Ошибка при добовления комментари")
   	}

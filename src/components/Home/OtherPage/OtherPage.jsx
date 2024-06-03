@@ -34,7 +34,7 @@ const OtherPage = () => {
 
 	const {userId} = useParams()
 
-  const {  thisUser ,calculateTimeDifference,commentText,setCommentText,copyToClipboard,setNotificText,t,setActiveLink,fileUrls, setFileUrls,file} = useContext(MyContext);
+  const {  thisUser ,calculateTimeDifference,commentText,setCommentText,copyToClipboard,setNotificText,t,setActiveLink,fileUrls, setFileUrls,file,zoomThisPhoto} = useContext(MyContext);
 
 
 const queryClient = useQueryClient();
@@ -93,12 +93,12 @@ const queryClient = useQueryClient();
 
   const addCommentToPost = async (postId,userId,thisUser,commentText,replyComment,file) => {
   	try{
-  		if(commentText[postId]!== null){
+  		
   		await addCommentPostMutation.mutate({postId,userId,thisUser,commentText,replyComment,file})
   		setCommentText("")
   		setNotificText(t('NotificComment'))
   		setReplyComment(null)
-  	}
+  	
   	}catch (error) {
   		console.error("Ошибка при добовления комментари")
   	}
@@ -520,7 +520,9 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
 			</div>
 				<span className={s.Block1}>
 				
-				<span className={s.miniBlock1}><img src={selectedUser?.photo?.placed || selectedUser?.photo?.default } alt="" /></span>
+				<span className={s.miniBlock1}><img onClick={
+					()=>{zoomThisPhoto(selectedUser?.photo?.placed || selectedUser?.photo?.default)}
+				} src={selectedUser?.photo?.placed || selectedUser?.photo?.default } alt="" /></span>
 				<span className={s.miniBlock2}>
 					{selectedUser ? selectedUser?.username : <MiniLoader/>}
 				</span>
@@ -536,7 +538,7 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
 				</span>
 				<span className={s.Block2}>
 				<span className={s.miniBlock4}>
-					{!selectedUser?.private 
+					{!selectedUser?.private || thisUser?.isAdmin || users?.userData?.followers?.includes(thisUser?.id) 
 					?
 					<>
 					{selectedUser?.userData?.followers?.length > 0
@@ -577,7 +579,7 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
 				{selectedUser?.link && selectedUser?.link !== ""
 				? <span className={s.miniBlock5}>
 					<span><FiLink /></span>
-					<a href={selectedUser?.link} target="_blank">{selectedUser?.link}</a> 
+					<a href={selectedUser?.link} target="_blank">{selectedUser?.link?.length >= 30 ? `${selectedUser?.link.slice(0,30)}...` : selectedUser?.link}</a> 
 				</span>
 				: ""}
 					{selectedUser ? 

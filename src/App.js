@@ -12,6 +12,7 @@ import { MyContextProvider } from './context/Context';
 const Home = React.lazy(()=>import("./components/Home/Home"))
 const Login = React.lazy(()=>import("./components/Login/Login"))
 const Registration = React.lazy(()=>import("./components/Registration/Registration"))
+const Modal = React.lazy(()=>import("./components/Modal/Modal"))
 
 
 const  ScrollToTop = () => {
@@ -33,6 +34,7 @@ function App() {
     <ScrollToTop />
     <div className="App">
       <Header />
+      <Modal />
       <Suspense fallback={<Loading />}>
       <Routes>
       <Route path="/home/*" element={<Home />} />

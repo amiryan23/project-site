@@ -33,6 +33,7 @@ const MyContextProvider = ({ children }) => {
   const [isStatusUpdated, setStatusUpdated] = useState(false);
   const [openUpdate,setOpenUpdate] = useState(true)
   const [fileUrls, setFileUrls] = useState({});
+  const [openModal,setOpenModal] = useState(false)
 
 const [activeLink,setActiveLink] = useState(locationStorage ? locationStorage : "/home")
 
@@ -187,6 +188,10 @@ const calculateTimeDifference = (timeAdded) => {
   };
 
 
+const zoomThisPhoto = (url) =>{
+  localStorage.setItem("thisPhotoZoom",url)
+  setOpenModal(true)
+}
 
 
 
@@ -220,8 +225,11 @@ const calculateTimeDifference = (timeAdded) => {
         // setReplyComment
         fileUrls, 
         setFileUrls,
-        file
-    }), [logined, authUser, isWideScreen, openMenu, commentText,notificText,theme,t,activeLink,setActiveLink,openUpdate,fileUrls,file]);
+        file,
+        openModal,
+        setOpenModal,
+        zoomThisPhoto
+    }), [logined, authUser, isWideScreen, openMenu, commentText,notificText,theme,t,activeLink,setActiveLink,openUpdate,fileUrls,file,openModal]);
 
   return (
     <MyContext.Provider 

@@ -33,7 +33,7 @@ import { IoMdPhotos } from "react-icons/io";
 
 const ProfilePage = ()=>{
 
- const {   isWideScreen ,calculateTimeDifference,commentText,setCommentText,copyToClipboard,setNotificText,t,setActiveLink,fileUrls, setFileUrls,file} = useContext(MyContext);
+ const {   isWideScreen ,calculateTimeDifference,commentText,setCommentText,copyToClipboard,setNotificText,t,setActiveLink,fileUrls, setFileUrls,file,zoomThisPhoto} = useContext(MyContext);
 
  	const forwardPostStorage = JSON.parse(localStorage.getItem("forwardPost"))
 
@@ -105,12 +105,12 @@ const ProfilePage = ()=>{
 
   const addCommentToPost = async (postId,userId,thisUser,commentText,replyComment,file) => {
   	try{
-  		if(commentText[postId]!== null){
+  		
   		await addCommentPostMutation.mutate({postId,userId,thisUser,commentText,replyComment,file})
   		setCommentText("")
   		setNotificText(t('NotificComment'))
   		setReplyComment(null)
-  	}
+  	
   	}catch (error) {
   		console.error("Ошибка при добовления комментари")
   	}
@@ -465,7 +465,9 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
 				<span className={s.Block1}>
 
 				<span className={s.miniBlock1}>
-				<img src={thisUser?.photo?.placed ? thisUser?.photo?.placed : thisUser?.photo?.default} alt="" />
+				<img onClick={
+					()=>{zoomThisPhoto(thisUser?.photo?.placed ? thisUser?.photo?.placed : thisUser?.photo?.default)}
+				} src={thisUser?.photo?.placed ? thisUser?.photo?.placed : thisUser?.photo?.default} alt="" />
 				</span>
 				<span className={s.miniBlock2}>
 					{thisUser ? thisUser.username : <MiniLoader/>}
