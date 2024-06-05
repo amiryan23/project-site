@@ -118,21 +118,24 @@ export const savePostToFavorite = async (postId,userId,arrayPosts,queryClient) =
 }
 
 
-export const addCommentPostFunction = async (postId, userId, thisUser , commentText   , replyComment , file ,arrayPosts, queryClient) => {
+export const addCommentPostFunction = async (postId, userId, thisUser , commentText  , replyComment , file ,arrayPosts, queryClient) => {
     try {
+
+        
         if(arrayPosts){
         const postIndex = arrayPosts.findIndex(post => post.id === postId);
+
         if (postIndex !== -1) {
 
-               const thisFile = file.current ? file.current.files[0] : ""
+               
 
 
-            if(thisFile){ 
+            if(file){ 
                   const compressedFile = await new Promise((resolve) => {
           Resizer.imageFileResizer(
-            thisFile,
-            thisFile.width, 
-            thisFile.height, 
+            file,
+            file.width, 
+            file.height, 
             'JPEG', 
             80, 
             0, 
@@ -144,7 +147,7 @@ export const addCommentPostFunction = async (postId, userId, thisUser , commentT
         });
 
         const timestamp = new Date().getTime();
-            const uniqueFilename = `post_${timestamp}_${thisFile.name}`;
+            const uniqueFilename = `post_${timestamp}_${file.name}`;
             
             
             
@@ -189,7 +192,7 @@ export const addCommentPostFunction = async (postId, userId, thisUser , commentT
             console.log("Комментарий успешно добавлен к посту.");
             // setNotificText("Комментарий успешно добавлен к посту")
 
-                } else if(commentText !== "") {
+                } else if(commentText !== "" && commentText !== undefined && !file) {
 
             const updatedPosts = [...arrayPosts];
 
@@ -201,6 +204,7 @@ export const addCommentPostFunction = async (postId, userId, thisUser , commentT
             userId: userId, 
             userName:thisUser.username,
             commentText: commentText ,
+            imgUrl:"",
             timeAdded: new Date().toLocaleString() ,
             replyComment:thisRepleyPost
             };

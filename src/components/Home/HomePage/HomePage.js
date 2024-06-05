@@ -27,7 +27,7 @@ import { IoMdPhotos } from "react-icons/io";
 
 const HomePage = ()=>{
 
- const {  thisUser,calculateTimeDifference,commentText,setCommentText,setNotificText,copyToClipboard,t,setActiveLink,fileUrls, setFileUrls,file} = useContext(MyContext);
+ const {  thisUser,calculateTimeDifference,commentText,setCommentText,setNotificText,copyToClipboard,t,setActiveLink,fileUrls, setFileUrls } = useContext(MyContext);
 
  const queryClient = useQueryClient();
 
@@ -55,7 +55,7 @@ const HomePage = ()=>{
  const animBlock = useRef()
  const btn1 = useRef()
  const btn2 = useRef()
- 
+
 
 
  let timer;
@@ -96,6 +96,7 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
       ...prevState,
       [postId]: text
     }));
+
   }, []);
 
 
@@ -171,14 +172,16 @@ const handleFileChange = useCallback((e, postId) => {
  
   if (e.target.files && e.target.files.length > 0) {
  
-    const file = e.target.files[0];
-    const url = URL.createObjectURL(file);
+    const thisFile = e.target.files[0];
+    const url = URL.createObjectURL(thisFile);
 
-    setFileUrls(prevState => ({
-      ...prevState,
-      [postId]: url
+    setFileUrls(prevFileUrls => ({
+      ...prevFileUrls,
+      [postId]: {url:url,file:thisFile}
+
     }));
   }
+
 }, []);
 
 
@@ -416,15 +419,18 @@ const handleFileChange = useCallback((e, postId) => {
 							</div>
 							</div>
 							:"" }
-							{fileUrls[m.id] && 
+							{fileUrls[m.id]?.url && 
 							 <div className={s.imgContainer}>
-							 <img src={fileUrls[m.id]} alt="Preview" width="100px" /> 
+							 <img src={fileUrls[m.id]?.url} alt="Preview" width="100px" /> 
 							 <span onClick={() => {
 				 				 setFileUrls(prevFileUrls => {
 		   						 const updatedFileUrl = { ...prevFileUrls };
 		   						 delete updatedFileUrl[m.id];
 								   return updatedFileUrl;
 								  });
+
+				 				
+				 				
 								}}>
 							 <MdOutlineClose />
 							 </span>
@@ -435,19 +441,24 @@ const handleFileChange = useCallback((e, postId) => {
 							<span className={s.postCommentItem2}>
 							{!m.privateComment 
 							? <textarea value={commentText[m.id] || ""} onChange={(e)=>{handleCommentChange(m.id,e.target.value)}} type="text" placeholder={t('AddComment')}/>
-							: <textarea value={commentText[m.id] || ""}  disabled="true" onChange={(e)=>{handleCommentChange(m.id,e.target.value)}} type="text" placeholder="..."/>}
+							: <textarea value={commentText[m.id] || ""}  disabled={true} onChange={(e)=>{handleCommentChange(m.id,e.target.value)}} type="text" placeholder="..."/>}
 							</span>
 							{!m.privateComment 
 							? <span className={s.postCommentItem3}>
-							<input ref={file} id={`fileUrl-${[m.id]}`} type="file" onChange={(e)=>{handleFileChange(e,m.id)}}  />
-							<label htmlFor={`fileUrl-${[m.id]}`} className={s.item1}><IoMdPhotos/></label>
+							<input  id={`fileUrl-${m.id}`} type="file" onChange={(e)=>{
+								handleFileChange(e,m.id)
+							
+							}}  />
+							<label htmlFor={`fileUrl-${m.id}`} className={s.item1}><IoMdPhotos/></label>
 							<span  onClick={()=>{
-								addCommentToPost(m.id,thisUser?.id,thisUser,commentText[m.id],replyComment,file)
+								addCommentToPost(m.id,thisUser?.id,thisUser,commentText[m.id],replyComment,fileUrls[m.id]?.file)
 								 setFileUrls(prevFileUrls => {
 		   						 const updatedFileUrl = { ...prevFileUrls };
 		   						 delete updatedFileUrl[m.id];
 								   return updatedFileUrl;
+
 								  });
+								
 							}} className={s.item2}><RiSendPlaneFill title="Send"/></span>
 							</span>
 							: <span className={s.postCommentItem3}  style={{opacity:"0.5"}}>
@@ -467,7 +478,7 @@ const handleFileChange = useCallback((e, postId) => {
 const onlyFollowing = arrayPosts 
   ? arrayPosts
  	.filter(post => thisUser?.userData?.following?.some(id => id === post.userId) && thisUser.id !== post.userId && !post.forwardPost  )
- 	.map(m => 		<div className={s.postMegaContent} key={m.id}>
+ 	.map(m => 		<div className={s.postMegaContent} key={`f${m.id}`}>
 					<div className={s.postMiniContent1}>
 						<span className={s.postBlock1}>
 							<Link to={thisUser?.id !== m.userId ? `/home/user/profile/${m.userId}` : "/home/profile"}><img src={users?.find(user => user.id === m.userId).photo?.placed ? users?.find(user => user?.id === m.userId).photo?.placed : users?.find(user => user?.id === m.userId).photo?.default} alt="" /></Link>
@@ -662,9 +673,9 @@ const onlyFollowing = arrayPosts
 							</div>
 							</div>
 							:"" }
-								{fileUrls[m.id] &&
+								{fileUrls[m.id]?.url &&
 							 <div className={s.imgContainer}>
-							 <img src={fileUrls[m.id]} alt="Preview" width="100px" /> 
+							 <img src={fileUrls[m.id]?.url} alt="Preview" width="100px" /> 
 							 <span onClick={() => {
 				 				 setFileUrls(prevFileUrls => {
 		   						 const updatedFileUrl = { ...prevFileUrls };
@@ -682,14 +693,17 @@ const onlyFollowing = arrayPosts
 							<span className={s.postCommentItem2}>
 							{!m.privateComment 
 							? <textarea value={commentText[m.id] || ""} onChange={(e)=>{handleCommentChange(m.id,e.target.value)}} type="text" placeholder={t('AddComment')}/>
-							: <textarea value={commentText[m.id] || ""}  disabled="true" onChange={(e)=>{handleCommentChange(m.id,e.target.value)}} type="text" placeholder="..."/>}
+							: <textarea value={commentText[m.id] || ""}  disabled={true} onChange={(e)=>{handleCommentChange(m.id,e.target.value)}} type="text" placeholder="..."/>}
 							</span>
 							{!m.privateComment 
 							? <span className={s.postCommentItem3}>
-							<input ref={file} id={`fileUrl-${[m.id]}`} type="file" onChange={(e)=>{handleFileChange(e,m.id)}}  />
-							<label htmlFor={`fileUrl-${[m.id]}`} className={s.item1}><IoMdPhotos/></label>
+							<input  id={`fileUrl2-${[m.id]}`} type="file" onChange={(e)=>{
+								handleFileChange(e,m.id)
+								
+							}}  />
+							<label htmlFor={`fileUrl2-${[m.id]}`} className={s.item1}><IoMdPhotos/></label>
 							<span  onClick={()=>{
-								addCommentToPost(m.id,thisUser?.id,thisUser,commentText[m.id],replyComment,file)
+								addCommentToPost(m.id,thisUser?.id,thisUser,commentText[m.id],replyComment,fileUrls[m.id]?.file)
 								 setFileUrls(prevFileUrls => {
 		   						 const updatedFileUrl = { ...prevFileUrls };
 		   						 delete updatedFileUrl[m.id];

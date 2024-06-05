@@ -35,6 +35,7 @@ const SavePage = React.lazy(()=>import('./SavePage/SavePage'))
 
 
 
+
 const Home = ()=> {
 
 //     const locationStorage = localStorage.getItem("location")
@@ -206,6 +207,7 @@ const topUsersList = sortedUsers?.map((user,index) => (
             <Route path="profile/following" element={<MyFollowing />} />
             <Route path="updated" element={<UpdatedSitePage />} />
             <Route path="save" element={<SavePage />} />
+
             </Routes>
             </Suspense> 
             </div>

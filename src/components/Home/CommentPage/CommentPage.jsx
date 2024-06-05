@@ -19,7 +19,7 @@ import { IoMdPhotos } from "react-icons/io";
 
 const CommentPage = () => {
 
- const {  thisUser  ,calculateTimeDifference,commentText,setCommentText,setNotificText,t,setActiveLink,fileUrls, setFileUrls,file} = useContext(MyContext);
+ const {  thisUser  ,calculateTimeDifference,commentText,setCommentText,setNotificText,t,setActiveLink,fileUrls, setFileUrls} = useContext(MyContext);
 
  const queryClient = useQueryClient();
 
@@ -317,9 +317,9 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
 							</div>
 							</div>
 							:"" }
-							{fileUrls[selectedPost.id] &&
+							{fileUrls[selectedPost.id]?.url &&
 							 <div className={s.imgContainer}>
-							 <img src={fileUrls[selectedPost.id]} alt="Preview" width="100px" /> 
+							 <img src={fileUrls[selectedPost.id]?.url} alt="Preview" width="100px" /> 
 							 <span onClick={() => {
 				 				 setFileUrls(prevFileUrls => {
 		   						 const updatedFileUrl = { ...prevFileUrls };
@@ -341,10 +341,13 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
 							</span>
 							{!selectedPost.privateComment 
 							? <span className={s.postCommentItem3}>
-							<input ref={file} id={`fileUrl-${[selectedPost.id]}`} type="file" onChange={(e)=>{handleFileChange(e,selectedPost.id)}}  />
+							<input  id={`fileUrl-${[selectedPost.id]}`} type="file" onChange={(e)=>{
+								handleFileChange(e,selectedPost.id)
+							
+							}}  />
 							<label htmlFor={`fileUrl-${[selectedPost.id]}`} className={s.item1}><IoMdPhotos/></label>
 							<span  onClick={()=>{
-								addCommentToPost(selectedPost.id,thisUser?.id,thisUser,commentText[selectedPost.id],replyComment,file)
+								addCommentToPost(selectedPost.id,thisUser?.id,thisUser,commentText[selectedPost.id],replyComment,fileUrls[selectedPost.id]?.file)
 								 setFileUrls(prevFileUrls => {
 		   						 const updatedFileUrl = { ...prevFileUrls };
 		   						 delete updatedFileUrl[selectedPost.id];

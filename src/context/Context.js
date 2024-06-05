@@ -39,7 +39,7 @@ const [activeLink,setActiveLink] = useState(locationStorage ? locationStorage : 
 
   const {t} = useTranslation()
 
-   const file = useRef({})
+ 
 
 const queryClient = useQueryClient();
 
@@ -47,7 +47,7 @@ const queryClient = useQueryClient();
   const { users, usersisLoading, usersisError } = useUsersQuery();
   const {thisUser,thisUserisLoading,thisUserisError} = useThisUserQuerry()
 
-
+  const file = useRef()
 
 
 useEffect(()=>{
@@ -69,7 +69,6 @@ useEffect(() => {
   const isSubscribedStorage = localStorage.getItem('isSubscribed') === "true";
   const thisUserIdStorage = localStorage.getItem('thisUserId');
 
-console.log(thisUserIdStorage)
   const updateStatus = async (status) => {
     if (thisUser) {
       const userRef = doc(db, 'users', thisUser.id);
@@ -80,17 +79,17 @@ console.log(thisUserIdStorage)
     }
   };
 
-  const handleBeforeUnload = () => {
-    updateStatus(false);
-    localStorage.removeItem('location');
-  };
-
-  // const handlePageHide = (event) => {
-  //   if (event.persisted) {
-  //     return;
-  //   }
+  // const handleBeforeUnload = () => {
   //   updateStatus(false);
+  //   localStorage.removeItem('location');
   // };
+
+  const handlePageHide = (event) => {
+    if (event.persisted ) {
+      return;
+    }
+    updateStatus(false);
+  };
 
   const handleVisibilityChange = () => {
     if (document.visibilityState === 'hidden' && isWideScreen) {
@@ -106,13 +105,13 @@ console.log(thisUserIdStorage)
     updateStatus(false);
   }
 
-  window.addEventListener('beforeunload', handleBeforeUnload);
-  // window.addEventListener('pagehide', handlePageHide);
+  // window.addEventListener('beforeunload', handleBeforeUnload);
+  window.addEventListener('pagehide', handlePageHide);
   document.addEventListener('visibilitychange', handleVisibilityChange);
 
   return () => {
-    window.removeEventListener('beforeunload', handleBeforeUnload);
-    // window.removeEventListener('pagehide', handlePageHide);
+    // window.removeEventListener('beforeunload', handleBeforeUnload);
+    window.removeEventListener('pagehide', handlePageHide);
     document.removeEventListener('visibilitychange', handleVisibilityChange);
   };
 }, [thisUser, isWideScreen , logined]);

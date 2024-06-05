@@ -50,7 +50,7 @@ const EditPost = () => {
  	if(animBlock.current){
  timer = setTimeout(()=>{animBlock.current.classList.add(s.animBlock)},10)
  }
- console.log(users)
+
  return () => {
  	if(animBlock.current){
  	animBlock.current.classList.remove(s.animBlock)

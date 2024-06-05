@@ -33,7 +33,7 @@ import { FaStar } from "react-icons/fa";
 
 const ProfilePage = ()=>{
 
- const {   isWideScreen ,calculateTimeDifference,commentText,setCommentText,copyToClipboard,setNotificText,t,setActiveLink,fileUrls, setFileUrls,file,zoomThisPhoto} = useContext(MyContext);
+ const {   isWideScreen ,calculateTimeDifference,commentText,setCommentText,copyToClipboard,setNotificText,t,setActiveLink,fileUrls, setFileUrls,zoomThisPhoto} = useContext(MyContext);
 
  	const forwardPostStorage = JSON.parse(localStorage.getItem("forwardPost"))
 
@@ -172,16 +172,17 @@ const handleFileChangeComment = useCallback((e, postId) => {
  
   if (e.target.files && e.target.files.length > 0) {
  
-    const file = e.target.files[0];
-    const url = URL.createObjectURL(file);
+    const thisFile = e.target.files[0];
+    const url = URL.createObjectURL(thisFile);
 
-    setFileUrls(prevState => ({
-      ...prevState,
-      [postId]: url
+    setFileUrls(prevFileUrls => ({
+      ...prevFileUrls,
+      [postId]: {url:url,file:thisFile}
+
     }));
   }
-}, []);
 
+}, []);
 
 
 
@@ -400,9 +401,9 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
 							</div>
 							</div>
 							:"" }
-							{fileUrls[m.id] &&
+							{fileUrls[m.id]?.url &&
 							<div className={s.imgContainer}>
-							 <img src={fileUrls[m.id]} alt="Preview" width="100px" /> 
+							 <img src={fileUrls[m.id]?.url} alt="Preview" width="100px" /> 
 							 <span onClick={() => {
 				 				 setFileUrls(prevFileUrls => {
 		   						 const updatedFileUrl = { ...prevFileUrls };
@@ -424,10 +425,10 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
 							</span>
 							{!m.privateComment 
 							? <span className={s.postCommentItem3}>
-							<input ref={file} id={`fileUrl-${[m.id]}`} type="file" onChange={(e)=>{handleFileChangeComment(e,m.id)}}  />
+							<input  id={`fileUrl-${[m.id]}`} type="file" onChange={(e)=>{handleFileChangeComment(e,m.id)}}  />
 							<label htmlFor={`fileUrl-${[m.id]}`} className={s.item1}><IoMdPhotos/></label>
 							<span  onClick={()=>{
-								addCommentToPost(m.id,thisUser?.id,thisUser,commentText[m.id],replyComment,file)
+								addCommentToPost(m.id,thisUser?.id,thisUser,commentText[m.id],replyComment,fileUrls[m.id]?.file)
 								 setFileUrls(prevFileUrls => {
 		   						 const updatedFileUrl = { ...prevFileUrls };
 		   						 delete updatedFileUrl[m.id];
