@@ -23,7 +23,7 @@ import { FiLink } from "react-icons/fi";
 import {parseTextWithLinks} from './../../../helper/linkFunction.js'
 import { BsBookmarkPlus,BsBookmarkCheckFill } from "react-icons/bs";
 import { IoMdPhotos } from "react-icons/io";
-
+import { AiOutlineRollback } from "react-icons/ai";
 
 
 
@@ -515,9 +515,8 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
 
 		<div className={s.content1}>
 		<div className={s.megaBlock}>
+		<button onClick={() => window.history.back(-1)}><AiOutlineRollback size="30" color="whitesmoke"/></button>
 			<div ><BsThreeDotsVertical title="Edit profile"/></div>
-			</div>
-			<div className={s.megaBlock}>
 			</div>
 				<span className={s.Block1}>
 				

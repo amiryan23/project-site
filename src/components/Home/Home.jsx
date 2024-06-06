@@ -15,7 +15,7 @@ import {signOut} from 'firebase/auth'
 import {auth,db,storage,docId} from './../../firebase'
 import Language from './../Language/Language'
 import { useQueryClient,useQuery } from 'react-query';
-
+import {updatesArray} from './../../helper/updatesArray'
 
 const HomePage = React.lazy(()=>import('./HomePage/HomePage'))
 const ProfilePage = React.lazy(()=>import('./ProfilePage/ProfilePage'))
@@ -213,17 +213,9 @@ const topUsersList = sortedUsers?.map((user,index) => (
             </div>
             <div className={s.content3}>
                {openUpdate ? <div className={s.miniContent1}>
-                    <span className={s.item1}>Обновления 1.0.2 </span>
+                    <span className={s.item1}>{updatesArray[updatesArray?.length - 1].title}</span>
                     <span className={s.item2}>
-                        Начало бета-тестирования сайта 24.05.2024
-                        <br /><br />
-                        1. Исправлена онлайн/оффлайн функция для мобильных устройств.
-                        <br /><br />
-                        2. Теперь можно отвечать на комментарии.
-                        <br /><br />
-                        3. Глубокая адаптация под мобильные устройства.
-                        <br /><br />
-                        4. Теперь отображается онлайн/оффлайн статус в постах и комментариях. 
+                    {updatesArray[updatesArray?.length - 1].items?.map(item => <span>{item}</span>)}
 
                     </span>
                     <span className={s.item3}>

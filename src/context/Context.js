@@ -4,7 +4,7 @@ import { getFirestore, collection, doc, setDoc, getDoc , getDocs , updateDoc  } 
 import { getStorage,ref, uploadBytes } from "firebase/storage";
 import { getAuth , onAuthStateChanged } from "firebase/auth";
 // import { getAnalytics } from "firebase/analytics";
-import {auth,db,storage,docId} from './../firebase'
+import {auth,db,storage,docId,updatesDocId} from './../firebase'
 import {useQuery,useQueryClient} from 'react-query'
 import {usePostsQuery,useUsersQuery,useThisUserQuerry} from './../hooks/queryesHooks';
 import { useTranslation } from 'react-i18next';
@@ -34,6 +34,7 @@ const MyContextProvider = ({ children }) => {
   const [openUpdate,setOpenUpdate] = useState(true)
   const [fileUrls, setFileUrls] = useState({});
   const [openModal,setOpenModal] = useState(false)
+  const [updatesData,setUpdatesData] = useState()
 
 const [activeLink,setActiveLink] = useState(locationStorage ? locationStorage : "/home")
 
@@ -123,6 +124,8 @@ useEffect(() => {
     }
 
 localStorage.setItem('isSubscribed', 'true')
+
+
 
 
 
@@ -220,15 +223,13 @@ const zoomThisPhoto = (url) =>{
         setActiveLink,
         openUpdate,
         setOpenUpdate,
-        // replyComment,
-        // setReplyComment
         fileUrls, 
         setFileUrls,
-        file,
         openModal,
         setOpenModal,
-        zoomThisPhoto
-    }), [logined, authUser, isWideScreen, openMenu, commentText,notificText,theme,t,activeLink,setActiveLink,openUpdate,fileUrls,file,openModal]);
+        zoomThisPhoto,
+        updatesData
+    }), [logined, authUser, isWideScreen, openMenu, commentText,notificText,theme,t,activeLink,setActiveLink,openUpdate,fileUrls,updatesData,openModal]);
 
   return (
     <MyContext.Provider 

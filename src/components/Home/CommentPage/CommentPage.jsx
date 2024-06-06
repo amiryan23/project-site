@@ -259,7 +259,7 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
 					          </div>
 					          <div className={s.Block2}>
 					            <span className={s.item1}>
-					              <span className={s.miniItem1}>{comment.userName}</span>
+					              <span className={s.miniItem1}>{users?.find(user => user.id === comment.userId).username || "Deleted"}</span>
 					              <span className={s.miniItem2}>{calculateTimeDifference(comment.timeAdded)}</span>
 
 					            </span>

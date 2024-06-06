@@ -11,6 +11,7 @@ export const usePostsQuery = () => {
     refetchOnMount: false,
     refetchOnWindowFocus: false,
     refetchInterval: 120000,
+    retry:false,
   });
 
   return { arrayPosts, postsisLoading, postsisError };
@@ -22,6 +23,7 @@ export const useUsersQuery = () => {
     refetchOnMount: false,
     refetchOnWindowFocus: false,
     refetchInterval: 120000,
+    retry:false,
   });
 
   return { users, usersisLoading, usersisError };
@@ -32,6 +34,7 @@ export const useThisUserQuerry = () => {
     refetchOnMount: false,
     refetchOnWindowFocus: false,
     refetchInterval: 120000,
+    retry:false,
   });
 
   return { thisUser, thisUseridLoading, thisUserisError };

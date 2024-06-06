@@ -520,7 +520,7 @@
 				display: flex;
 				flex-direction: row;
 				align-items: center;
-				gap:10px;
+				gap:5px;
 				padding: 15px 15px 0px 15px;
 
 
@@ -528,6 +528,7 @@
 					display:flex;
 					flex-direction:row;
 					flex-wrap:no-wrap;
+					gap: 0px;
 
 					img{
 						width: 50px;
@@ -558,19 +559,22 @@
 
 				.postBlock2{
 					font-weight: bold;
-					color: rgba(256, 256, 256, 1);
+					color: rgba(256, 256, 256, 0.9);
 				}
 
 				.postBlock3{
 					opacity: 0.7;
 					color: #999;
-					font-size: 13px;
+					font-size: 12px;
+					margin-left: 10px;
+					font-weight: bold;
 				}
 
 				.postBlock4{
 					opacity: 0.6;
 					color: #999;
 					font-size: 9px;
+					font-weight: bold;
 				}
 
 				.postSettings{
@@ -821,6 +825,7 @@
 				background-color: rgba(256, 256, 256, 0.1);
 				border-radius: 13px;
 				color: rgba(256, 256, 256, 0.9);
+
 
 					a{
 						color: rgba(256, 256, 256, 0.7);

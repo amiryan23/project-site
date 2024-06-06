@@ -113,12 +113,12 @@ const handlerChangeInfo = async () => {
 
 						{selectedPost.imageURL 
 						? <>
-						<span>{t('ChnagePostPhoto')}</span>
+						<span className={s.miniblock}>{t('ChnagePostPhoto')}</span>
 						<span className={s.item1}><img src={selectedPost.imageURL ? selectedPost.imageURL : <MiniLoader />} alt="" /></span>
 						</>
 						: "" }
-						<span>{t('ChangePostText')}</span>
-						<input className={s.item2} value={text} type="text" onChange={(e)=>{setText(e.target.value)}} /> 
+						<span className={s.miniblock}>{t('ChangePostText')}</span>
+						<textarea className={s.item2} value={text} type="text" onChange={(e)=>{setText(e.target.value)}} /> 
 						<span className={s.item3} onClick={()=>{setPrivateComment((prevPrivateComment)=> !prevPrivateComment)}}>{t('DisableCom')} {privateComment ? <RiCheckboxCircleFill color="limegreen"/>  : <RiCheckboxBlankCircleLine/>}</span>
 						<span className={s.item3} onClick={()=>{setPrivateForward((prevPrivateForward)=> !prevPrivateForward)}}>{t('DisableForward')} {privateForward? <RiCheckboxCircleFill color="limegreen"/>  : <RiCheckboxBlankCircleLine/>}</span>
 						<span className={s.item3} onClick={()=>{setHideLikeDislike((prevHideLikeDislike)=> !prevHideLikeDislike)}}>{t('HideLikeDislike')} {hideLikeDislike? <RiCheckboxCircleFill color="limegreen"/>  : <RiCheckboxBlankCircleLine/>}</span>

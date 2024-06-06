@@ -22,3 +22,4 @@ export const db = getFirestore(app);
 export const storage = getStorage(app);
 
 export const docId = process.env.REACT_APP_DOC_ID;
+export const updatesDocId = process.env.REACT_APP_UPDATES_DOC_ID

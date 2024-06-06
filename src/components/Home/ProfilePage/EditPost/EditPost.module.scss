@@ -81,6 +81,7 @@
 				.item1{
 					width:100%;
 					
+					
 					img{
 						
 						max-width: 100%;
@@ -89,17 +90,29 @@
 						border-radius: 7px;
 						border: 2px solid #999;
 					}
+
+
 				}
+
+					.miniblock{
+						font-size: 14px;
+						font-weight: bold;
+					}
 
 				.item2{
 					min-width: 50%;
+					min-height: 200px;
+					height: auto;
+					max-height: 500px;
+					resize: none;
 					padding: 15px;
-					border: 2px solid rgba(256, 256, 256, 0.9) ;
+					border: 2px solid rgba(256, 256, 256, 0.7) ;
 					outline: none;
 				background-color: rgba(256, 256, 256, 0.1);
 				border-radius: 9px;
 				color: whitesmoke;
 				font-weight: bold;
+
 				
 
 

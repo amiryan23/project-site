@@ -13,10 +13,25 @@
 
 	.megaBlock{
 		width: 100%;
-		position: relative;
-		text-align: end;
-		right:10px;
-		top: 0;
+		// position: relative;
+		// text-align: end;
+		// right:10px;
+		// top: 0;
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+
+
+
+		button{
+			background-color: transparent;
+			border: none;
+			outline: none;
+			cursor: pointer;
+		}
+
+
+		div{
 
 		svg{
 			font-size: 25px;
@@ -30,6 +45,8 @@
 			transition: 250ms linear;
 
 		}
+
+	}
 	}
 
 
@@ -753,6 +770,7 @@
 				background-color: rgba(256, 256, 256, 0.1);
 				border-radius: 13px;
 				color: rgba(256, 256, 256, 0.9);
+				
 
 					a{
 						color: rgba(256, 256, 256, 0.7);
