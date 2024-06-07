@@ -26,8 +26,10 @@ import {parseTextWithLinks} from './../../../helper/linkFunction.js'
 import { GoBookmarkFill } from "react-icons/go";
 import { IoMdPhotos } from "react-icons/io";
 import { FaStar } from "react-icons/fa";
-
-
+import { RiUserAddFill } from "react-icons/ri";
+import { TbUserSearch } from "react-icons/tb";
+import { HiMiniPlusCircle } from "react-icons/hi2";
+import { FaUserTag } from "react-icons/fa6";
 
 
 
@@ -44,6 +46,8 @@ const ProfilePage = ()=>{
   const [openSettings,setOpenSettings] = useState(null)
   const [forwardPost,setForwardPost] = useState(forwardPostStorage ? forwardPostStorage : null)
   const [replyComment,setReplyComment] = useState(null)
+  const [openUsers,setOpenUsers] = useState(false)
+  const [tagUser,setTagUser] = useState(null)
  
 	const likePostMutation = useLikePostMutation();
   const dislikePostMutation = useDislikePostMutation()
@@ -58,6 +62,7 @@ const ProfilePage = ()=>{
 
  const animBlock = useRef()
  const imageRef = useRef()
+ const animTagUsers = useRef()
 
  let timer;
 
@@ -75,6 +80,32 @@ const ProfilePage = ()=>{
  }
  }
  },[])
+
+let timer2;
+
+ useEffect (()=>{
+ 	if(openUsers && animTagUsers.current){
+ timer2 = setTimeout(()=>{
+ 	animTagUsers.current.classList.add(s.active)
+ 	animTagUsers.current.classList.remove(s.usersContainer)
+ },10)
+
+ } else if(!openUsers && animTagUsers.current){
+  timer2 = setTimeout(()=>{
+  	animTagUsers.current.classList.add(s.usersContainer)
+  	animTagUsers.current.classList.remove(s.active)
+  },10)
+ }
+
+ setActiveLink("/profile")
+
+ return () => {
+ 	if(animTagUsers.current ){
+
+ 	clearTimeout(timer2)
+ }
+ }
+ },[openUsers])
 
    const handleFileChange = (e) => {
         if (e.target.files && e.target.files.length > 0) {
@@ -125,13 +156,14 @@ const ProfilePage = ()=>{
   	}
   }
 
-  const handleAddPost = async (thisUser,postText,fileUrl,imageRef,forwardPost) => {
+  const handleAddPost = async (thisUser,postText,fileUrl,imageRef,forwardPost,tagged) => {
   	try{
   		if(postText !== "" || fileUrl !== null || forwardPost !== null){
-  		await addPostMutation.mutate({thisUser,postText,fileUrl,imageRef,forwardPost})
+  		await addPostMutation.mutate({thisUser,postText,fileUrl,imageRef,forwardPost,tagged})
   		setPostText("")
       setFileUrl("")
       setForwardPost(null)
+      setTagUser(null)
   		setNotificText(t('NotificPostAdd'))
   		localStorage.removeItem("forwardPost")
   	} else {
@@ -285,6 +317,14 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
 						{parseTextWithLinks(m.postText)}
 						</span>
 						: "" }
+						{m.taggedUser !== undefined && m.taggedUser !== null 
+						? <Link to={`/home/user/profile/${users?.find(user=> user.id === m.taggedUser).id}`} className={s.taggedUserContainer}>
+							
+							<FaUserTag /> 
+							@{users?.find(user=> user.id === m.taggedUser).username}
+							
+							</Link>
+							: ""}
 					</div>
 					<div className={s.postMiniContent3}>
 						{m.likes.includes(thisUser?.id) 
@@ -519,7 +559,19 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
 				</span>
 			</div>
 			<div className={s.content2}>
-				<span className={s.miniBlock3}>{t("AddPost")}</span>
+				<span className={s.miniBlock3}>{t("AddPost")}
+				{tagUser !== null 
+				?	<div className={s.taggedUserContainer}>
+				<span className={s.item1}>
+				<FaUserTag /> 
+				{users?.find(user=> user.id === tagUser).username}
+				</span>
+				<span className={s.item2} onClick={()=>{setTagUser(null)}}>
+				<MdOutlineClose />
+				</span>
+				</div>
+				: ""}
+				</span>
 				{forwardPost !== null 
 				?<span className={s.fwPost}>
 					<span className={s.item1}>
@@ -557,14 +609,39 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
 						<MdOutlineAddPhotoAlternate title="Photo" />
 						</label>
 						<GrAttachment title="File" />
+						<span onClick={()=>{
+							setOpenUsers((prevOpenUsers)=> !prevOpenUsers)
+						}}><RiUserAddFill /></span>
+
 					</span>
 					</span>
 					<span className={s.block2}>
 					
-					<button onClick={()=>{handleAddPost(thisUser,postText,fileUrl,imageRef,forwardPost)}}><HiMiniPlusSmall />{t("AddPost")}</button>
+					<button onClick={()=>{handleAddPost(thisUser,postText,fileUrl,imageRef,forwardPost,tagUser)}}><HiMiniPlusSmall />{t("AddPost")}</button>
 					
 					</span>
 				</span>
+
+				 <div ref={animTagUsers} className={s.usersContainer}>
+					<div className={s.userContent1}>{t('TagUser')}</div>
+					<div className={s.userContent2}>
+					<span className={s.userMiniContent1}>
+							<TbUserSearch /><input type="search" />
+					</span>
+					{thisUser?.userData?.followers && users?.filter(user => thisUser.userData.followers.includes(user.id)).map(user => 
+						<span className={s.userMiniContent2} >
+							<img src={user?.photo?.placed || user?.photo?.default } className={s.userItem1} />
+							<span className={s.userItem2}>{user.username}</span>
+							<span className={s.userItem3} 
+							onClick={()=>{
+								setTagUser(user.id)
+								setOpenUsers(false)
+							}}><HiMiniPlusCircle /></span>
+						</span>)}
+					</div>
+					<div className={s.userContent3}></div>
+				</div>
+				
 
 			</div>
 			<div className={s.content3}>

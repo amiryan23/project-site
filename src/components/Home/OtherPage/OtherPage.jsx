@@ -24,7 +24,7 @@ import {parseTextWithLinks} from './../../../helper/linkFunction.js'
 import { BsBookmarkPlus,BsBookmarkCheckFill } from "react-icons/bs";
 import { IoMdPhotos } from "react-icons/io";
 import { AiOutlineRollback } from "react-icons/ai";
-
+import { FaUserTag } from "react-icons/fa6";
 
 
 
@@ -324,6 +324,14 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
 						{parseTextWithLinks(m.postText)}
 						</span>
 						: "" }
+						{m.taggedUser !== undefined && m.taggedUser !== null 
+						? <Link to={`/home/user/profile/${users?.find(user=> user.id === m.taggedUser).id}`} className={s.taggedUserContainer}>
+							
+							<FaUserTag /> 
+							@{users?.find(user=> user.id === m.taggedUser).username}
+							
+							</Link>
+							: ""}
 					</div>
 					<div className={s.postMiniContent3}>
 						{m.likes.includes(thisUser?.id) 

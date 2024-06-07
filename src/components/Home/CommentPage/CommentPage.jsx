@@ -14,7 +14,7 @@ import { MdOutlineReply,MdOutlineClose } from "react-icons/md";
 import { MdCircle,MdBrightness1,MdDelete } from "react-icons/md";
 import {parseTextWithLinks} from './../../../helper/linkFunction.js'
 import { IoMdPhotos } from "react-icons/io";
-
+import { FaUserTag } from "react-icons/fa6";
 
 
 const CommentPage = () => {
@@ -142,18 +142,20 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
   	}
   }
 
-  const handleFileChange = useCallback((e, postId) => {
+const handleFileChange = useCallback((e, postId) => {
  
   if (e.target.files && e.target.files.length > 0) {
  
-    const file = e.target.files[0];
-    const url = URL.createObjectURL(file);
+    const thisFile = e.target.files[0];
+    const url = URL.createObjectURL(thisFile);
 
-    setFileUrls(prevState => ({
-      ...prevState,
-      [postId]: url
+    setFileUrls(prevFileUrls => ({
+      ...prevFileUrls,
+      [postId]: {url:url,file:thisFile}
+
     }));
   }
+
 }, []);
 
 
@@ -187,6 +189,14 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
 						{parseTextWithLinks(selectedPost?.postText)}
 						</span>
 						: "" }
+						{selectedPost.taggedUser !== undefined && selectedPost.taggedUser !== null 
+						? <Link to={`/home/user/profile/${users?.find(user=> user.id === selectedPost.taggedUser).id}`} className={s.taggedUserContainer}>
+							
+							<FaUserTag /> 
+							@{users?.find(user=> user.id === selectedPost.taggedUser).username}
+							
+							</Link>
+							: ""}						
 					</div>
 					<div className={s.postMiniContent3}>
 						{selectedPost?.likes.includes(thisUser?.id) 

@@ -173,11 +173,11 @@ export const useSavePostToFavorite = () => {
   const queryClient = useQueryClient();
 
   const addPostMutation= useMutation(
-    async ({ thisUser,postText,fileUrl,imageRef,forwardPost}) => {
+    async ({ thisUser,postText,fileUrl,imageRef,forwardPost,tagged}) => {
       const arrayPosts = queryClient.getQueryData('arrayPosts');
 
       if (arrayPosts) {
-        return addPostFunction(thisUser,postText,fileUrl,imageRef,forwardPost,arrayPosts,queryClient);
+        return addPostFunction(thisUser,postText,fileUrl,imageRef,forwardPost,tagged,arrayPosts,queryClient);
       } else {
         return Promise.reject("Массив постов не определен.");
       }
