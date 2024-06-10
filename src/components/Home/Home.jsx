@@ -31,7 +31,7 @@ const MyFollowers = React.lazy(()=> import('./ProfilePage/MyFollowers/MyFollower
 const MyFollowing = React.lazy(()=> import('./ProfilePage/MyFollowing/MyFollowing'))
 const UpdatedSitePage = React.lazy(()=>import('./../UpdatedSitePage/UpdatedSitePage'))
 const SavePage = React.lazy(()=>import('./SavePage/SavePage'))
-
+const NotificationPage = React.lazy(()=>import('./NotificationPage/NotificationPage'))
 
 
 
@@ -79,7 +79,7 @@ const Home = ()=> {
 const sortedUsers = usersWithPostCount?.sort((a, b) => b.postCount - a.postCount).slice(0,5);
 
 const topUsersList = sortedUsers?.map((user,index) => (
-  <Link to={thisUser?.id !== user.id ? `/home/user/profile/${user.id}` : "/home/profile"} key={user.id} className={s.topUserContainer}>
+  <Link  to={thisUser?.id !== user.id ? `/home/user/profile/${user.id}` : "/home/profile"} key={user.id} className={s.topUserContainer}>
     <span className={s.miniItem1}>
        <span>#{index + 1}</span>
       <img src={user.photo?.placed ? user.photo?.placed : user.photo?.default} alt="" />
@@ -207,6 +207,7 @@ const topUsersList = sortedUsers?.map((user,index) => (
             <Route path="profile/following" element={<MyFollowing />} />
             <Route path="updated" element={<UpdatedSitePage />} />
             <Route path="save" element={<SavePage />} />
+            <Route path='notification' element={<NotificationPage />} />
 
             </Routes>
             </Suspense> 
@@ -215,7 +216,7 @@ const topUsersList = sortedUsers?.map((user,index) => (
                {openUpdate ? <div className={s.miniContent1}>
                     <span className={s.item1}>{updatesArray[updatesArray?.length - 1].title}</span>
                     <span className={s.item2}>
-                    {updatesArray[updatesArray?.length - 1].items?.map(item => <span>{item}</span>)}
+                    {updatesArray[updatesArray?.length - 1].items?.map(item => <span>{item}</span>).slice(0,3)}
 
                     </span>
                     <span className={s.item3}>

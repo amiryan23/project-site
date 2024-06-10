@@ -1,0 +1,113 @@
+.megaContainer{
+	width: 100%;
+	height: auto;
+
+	.content1{
+		padding: 15px;
+		display: flex;
+		flex-direction: row;
+		gap: 5px;
+		border-bottom: 2px solid rgba(256, 256, 256, 0.7);
+		font-size: 25px;
+		color: rgba(256, 256, 256, 0.7);
+	}
+
+	.content2{
+		width: 100%;
+		padding: 15px;
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+		            .notificContent{
+            	width: 50%;
+            	display: flex;
+            	flex-direction: row;
+            	justify-content: flex-start;
+            	align-items: center;
+            	gap:25px;
+            	padding:10px;
+            	border:2px solid #333;
+            	background-color:rgba(0,0,0,0.5);
+            	border-radius:9px;
+            	text-decoration: none;
+
+
+            	.miniItem1{
+            		display:flex;
+            		flex-direction:column;
+            		align-items: center;
+            		justify-content: center;
+            		gap:5px;
+            		
+            		img{
+            			width: 40px;
+            			height: 40px;
+            			border-radius: 50%;
+            			border: 2px solid rgba(256, 256, 256, 0.7);
+            		}
+
+            		
+
+            	}
+
+            	.miniItem2{
+            		
+            		display: flex;
+            		flex-direction:column;
+            		flex: 1 0;
+            		gap:5px;
+
+            		.block1{
+            			align-self: flex-start;
+            			color: rgba(256, 256, 256, 0.7);
+            			font-size: 11px;
+            			font-weight: bold;
+            		}
+
+            		.block2{
+            				font-size: 14px;
+            			color: whitesmoke;
+            			font-weight: bold;
+            		}
+
+            	}
+
+            	.miniItem3{
+            		width: 20%;
+            		display: flex;
+            		flex-direction: row;
+            		justify-content: flex-end;
+            		gap:5px;
+            		color: rgba(256, 256, 256, 0.5);
+            		font-weight: bold;
+            		font-size: 12px;
+
+
+            	}
+            }
+	}
+}
+
+
+@media screen and (max-width: 1024px) {
+	.megaContainer{
+		.content2{
+			.notificContent {
+				width: 100%;
+
+				.miniItem2{
+					.block2{
+						font-size: 12px;
+					}
+				}
+
+				.miniItem3{
+					width: 23%;
+					display: flex;
+					justify-content: flex-end;
+					font-size: 9px;
+				}
+			}
+		}
+	}
+}

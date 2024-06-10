@@ -21,6 +21,7 @@ import { MdBookmarkAdd } from "react-icons/md";
 import { BsBookmarkPlus,BsBookmarkCheckFill } from "react-icons/bs";
 import { IoMdPhotos } from "react-icons/io";
 import { FaUserTag } from "react-icons/fa6";
+import {addNotificationToUser} from './../../../helper/addNotification'
 
 
 
@@ -106,9 +107,10 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
   }, []);
 
 
-   const handleLikePost = async (postId, userId) => {
+   const handleLikePost = async (postId, userId ) => {
     try {
-      await likePostMutation.mutate({ postId, userId });
+      await likePostMutation.mutate({ postId, userId  });
+      
       console.log("Лайк успешно добавлен/удален к посту.");
     } catch (error) {
       console.error("Ошибка при обновлении лайка к посту:", error);
@@ -758,16 +760,16 @@ const onlyFollowing = arrayPosts
 				}}>{t('ViewMore')}<FaArrowTurnDown /></button> 
 			: arrayLength > 4 
 			?<button onClick={()=>{
-					setArrayLength(4)
+					setArrayLength((prevArrayLength)=>prevArrayLength - 4)
 				}}>{t('Hide')}<FaArrowTurnUp  /></button> : ""
 			: 
 				arrayLength <= onlyFollowing.length	
 			?<button onClick={()=>{
 					setArrayLength((prevArrayLength)=>prevArrayLength + 4)
 				}}>{t('ViewMore')}<FaArrowTurnDown /></button> 
-			: arrayLength > 4 
+			: arrayLength > 8 
 			?<button onClick={()=>{
-					setArrayLength(4)
+					setArrayLength((prevArrayLength)=>prevArrayLength - 4)
 				}}>{t('Hide')}<FaArrowTurnUp  /></button> 
 				: ""}
 			</span>

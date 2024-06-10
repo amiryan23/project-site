@@ -35,9 +35,13 @@ const queryClient = useQueryClient();
 // const { data: thisUser } = useQuery('thisUser', () => queryClient.getQueryData('thisUser'));
 
 
+ const { data: users } = useQuery('users', () => queryClient.getQueryData('users'));
+
  const imageRef = useRef()
 
  const animBlock = useRef()
+
+ const userRef = useRef()
 
  // const changeInfoUserMutation = useChangeInfoUser()
  
@@ -69,19 +73,20 @@ const queryClient = useQueryClient();
     }
   };
 
- // 
- //    const handlerChangeInfo = async ( username,age,country,city,fileUrl,description,privateProfile ) => {
- //    try {
- //      await changeInfoUserMutation.mutate({ username,age,country,city,fileUrl,description,privateProfile });
- //      console.log("добавлен в подписки ");
- //      setError("")
- //  		setNotificText("Новые Насртойки сохранени")
- //     
- //    } catch (error) {
- //      console.error("Ошибка при добавлен в подписки", error);
- //      setError("Ошибка")
- //    }
- //  };
+
+   const userNameVerify = users ?
+   users?.filter(user => user.id !== thisUser?.id) 
+   .some((user) => user.username?.toLowerCase() === username?.toLowerCase())
+   : ""
+
+    useEffect(()=>{
+        
+        if(userNameVerify && userRef.current){
+            userRef.current.classList.add(s.userInvalid)
+        } else if (!userNameVerify && userRef.current) {
+            userRef.current.classList.remove(s.userInvalid)
+        }
+    },[username,userNameVerify])
 
 
 
@@ -201,7 +206,7 @@ const handlerChangeInfo = async () => {
 				<span className={s.Block2}>
 					<span className={s.item1}>
 						<span>{t('Username')}</span>
-						<span><input value={username} pattern="^[a-zA-Z0-9]*$" minLength={4} maxLength={16} name="username" placeholder='Username' onChange={(e)=>{setUsername(e.target.value)}} type="text" /></span>
+						<span><input ref={userRef} value={username} pattern="^[a-zA-Z0-9]*$" minLength={4} maxLength={16} name="username" placeholder='Username' onChange={(e)=>{setUsername(e.target.value)}} type="text" /></span>
 					</span>
 					<span className={s.item1}>
 						<span>{t('Age')}</span>

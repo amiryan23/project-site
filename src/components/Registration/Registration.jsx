@@ -7,7 +7,7 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 import {  doc, setDoc} from "firebase/firestore";
 import {auth,db } from './../../firebase'
 import { useQueryClient,useQuery } from 'react-query';
-
+import { BsFillEyeFill,BsFillEyeSlashFill } from "react-icons/bs";
 
 const Registration = ()=>{
     const [username,setUsername] = useState()
@@ -17,9 +17,11 @@ const Registration = ()=>{
     const [age,setAge] = useState()
     const [error,setError] = useState()
     const [checkbox,setCheckbox]=useState(false)
+    const [passHide,setPassHide] = useState(true)
 
     const animBlock = useRef()
     const rePassRef = useRef()
+    const passRef = useRef()
     const userRef = useRef()
 
     const { logined , t } = useContext(MyContext);
@@ -56,9 +58,17 @@ const Registration = ()=>{
 
     }   
 
+    if(passHide){
+        passRef.current.type = "password"
+        rePassRef.current.type = "password"
+    } else {
+        passRef.current.type = "text"
+        rePassRef.current.type = "text"
+    }
 
 
-    },[password,copypassword])
+
+    },[password,copypassword,passHide])
 
 
    const userNameVerify = users ?
@@ -158,15 +168,15 @@ useEffect(()=>{
             </div>
             <div className={s.content2}>
                 <span className={s.item1}>{t('Password')}</span>
-                <span><input type="password" value={password} minLength={8} maxLength={30} name="password" placeholder='Password' onChange={(e)=>{
+                <span className={s.item2}><input ref={passRef} type="password" value={password} minLength={8} maxLength={30} name="password" placeholder='Password' onChange={(e)=>{
                     setPassword(e.target.value)
-                }}/></span>
+                }}/>{passHide ? <span onClick={()=>{setPassHide((prevPassHide)=>!prevPassHide)}} className={s.hidePass}><BsFillEyeFill/></span> : <span onClick={()=>{setPassHide((prevPassHide)=>!prevPassHide)}} className={s.hidePass}><BsFillEyeSlashFill /></span>}</span>
             </div>
             <div className={s.content2}>
                 <span className={s.item1}>{t('CopyPassword')}</span>
-                <span><input ref={rePassRef} type="password" value={copypassword} minLength={8} maxLength={30} name="copypassword" placeholder='Replay password' onChange={(e)=>{
+                <span className={s.item2}><input ref={rePassRef} type="password" value={copypassword} minLength={8} maxLength={30} name="copypassword" placeholder='Replay password' onChange={(e)=>{
                     setCopypassword(e.target.value)
-                }} /></span>
+                }} />{passHide ? <span onClick={()=>{setPassHide((prevPassHide)=>!prevPassHide)}} className={s.hidePass}><BsFillEyeFill/></span> : <span onClick={()=>{setPassHide((prevPassHide)=>!prevPassHide)}} className={s.hidePass}><BsFillEyeSlashFill /></span>}</span>
             </div>
             <div className={s.content2}>
                 <span className={s.item1}>{t('Age')}</span>

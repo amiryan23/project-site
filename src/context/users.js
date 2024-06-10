@@ -188,4 +188,31 @@ export const cancelRequestFunction = async (thisUser,user,queryClient) => {
 
 
 
-
+// export const notificationFunction = async (thisUser,user,notificText,queryClient) => {
+//   try{
+//     const userRef = doc(db, 'users', user.id);
+//     const thisUserRef = doc(db, 'users', thisUser.id);
+// 
+//         const usersArray = queryClient.getQueryData('users');
+//     const thisUserSnapshot = queryClient.getQueryData('thisUser');
+// 
+//      const userIndex = usersArray.findIndex(u => u.id === user.id);
+// 
+//     if(!usersArray[userIndex].notificMessage){
+//       usersArray[userIndex].notificMessage = []
+//     }
+// 
+//     usersArray[userIndex].notificMessage.push({
+//       id:new Date().toLocaleString(),
+//       message:notificText,
+//       sendUserId:thisUser.id,
+//       read:false
+//     })
+// 
+//   queryClient.setQueryData('thisUser', usersArray);
+//   await updateDoc(userRef, usersArray)
+// 
+//   } catch(error){
+//     console.log("Ошибка",error)
+//   }
+// }

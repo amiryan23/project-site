@@ -12,6 +12,7 @@ export const usePostsQuery = () => {
     refetchOnWindowFocus: false,
     refetchInterval: 120000,
     retry:false,
+
   });
 
   return { arrayPosts, postsisLoading, postsisError };
@@ -24,6 +25,7 @@ export const useUsersQuery = () => {
     refetchOnWindowFocus: false,
     refetchInterval: 120000,
     retry:false,
+
   });
 
   return { users, usersisLoading, usersisError };
@@ -35,23 +37,25 @@ export const useThisUserQuerry = () => {
     refetchOnWindowFocus: false,
     refetchInterval: 120000,
     retry:false,
+
   });
 
   return { thisUser, thisUseridLoading, thisUserisError };
 }
 
 
-  
+
+
 
 export const useLikePostMutation = () => {
   const queryClient = useQueryClient();
 
   const likePostMutation = useMutation(
-    async ({ postId, userId }) => {
+    async ({ postId, userId  }) => {
       const arrayPosts = queryClient.getQueryData('arrayPosts');
 
       if (arrayPosts) {
-        return likePostFunction(postId, userId, arrayPosts, queryClient);
+        return likePostFunction(postId, userId , arrayPosts, queryClient);
       } else {
         return Promise.reject("Массив постов не определен.");
       }
@@ -353,3 +357,26 @@ export const useDeleteComment = () => {
     )
   return deleteCommentMutation;
 }
+
+
+// export const useNotification = () => {
+//   const queryClient = useQueryClient();
+// 
+//   const notificationMutation = useMutation(
+//     async({thisUser,user,notificText}) => {
+//      const usersArray = queryClient.getQueryData('users');
+//      if(usersArray) {
+//       return notificationFunction(thisUser,user,notificText,queryClient)
+//      } else{
+//       return Promise.reject("Массив постов не определен.");
+//      }
+//     },
+//     {
+//       onSuccess: () => {
+//         
+//         queryClient.invalidateQueries('users');
+//       },
+//     }
+//     )
+//   return notificationMutation
+// }

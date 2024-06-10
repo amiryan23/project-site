@@ -127,7 +127,17 @@
                     100%{transform: translateX(0);}
                 }
 
+                .userInvalid {
+                    background-color: rgba(255, 0, 0, 0.6);
+                    animation:inputAnim 50ms linear forwards;
+                    color: whitesmoke;
+                    transition: 250ms linear;
+                }
+
+
 			}
+
+
 		}
 	}
 

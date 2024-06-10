@@ -53,9 +53,27 @@
             visibility: hidden;
             transition: 250ms linear ;
             overflow-y:scroll;
+            display: flex;
+            flex-direction: column;
 
+
+           .miniBlock1{
+           	width: 70%;
+            	padding: 10px;
+            	margin: 5px;
+            	color: #222;
+            	text-decoration: none;
+            	background-color: rgba(256, 256, 256, 0.7);
+            	font-weight: bold;
+            	border-radius: 7px;
+            	display: flex;
+            	justify-content: center;
+
+
+            }
 
           
+
           .requestsContent{
             	width: 100%;
             	display: flex;
@@ -139,6 +157,74 @@
             	}
             }
 
+		            .notificContent{
+            	width: 100%;
+            	display: flex;
+            	flex-direction: row;
+            	justify-content: flex-start;
+            	align-items: center;
+            	gap:25px;
+            	padding:10px;
+            	border:2px solid #333;
+            	background-color:rgba(256,256,256,0.1);
+            	border-radius:9px;
+            	text-decoration: none;
+
+
+            	.miniItem1{
+            		display:flex;
+            		flex-direction:column;
+            		align-items: center;
+            		justify-content: center;
+            		gap:5px;
+            		
+            		img{
+            			width: 40px;
+            			height: 40px;
+            			border-radius: 50%;
+            			border: 2px solid rgba(256, 256, 256, 0.7);
+            		}
+
+            		
+
+            	}
+
+            	.miniItem2{
+            		
+            		display: flex;
+            		flex-direction:column;
+            		flex: 1 0;
+            		gap:5px;
+
+            		.block1{
+            			align-self: flex-start;
+            			color: rgba(256, 256, 256, 0.7);
+            			font-size: 11px;
+            			font-weight: bold;
+            		}
+
+            		.block2{
+            				font-size: 14px;
+            			color: whitesmoke;
+            			font-weight: bold;
+            		}
+
+            	}
+
+            	.miniItem3{
+            		width: 20%;
+            		display: flex;
+            		flex-direction: row;
+            		justify-content: flex-end;
+            		gap:5px;
+            		color: rgba(256, 256, 256, 0.5);
+            		font-weight: bold;
+            		font-size: 12px;
+
+
+            	}
+            }
+
              .notNotific{
             	width: 100%;
             	height: 100%;
@@ -180,6 +266,25 @@
             transition: 400ms linear ;
             overflow-y:scroll;
       
+
+           .miniBlock1{
+           	width: 70%;
+            	padding: 10px;
+            	margin: 5px;
+            	color: #222;
+            	text-decoration: none;
+            	background-color: rgba(256, 256, 256, 0.7);
+            	font-weight: bold;
+            	border-radius: 7px;
+            	display: flex;
+            	justify-content: center;
+            	border-bottom:2px solid rgba(256, 256, 256, 0.5);
+
+
+            }
+
+
+            
 
             .requestsContent{
             	width: 100%;
@@ -265,6 +370,74 @@
             	}
             }
 
+            		            .notificContent{
+            	width: 100%;
+            	display: flex;
+            	flex-direction: row;
+            	justify-content: flex-start;
+            	align-items: center;
+            	gap:25px;
+            	padding:10px;
+            	border:2px solid #333;
+            	background-color:rgba(256,256,256,0.1);
+            	border-radius:9px;
+            	text-decoration: none;
+
+
+            	.miniItem1{
+            		display:flex;
+            		flex-direction:column;
+            		align-items: center;
+            		justify-content: center;
+            		gap:5px;
+            		
+            		img{
+            			width: 40px;
+            			height: 40px;
+            			border-radius: 50%;
+            			border: 2px solid rgba(256, 256, 256, 0.7);
+            		}
+
+            		
+
+            	}
+
+            	.miniItem2{
+            		
+            		display: flex;
+            		flex-direction:column;
+            		flex: 1 0;
+            		gap:5px;
+
+            		.block1{
+            			align-self: flex-start;
+            			color: rgba(256, 256, 256, 0.7);
+            			font-size: 11px;
+            			font-weight: bold;
+            		}
+
+            		.block2{
+            				font-size: 14px;
+            			color: whitesmoke;
+            			font-weight: bold;
+            		}
+
+            	}
+
+            	.miniItem3{
+            		width: 20%;
+            		display: flex;
+            		flex-direction: row;
+            		justify-content: flex-end;
+            		gap:5px;
+            		color: rgba(256, 256, 256, 0.5);
+            		font-weight: bold;
+            		font-size: 12px;
+
+
+            	}
+            }
+
             .notNotific{
             	width: 100%;
             	height: 100%;
@@ -290,6 +463,10 @@
 	.miniContent{
 		.item2{
 
+			.miniBlock1{
+				width: 100%;
+				margin: 0;
+			}
 			width: 100%;
 			left: 0;
 
@@ -303,6 +480,11 @@
 		.notificAnim {
 			width: 100%;
 			left: 0;
+
+			.miniBlock1{
+				width: 100%;
+				margin: 0 5px 5px 0;
+			}
 			.miniItem2{
 				.block2{
 				font-size: 12px;

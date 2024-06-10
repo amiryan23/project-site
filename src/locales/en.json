@@ -2,6 +2,7 @@
 	"login": "Login",
 	"signUp": "Sign Up",
 	"Exit": "Log out",
+	"authError":"Account not registered or not found!",
 	"Username": "Username",
 	"Email": "Email",
 	"Password": "Password",
@@ -89,5 +90,10 @@
 	"AddSaved":"Added to saved",
 	"RemoveSaved":"Removed from saved",
 	"RemoveFromSaved":"Remove from saved",
-	"TagUser":"Tag a user in a post"
+	"TagUser":"Tag a user in a post",
+	"NotificComment":"added a comment to your post",
+	"NotificLike":"liked your post",
+	"SeeAllNot":"See all notifications"
+
+
 }

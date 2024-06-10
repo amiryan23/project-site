@@ -10,6 +10,7 @@ const Notification = () => {
 
 const notificAnim = useRef()
 
+const [widthTimer,setWidthTimer] = useState(100)
 
 
 useEffect(()=>{
@@ -32,13 +33,33 @@ useEffect(()=>{
 
 },[notificText])
 
+  useEffect(() => {
+    let interval;
+    if (widthTimer > 0 && notificText) {
+      interval = setInterval(() => {
+        setWidthTimer((prevWidthTimer) => prevWidthTimer - 1);
+      }, 24); // Adjust the decrement and interval as needed
+    }
+
+    if(!notificText){
+    	setWidthTimer(100)
+    }
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, [widthTimer, notificText]);
+
 	return (
 		<>
 		{notificText
 		? <div className={s.megaContainer} ref={notificAnim}>
 			<div className={s.content}>
+		{notificText ?	<div className={s.timer} style={{width:`${widthTimer}%`}}></div> : "" }
+				<div className={s.notificContent}>
 				<FaCircleCheck />
 				<span>{notificText}</span>
+				</div>
 				
 			</div>
 		</div>

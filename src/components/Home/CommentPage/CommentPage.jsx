@@ -171,7 +171,7 @@ const handleFileChange = useCallback((e, postId) => {
 							<img src={users?.find(user => user.id === selectedPost?.userId).photo?.placed || users?.find(user => user.id === selectedPost?.userId).photo?.default} alt="" />
 						</span>
 						<span className={s.postBlock2}>
-							{selectedPost?.user}
+							{users?.find(user=> user.id === selectedPost?.userId).username}
 						</span>
 						<span className={s.postBlock3}>
 							{calculateTimeDifference(selectedPost?.timeAdded)}

@@ -1,7 +1,9 @@
 import {db,docId,firebaseConfig,storage} from './../firebase'
-import { doc, updateDoc  } from "firebase/firestore";
+import { doc, updateDoc ,arrayUnion  } from "firebase/firestore";
 import Resizer from 'react-image-file-resizer';
 import { getStorage,ref, uploadBytes } from "firebase/storage";
+import {addNotificationToUser} from './../helper/addNotification'
+
 
 
 
@@ -24,6 +26,8 @@ export const likePostFunction = async (postId, userId, arrayPosts, queryClient) 
                 updatedPosts[postIndex].likes = updatedLikes;
             } else {
                 updatedPosts[postIndex].likes.push(userId);
+                addNotificationToUser(post.userId,userId,post.id,"Like");
+                
             }
 
             queryClient.setQueryData('arrayPosts', updatedPosts);
@@ -189,6 +193,7 @@ export const addCommentPostFunction = async (postId, userId, thisUser , commentT
             const postDocRef = doc(db, "posts", docId);
             await updateDoc(postDocRef, { arrayPosts: updatedPosts });
 
+            addNotificationToUser(post.userId,thisUser.id,post.id,"Comment");
             console.log("Комментарий успешно добавлен к посту.");
             // setNotificText("Комментарий успешно добавлен к посту")
 
@@ -211,14 +216,14 @@ export const addCommentPostFunction = async (postId, userId, thisUser , commentT
 
 
 
-
+            const post = arrayPosts[postIndex];
         
             updatedPosts[postIndex].commentArray.push(comment);
   
             queryClient.setQueryData('arrayPosts', updatedPosts);
             const postDocRef = doc(db, "posts", docId);
             await updateDoc(postDocRef, { arrayPosts: updatedPosts });
-
+             addNotificationToUser(post.userId,thisUser.id,post.id,"Comment");
             console.log("Комментарий успешно добавлен к посту.");
                 }
         } else {

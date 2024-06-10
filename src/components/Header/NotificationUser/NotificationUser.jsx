@@ -21,7 +21,7 @@ const NotificationUser = ({openNotific,setOpenNotific}) =>{
 
 	const acceptRequest = useAcceptRequest()
 	const cancelRequest = useCancelRequest()
-const queryClient = useQueryClient();
+	const queryClient = useQueryClient();
 
 
 const { data: users } = useQuery('users', () => queryClient.getQueryData('users'));
@@ -89,20 +89,40 @@ const { data: users } = useQuery('users', () => queryClient.getQueryData('users'
 		</span>) 
 	: ""
 
+	const lastNotific = thisUser 
+	? 	thisUser?.notifications?.map(m => 
+		<Link to={`/home/comment/post/${m.postId}`}  className={s.notificContent}>
+			<span className={s.miniItem1}>
+				<Link to={`home/user/profile/${users?.find(user => user.id === m.fromUser).id}`}>
+				<img src={users.find(user => user.id === m.fromUser).photo?.placed ? users.find(user => user.id === m.fromUser).photo?.placed  : users.find(user => user.id === m.fromUser).photo?.default} alt="" />
+				</Link>
+			</span>
+			<span className={s.miniItem2}>
+				<span className={s.block1}>{users ? users?.find(user => user.id === m.fromUser).username : "" }</span>
+
+				<span className={s.block2}>{m.type === "Like" && t('NotificLike') || m.type === "Comment" && t('NotificComment')}</span>
+			</span>
+
+		</Link>) 
+	: ""
+
 	return (
 			<span className={s.miniContent} >
 				<span className={s.item1} onClick={()=>{setOpenNotific((prevOpenNotific)=>!prevOpenNotific)}}>
 				<IoMdNotifications />
-				{thisUser?.userData?.requests?.length > 0
-				? <span>{thisUser?.userData ? thisUser?.userData?.requests?.length : 0}</span>
+				{thisUser?.userData?.requests?.length > 0 || thisUser?.notifications?.filter(m=> m.read === false).length > 0
+				? <span>{thisUser?.userData || thisUser?.notifications ? thisUser?.userData?.requests?.length + thisUser?.notifications?.filter(m=> m.read === false).length : 0}</span>
 				: "" }
 				</span>
 			<span ref={notificAnim} className={s.item2}>
-				{thisUser?.userData?.requests?.length > 0 
-				? requestsNotifix 
+				<Link onClick={()=>{setOpenNotific((prevOpenNotific)=>!prevOpenNotific)}} to="home/notification" className={s.miniBlock1}>{t('SeeAllNot')}</Link>
+				<hr />
+				{thisUser?.userData?.requests?.length > 0 || thisUser?.notifications?.length > 0 
+				?	<> {requestsNotifix}  {lastNotific?.reverse()} </>
 				: <span className={s.notNotific}>
 					{t('noNotific')} <IoMdNotificationsOff />
 					</span>}
+				
 			</span> 
 			</span>
 
