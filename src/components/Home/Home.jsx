@@ -207,7 +207,7 @@ const topUsersList = sortedUsers?.map((user,index) => (
             <Route path="profile/following" element={<MyFollowing />} />
             <Route path="updated" element={<UpdatedSitePage />} />
             <Route path="save" element={<SavePage />} />
-            <Route path='notification' element={<NotificationPage />} />
+            <Route path="notification" element={<NotificationPage />} />
 
             </Routes>
             </Suspense> 
