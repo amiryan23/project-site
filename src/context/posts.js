@@ -3,7 +3,7 @@ import { doc, updateDoc,setDoc  } from "firebase/firestore";
 import { ref, uploadBytes } from "firebase/storage";
 import imageCompression from 'browser-image-compression';
 import Resizer from 'react-image-file-resizer';
-
+import {addNotificationToUser} from './../helper/addNotification'
 
 export  const addPostFunction = async (thisUser,postText,fileUrl,imageRef,forwardPost,tagged,arrayPosts,queryClient) => {
    	
@@ -48,7 +48,7 @@ export  const addPostFunction = async (thisUser,postText,fileUrl,imageRef,forwar
           imageURL:fileUrl ? `https://firebasestorage.googleapis.com/v0/b/${firebaseConfig.storageBucket}/o/imagePosts%2F${encodeURIComponent(uniqueFilename)}?alt=media` : false,
 		  timeAdded: new Date().toLocaleString() ,
           forwardPost: forwardPost !== null ? forwardPost : "",
-          tagged:tagged
+          taggedUser:tagged
           
 
         };
@@ -56,6 +56,9 @@ export  const addPostFunction = async (thisUser,postText,fileUrl,imageRef,forwar
         queryClient.setQueryData('arrayPosts',newPostArray)
         await setDoc(doc(db, "posts", docId), { arrayPosts: newPostArray });
         console.log("Новый объект успешно добавлен в Firestore.");
+        if(tagged){
+            addNotificationToUser(tagged,thisUser.id,newPost?.id,"Tagged")
+        }
         // setNotificText("Новый пост успешно добавлено")
         // setPostText("")
         // setFileUrl("")
@@ -79,6 +82,9 @@ export  const addPostFunction = async (thisUser,postText,fileUrl,imageRef,forwar
         queryClient.setQueryData('arrayPosts',newPostArray)
         await setDoc(doc(db, "posts", docId), { arrayPosts: newPostArray });
         console.log("Новый объект успешно добавлен в Firestore.");
+        if(tagged){
+            addNotificationToUser(tagged,thisUser.id,newPost?.id,"Tagged")
+        }
     //     setNotificText("Новый пост успешно добавлено")
 				// setPostText("")
     //     setFileUrl("")

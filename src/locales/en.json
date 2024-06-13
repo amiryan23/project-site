@@ -93,7 +93,13 @@
 	"TagUser":"Tag a user in a post",
 	"NotificComment":"added a comment to your post",
 	"NotificLike":"liked your post",
-	"SeeAllNot":"See all notifications"
-
+	"SeeAllNot":"See all notifications",
+	"SubReq":"Subscription requests",
+	"OtherNotific":"Other notifications",
+	"MarkAllNotific":"Mark all notifications as read",
+	"NotificRead":"All notifications are read",
+	"Notifics":"Notifications",
+	"TaggedPost":"Tagged you in a post",
+	"Photo":"Photo"
 
 }

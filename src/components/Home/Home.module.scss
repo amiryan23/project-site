@@ -46,7 +46,8 @@
                 padding: 10px;
             // border: 2px solid rgba(69,200,168,0.5);
             border: 2px solid rgba(60,60,60,0.5);
-
+            font-size: 14px;
+            font-weight: bold;
             border-radius: 13px;
             color: #888;
             text-decoration: none;
@@ -80,6 +81,8 @@
             flex-direction: row;
             gap: 5px;
             align-items: center;
+                        font-size: 14px;
+            font-weight: bold;
             transition-duration: 500ms;
             }
 
@@ -194,6 +197,8 @@
             border: 2px solid rgba(256, 256, 256, 0.5);
             border-radius: 13px;
             color: #999;
+            font-weight: bold;
+            font-size: 13px;
             text-decoration: none;
             display: flex;
             flex-direction: row;
@@ -225,6 +230,8 @@
             flex-direction: row;
             gap: 5px;
             align-items: center;
+            font-weight: bold;
+            font-size: 13px;
             transition-duration: 500ms;
             }
 

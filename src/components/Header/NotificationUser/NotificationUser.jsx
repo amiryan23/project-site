@@ -26,6 +26,7 @@ const NotificationUser = ({openNotific,setOpenNotific}) =>{
 
 const { data: users } = useQuery('users', () => queryClient.getQueryData('users'));
     const { data: thisUser } = useQuery('thisUser', () => queryClient.getQueryData('thisUser'));
+    const { data: arrayPosts } = useQuery('arrayPosts', () => queryClient.getQueryData('arrayPosts'));
 
 	useEffect(()=>{
 		if(openNotific){
@@ -66,7 +67,18 @@ const { data: users } = useQuery('users', () => queryClient.getQueryData('users'
 	}
 
 
-
+const getNotificationText = (type) => {
+  switch(type) {
+    case "Like":
+      return t('NotificLike');
+    case "Comment":
+      return t('NotificComment');
+    case "Tagged":
+      return t('TaggedPost');
+    default:
+      return "";
+  }
+};
 
 	const requestsNotifix = thisUser
 	? 
@@ -74,7 +86,7 @@ const { data: users } = useQuery('users', () => queryClient.getQueryData('users'
 		<span  className={s.requestsContent}>
 			<span className={s.miniItem1}>
 				<Link to={`home/user/profile/${users?.find(user => user.id === m).id}`}>
-				<img src={users.find(user => user.id === m).photo?.placed ? users.find(user => user.id === m).photo?.placed  : users.find(user => user.id === m).photo?.default} alt="" />
+				<img src={users?.find(user => user.id === m).photo?.placed ? users?.find(user => user.id === m).photo?.placed  : users?.find(user => user.id === m).photo?.default} alt="" />
 				</Link>
 			</span>
 			<span className={s.miniItem2}>
@@ -94,40 +106,51 @@ const { data: users } = useQuery('users', () => queryClient.getQueryData('users'
 		<Link to={`/home/comment/post/${m.postId}`}  className={s.notificContent}>
 			<span className={s.miniItem1}>
 				<Link to={`home/user/profile/${users?.find(user => user.id === m.fromUser).id}`}>
-				<img src={users.find(user => user.id === m.fromUser).photo?.placed ? users.find(user => user.id === m.fromUser).photo?.placed  : users.find(user => user.id === m.fromUser).photo?.default} alt="" />
+				<img src={users?.find(user => user.id === m.fromUser).photo?.placed ? users?.find(user => user.id === m.fromUser).photo?.placed  : users?.find(user => user.id === m.fromUser).photo?.default} alt="" />
 				</Link>
 			</span>
 			<span className={s.miniItem2}>
 				<span className={s.block1}>{users ? users?.find(user => user.id === m.fromUser).username : "" }</span>
 
-				<span className={s.block2}>{m.type === "Like" && t('NotificLike') || m.type === "Comment" && t('NotificComment')}</span>
+				<span className={s.block2}>{getNotificationText(m.type)}</span>
+				<span className={s.block3}>
+				{ arrayPosts?.find(post=> post.id === m.postId)?.postText === ""
+				? "(Photo)" 
+				: `${arrayPosts?.find(post=> post.id === m.postId)?.postText?.slice(0,25)}...` }</span>
 			</span>
 
 		</Link>) 
 	: ""
 
-	return (
-			<span className={s.miniContent} >
-				<span className={s.item1} onClick={()=>{setOpenNotific((prevOpenNotific)=>!prevOpenNotific)}}>
-				<IoMdNotifications />
-				{thisUser?.userData?.requests?.length > 0 || thisUser?.notifications?.filter(m=> m.read === false).length > 0
-				? <span>{thisUser?.userData || thisUser?.notifications ? thisUser?.userData?.requests?.length + thisUser?.notifications?.filter(m=> m.read === false).length : 0}</span>
-				: "" }
-				</span>
-			<span ref={notificAnim} className={s.item2}>
-				<Link onClick={()=>{setOpenNotific((prevOpenNotific)=>!prevOpenNotific)}} to="home/notification" className={s.miniBlock1}>{t('SeeAllNot')}</Link>
-				<hr />
-				{thisUser?.userData?.requests?.length > 0 || thisUser?.notifications?.length > 0 
-				?	<> {requestsNotifix}  {lastNotific?.reverse()} </>
-				: <span className={s.notNotific}>
-					{t('noNotific')} <IoMdNotificationsOff />
-					</span>}
-				
-			</span> 
-			</span>
-
-		)
+return (
+  <span className={s.miniContent}>
+    <span className={s.item1} onClick={() => setOpenNotific((prevOpenNotific) => !prevOpenNotific)}>
+      <IoMdNotifications />
+      {(thisUser?.userData?.requests?.length > 0 || (thisUser?.notifications?.filter(m => m.read === false)?.length > 0)) ? (
+        <span>
+          {(thisUser?.userData?.requests?.length || 0) + (thisUser?.notifications?.filter(m => m.read === false)?.length || 0)}
+        </span>
+      ) : ""}
+    </span>
+    <span ref={notificAnim} className={s.item2}>
+      <Link onClick={() => setOpenNotific((prevOpenNotific) => !prevOpenNotific)} to="/home/notification" className={s.miniBlock1}>{t('SeeAllNot')}</Link>
+      <hr />
+      <span className={s.Block}>
+        {(thisUser?.userData?.requests?.length > 0 || (Array.isArray(thisUser?.notifications) && thisUser.notifications.length > 0)) ? (
+          <>
+            {requestsNotifix}
+            {lastNotific?.[lastNotific.length - 1]}
+          </>
+        ) : (
+          <span className={s.notNotific}>
+            {t('noNotific')} <IoMdNotificationsOff />
+          </span>
+        )}
+      </span>
+    </span>
+  </span>
+);
 }
 
 
-export default NotificationUser
+export default React.memo(NotificationUser)
