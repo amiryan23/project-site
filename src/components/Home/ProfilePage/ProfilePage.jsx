@@ -30,12 +30,19 @@ import { RiUserAddFill } from "react-icons/ri";
 import { TbUserSearch } from "react-icons/tb";
 import { HiMiniPlusCircle } from "react-icons/hi2";
 import { FaUserTag } from "react-icons/fa6";
+import { TbMusicPlus,TbMusicSearch } from "react-icons/tb";
+import { FaCirclePlay  } from "react-icons/fa6";
+import { FaPauseCircle } from "react-icons/fa";
+import { IoIosMusicalNotes } from "react-icons/io";
+import { FaVolumeDown ,FaVolumeMute  } from "react-icons/fa";
+
+
 
 
 
 const ProfilePage = ()=>{
 
- const {   isWideScreen ,calculateTimeDifference,commentText,setCommentText,copyToClipboard,setNotificText,t,setActiveLink,fileUrls, setFileUrls,zoomThisPhoto} = useContext(MyContext);
+ const {   isWideScreen ,calculateTimeDifference,commentText,setCommentText,copyToClipboard,setNotificText,t,setActiveLink,fileUrls, setFileUrls,zoomThisPhoto,srcMusicId,setSrcMusicId} = useContext(MyContext);
 
  	const forwardPostStorage = JSON.parse(localStorage.getItem("forwardPost"))
 
@@ -47,7 +54,10 @@ const ProfilePage = ()=>{
   const [forwardPost,setForwardPost] = useState(forwardPostStorage ? forwardPostStorage : null)
   const [replyComment,setReplyComment] = useState(null)
   const [openUsers,setOpenUsers] = useState(false)
+  const [openMusic,setOpenMusic] = useState(false)
   const [tagUser,setTagUser] = useState(null)
+  const [trackId,setTrackId] = useState(null)
+  const [play,setPlay] = useState({ musicId: null, postId: null, playMusic: false })
  
 	const likePostMutation = useLikePostMutation();
   const dislikePostMutation = useDislikePostMutation()
@@ -59,10 +69,15 @@ const ProfilePage = ()=>{
   	const { data: users } = useQuery('users', () => queryClient.getQueryData('users'));
     const { data: thisUser } = useQuery('thisUser', () => queryClient.getQueryData('thisUser'));
     const { data: arrayPosts } = useQuery('arrayPosts', () => queryClient.getQueryData('arrayPosts'));
+    const { data: musicsArray } = useQuery('musicsArray', () => queryClient.getQueryData('musicsArray'));
 
  const animBlock = useRef()
  const imageRef = useRef()
  const animTagUsers = useRef()
+ const animMusics = useRef()
+
+   const postRef = useRef()
+  
 
  let timer;
 
@@ -97,7 +112,7 @@ let timer2;
   },10)
  }
 
- setActiveLink("/profile")
+
 
  return () => {
  	if(animTagUsers.current ){
@@ -106,6 +121,32 @@ let timer2;
  }
  }
  },[openUsers])
+
+ let timer3;
+
+  useEffect (()=>{
+ 	if(openMusic && animMusics.current){
+ timer2 = setTimeout(()=>{
+ 	animMusics.current.classList.add(s.activeMusic)
+ 	animMusics.current.classList.remove(s.musicContainer)
+ },10)
+
+ } else if(!openMusic && animMusics.current){
+  timer3 = setTimeout(()=>{
+  	animMusics.current.classList.add(s.musicContainer)
+  	animMusics.current.classList.remove(s.activeMusic)
+  },10)
+ }
+
+ 
+
+ return () => {
+ 	setSrcMusicId((prevMusicId)=>null)
+ 	if(animMusics.current ){
+		clearTimeout(timer3)
+ }
+ }
+ },[openMusic])
 
    const handleFileChange = (e) => {
         if (e.target.files && e.target.files.length > 0) {
@@ -156,15 +197,16 @@ let timer2;
   	}
   }
 
-  const handleAddPost = async (thisUser,postText,fileUrl,imageRef,forwardPost,tagged) => {
+  const handleAddPost = async (thisUser,postText,fileUrl,imageRef,forwardPost,tagged,trackId) => {
   	try{
   		if(postText !== "" || fileUrl !== null || forwardPost !== null){
-  		await addPostMutation.mutate({thisUser,postText,fileUrl,imageRef,forwardPost,tagged})
+  		await addPostMutation.mutate({thisUser,postText,fileUrl,imageRef,forwardPost,tagged,trackId})
   		setPostText("")
       setFileUrl("")
       setForwardPost(null)
       setTagUser(null)
   		setNotificText(t('NotificPostAdd'))
+  		setTrackId(null)
   		localStorage.removeItem("forwardPost")
   	} else {
   		setNotificText(t('Error'))
@@ -185,6 +227,31 @@ let timer2;
   	}
   }
 
+const playMusic = (musicId,postId,musicSrc) => {
+	setSrcMusicId((prevMusicId)=>null)
+	setTimeout(()=>{setSrcMusicId((prevMusicId)=>musicSrc)},10)
+    setPlay((prevPlay) => ({
+        ...prevPlay,
+        musicId: musicId,
+        postId:postId,
+        playMusic: true
+    }));
+    
+
+};
+
+
+const pauseMusic = (musicId,postId) => {
+	setSrcMusicId((prevMusicId)=>null)
+    setPlay((prevPlay) => ({
+        ...prevPlay,
+        musicId: musicId,
+        postId:postId,
+        playMusic: false
+    }));
+    
+ 
+};
 
      const handleCommentChange = useCallback((postId, text) => {
     setCommentText(prevState => ({
@@ -248,7 +315,7 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
   const postThisUser = arrayPosts 
   ? arrayPosts
   .filter(m => m.userId === thisUser?.id) 
-  	.map(m => 		<div className={s.postMegaContent} key={m.id}>
+  	.map(m => 		<div className={s.postMegaContent} ref={postRef} key={m.id} >
 
 					<div className={s.postMiniContent1}>
 						<span className={s.postBlock1}>
@@ -284,7 +351,18 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
 					</span>
 					</div>
 					<div className={s.postMiniContent2}>
+					{m.trackId !== null && m.trackId !== undefined 
+					? <div className={s.musicContent} >
+					<span className={s.musicItem1}><IoIosMusicalNotes />{musicsArray?.find(music => music.id === m.trackId)?.trackName?.length > 35 ? `${musicsArray?.find(music => music.id === m.trackId)?.trackName?.slice(0,35)}...` : musicsArray?.find(music => music.id === m.trackId)?.trackName}</span>
+					<span className={s.musicItem2}>		
+					{play.musicId === musicsArray?.find(music => music.id === m.trackId).id && play.playMusic === true && play.postId === m.id
+		? <span onClick={()=>{pauseMusic(musicsArray?.find(music => music.id === m.trackId).id,m.id)}}><FaPauseCircle /> </span>
+		: <span onClick={()=>{playMusic(musicsArray?.find(music => music.id === m.trackId).id,m.id,musicsArray?.find(music => music.id === m.trackId).urlTrack)}}><FaCirclePlay /> </span> }</span>
+					</div>
+					: ""}
 						{m.forwardPost !== undefined &&  m.forwardPost !== "" 
+					
+					
 				? arrayPosts?.find(post => post.id === m.forwardPost.fwPostid) 
 				? <Link className={s.fwPost} to={`/home/comment/post/${m.forwardPost.fwPostid}`}>
 					<span className={s.fwItem1}>
@@ -565,8 +643,21 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
 				<span className={s.item1}>
 				<FaUserTag /> 
 				{users?.find(user=> user.id === tagUser).username}
+
 				</span>
+
 				<span className={s.item2} onClick={()=>{setTagUser(null)}}>
+				<MdOutlineClose />
+				</span>
+				</div>
+				: ""}
+				{trackId !== null
+				? <div className={s.musicCont}>
+				<span className={s.item1}>
+				<IoIosMusicalNotes />
+				{musicsArray?.find(music => music.id === trackId)?.trackName?.length > 35 ? `${musicsArray?.find(music => music.id === trackId)?.trackName?.slice(0,35)}...` : musicsArray?.find(music => music.id === trackId)?.trackName}
+				</span> 
+				<span className={s.item2} onClick={()=>{setTrackId(null)}}>
 				<MdOutlineClose />
 				</span>
 				</div>
@@ -608,16 +699,22 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
 						<label htmlFor="file" >
 						<MdOutlineAddPhotoAlternate title="Photo" />
 						</label>
-						<GrAttachment title="File" />
+						<span onClick={()=>{
+							setOpenMusic((prevOpenMusic)=> !prevOpenMusic)
+							setOpenUsers(false)
+						}}>
+						<TbMusicPlus  title="Music" />
+						</span>
 						<span onClick={()=>{
 							setOpenUsers((prevOpenUsers)=> !prevOpenUsers)
+							setOpenMusic(false)
 						}}><RiUserAddFill /></span>
 
 					</span>
 					</span>
 					<span className={s.block2}>
 					
-					<button onClick={()=>{handleAddPost(thisUser,postText,fileUrl,imageRef,forwardPost,tagUser)}}><HiMiniPlusSmall />{t("AddPost")}</button>
+					<button onClick={()=>{handleAddPost(thisUser,postText,fileUrl,imageRef,forwardPost,tagUser,trackId)}}><HiMiniPlusSmall />{t("AddPost")}</button>
 					
 					</span>
 				</span>
@@ -636,6 +733,33 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
 							onClick={()=>{
 								setTagUser(user.id)
 								setOpenUsers(false)
+							}}><HiMiniPlusCircle /></span>
+						</span>)}
+					</div>
+					<div className={s.userContent3}></div>
+				</div>
+
+
+					<div ref={animMusics} className={s.musicContainer}>
+					<div className={s.musicContent1}>Add music to a post</div>
+					<div className={s.musicContent2}>
+					<span className={s.musicMiniContent1}>
+							<TbMusicSearch /><input type="search" />
+					</span>
+					{musicsArray && musicsArray?.map(m => 
+						<span className={s.musicMiniContent2} >
+							<span style={{backgroundImage:`url(${m.trackImgUrl})`}} className={s.musicItem1} >
+								<span>
+								{play.musicId === m.id && play.playMusic === true
+								? <span onClick={()=>{pauseMusic(m.id)}}><FaPauseCircle /> </span>
+								: <span onClick={()=>{playMusic(m.id,m.urlTrack)}}><FaCirclePlay /> </span> }
+								</span>
+							</span>
+							<span className={s.musicItem2}>{m.trackName}</span>
+							<span className={s.musicItem3} 
+							onClick={()=>{
+								setTrackId(m.id)
+								setOpenMusic(false)
 							}}><HiMiniPlusCircle /></span>
 						</span>)}
 					</div>

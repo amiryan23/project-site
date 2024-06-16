@@ -17,6 +17,8 @@ import Language from './../Language/Language'
 import { useQueryClient,useQuery } from 'react-query';
 import {updatesArray} from './../../helper/updatesArray'
 
+
+
 const HomePage = React.lazy(()=>import('./HomePage/HomePage'))
 const ProfilePage = React.lazy(()=>import('./ProfilePage/ProfilePage'))
 const UsersPage = React.lazy(()=>import('./UsersPage/UsersPage'))
@@ -32,6 +34,7 @@ const MyFollowing = React.lazy(()=> import('./ProfilePage/MyFollowing/MyFollowin
 const UpdatedSitePage = React.lazy(()=>import('./../UpdatedSitePage/UpdatedSitePage'))
 const SavePage = React.lazy(()=>import('./SavePage/SavePage'))
 const NotificationPage = React.lazy(()=>import('./NotificationPage/NotificationPage'))
+const AddMusicPage = React.lazy(()=>import('./MusicPage/AddMusicPage/AddMusicPage'))
 
 
 
@@ -44,9 +47,10 @@ const Home = ()=> {
 //     const [activeLink,setActiveLink] = useState(locationStorage ? locationStorage : "/home")
     const [open,setOpen] = useState(false)
 
-     const {  logined, setLogined  , thisUser , isWideScreen,openMenu,setOpenMenu,activeLink,setActiveLink,openUpdate,setOpenUpdate,t} = useContext(MyContext);
+     const {  logined, setLogined  , thisUser , isWideScreen,openMenu,setOpenMenu,activeLink,setActiveLink,openUpdate,setOpenUpdate,t,srcMusicId,setSrcMusicId} = useContext(MyContext);
 
      const mobileMenuAnim = useRef()
+     const song = useRef(new Audio())
 
      const queryClient = useQueryClient();
 
@@ -69,6 +73,16 @@ const Home = ()=> {
         },250)
     }
 
+
+useEffect(()=>{
+    if(srcMusicId){
+        song.current.src = srcMusicId;
+        song.current.play()
+    } else {
+        song.current.src = null
+        song.current.pause()
+    }
+},[srcMusicId,setSrcMusicId])
 
 
     const usersWithPostCount = users?.map(user => ({
@@ -208,11 +222,30 @@ const topUsersList = sortedUsers?.map((user,index) => (
             <Route path="updated" element={<UpdatedSitePage />} />
             <Route path="save" element={<SavePage />} />
             <Route path="notification" element={<NotificationPage />} />
+            <Route path="music/add" element={<AddMusicPage />} />
 
             </Routes>
             </Suspense> 
             </div>
             <div className={s.content3}>
+                {/* <div className={s.miniContent}> */}
+                {/* <span className={s.item1}> */}
+                {/*     music name */}
+                {/* </span> */}
+                {/* <span className={s.item2}> */}
+                {/*     <span className={s.miniBlock1}>-:-</span> */}
+                {/*     <span className={s.miniBlock2}> */}
+                {/*         <span className={s.element}></span> */}
+                {/*     </span> */}
+                {/*     <span className={s.miniBlock1}>-:-</span> */}
+                {/* </span> */}
+                {/* <span className={s.item3}> */}
+                {/*     prev play next */}
+                {/* </span> */}
+                {/* </div> */}
+            <div className={s.miniContent}>
+                <audio  ref={song} ></audio>
+            </div>
                {openUpdate ? <div className={s.miniContent1}>
                     <span className={s.item1}>{updatesArray[updatesArray?.length - 1].title}</span>
                     <span className={s.item2}>

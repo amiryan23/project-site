@@ -5,7 +5,7 @@ import imageCompression from 'browser-image-compression';
 import Resizer from 'react-image-file-resizer';
 import {addNotificationToUser} from './../helper/addNotification'
 
-export  const addPostFunction = async (thisUser,postText,fileUrl,imageRef,forwardPost,tagged,arrayPosts,queryClient) => {
+export  const addPostFunction = async (thisUser,postText,fileUrl,imageRef,forwardPost,tagged,trackId,arrayPosts,queryClient) => {
    	
     try {
      
@@ -48,7 +48,8 @@ export  const addPostFunction = async (thisUser,postText,fileUrl,imageRef,forwar
           imageURL:fileUrl ? `https://firebasestorage.googleapis.com/v0/b/${firebaseConfig.storageBucket}/o/imagePosts%2F${encodeURIComponent(uniqueFilename)}?alt=media` : false,
 		  timeAdded: new Date().toLocaleString() ,
           forwardPost: forwardPost !== null ? forwardPost : "",
-          taggedUser:tagged
+          taggedUser:tagged,
+          trackId:trackId
           
 
         };
@@ -74,7 +75,8 @@ export  const addPostFunction = async (thisUser,postText,fileUrl,imageRef,forwar
           commentArray:[],
           timeAdded: new Date().toLocaleString() ,
           forwardPost: forwardPost !== null ? forwardPost : "",
-          taggedUser:tagged
+          taggedUser:tagged,
+          trackId:trackId
           
 
         };

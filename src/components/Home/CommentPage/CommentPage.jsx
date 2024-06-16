@@ -15,16 +15,20 @@ import { MdCircle,MdBrightness1,MdDelete } from "react-icons/md";
 import {parseTextWithLinks} from './../../../helper/linkFunction.js'
 import { IoMdPhotos } from "react-icons/io";
 import { FaUserTag } from "react-icons/fa6";
+import { FaCirclePlay  } from "react-icons/fa6";
+import { FaPauseCircle } from "react-icons/fa";
+import { IoIosMusicalNotes } from "react-icons/io";
 
 
 const CommentPage = () => {
 
- const {  thisUser  ,calculateTimeDifference,commentText,setCommentText,setNotificText,t,setActiveLink,fileUrls, setFileUrls} = useContext(MyContext);
+ const {  thisUser  ,calculateTimeDifference,commentText,setCommentText,setNotificText,t,setActiveLink,fileUrls, setFileUrls,srcMusicId,setSrcMusicId} = useContext(MyContext);
 
  const queryClient = useQueryClient();
 
 		const { data: users } = useQuery('users', () => queryClient.getQueryData('users'));
     const { data: arrayPosts } = useQuery('arrayPosts', () => queryClient.getQueryData('arrayPosts'));
+    const { data: musicsArray } = useQuery('musicsArray', () => queryClient.getQueryData('musicsArray'));
 
 	const {id} = useParams()
 
@@ -36,6 +40,8 @@ const CommentPage = () => {
   const deleteCommentMutation = useDeleteComment()
 
   const [replyComment,setReplyComment] = useState(null)
+  const [trackId,setTrackId] = useState(null)
+  const [play,setPlay] = useState({ musicId: null, postId: null, playMusic: false })
 
  let timer;
 
@@ -47,6 +53,7 @@ const CommentPage = () => {
  setActiveLink("/")
 
  return () => {
+ 	setSrcMusicId((prevMusicId)=>null)
  	if(animBlock.current){
  	animBlock.current.classList.remove(s.animBlock)
  	clearTimeout(timer)
@@ -75,6 +82,32 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
     }
     return false;
 }) : null;
+
+const playMusic = (musicId,postId,musicSrc) => {
+	setSrcMusicId((prevMusicId)=>null)
+	setTimeout(()=>{setSrcMusicId((prevMusicId)=>musicSrc)},10)
+    setPlay((prevPlay) => ({
+        ...prevPlay,
+        musicId: musicId,
+        postId:postId,
+        playMusic: true
+    }));
+    
+
+};
+
+
+const pauseMusic = (musicId,postId) => {
+	setSrcMusicId((prevMusicId)=>null)
+    setPlay((prevPlay) => ({
+        ...prevPlay,
+        musicId: musicId,
+        postId:postId,
+        playMusic: false
+    }));
+    
+ 
+};
 
 
 	   const handleLikePost = async (postId, userId) => {
@@ -181,6 +214,15 @@ const handleFileChange = useCallback((e, postId) => {
 						</span>
 					</div>
 					<div className={s.postMiniContent2}>
+					{selectedPost.trackId !== null && selectedPost.trackId !== undefined 
+					? <div className={s.musicContent} >
+					<span className={s.musicItem1}><IoIosMusicalNotes />{musicsArray?.find(music => music.id === selectedPost.trackId)?.trackName?.length > 35 ? `${musicsArray?.find(music => music.id === selectedPost.trackId)?.trackName?.slice(0,35)}...` : musicsArray?.find(music => music.id === selectedPost.trackId)?.trackName}</span>
+					<span className={s.musicItem2}>		
+					{play.musicId === musicsArray?.find(music => music.id === selectedPost.trackId).id && play.playMusic === true && play.postId === selectedPost.id
+		? <span onClick={()=>{pauseMusic(musicsArray?.find(music => music.id === selectedPost.trackId).id,selectedPost.id)}}><FaPauseCircle /> </span>
+		: <span onClick={()=>{playMusic(musicsArray?.find(music => music.id === selectedPost.trackId).id,selectedPost.id,musicsArray?.find(music => music.id === selectedPost.trackId).urlTrack)}}><FaCirclePlay /> </span> }</span>
+					</div>
+					: ""}
 						{selectedPost?.imageURL 
 						? <span className={s.item1}><img src={selectedPost?.imageURL ? selectedPost?.imageURL : <MiniLoader />} alt="" /></span>
 						: "" }

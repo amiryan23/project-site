@@ -115,7 +115,7 @@ export const updatesArray = [
 		"4. Адаптация.",
 		"5. Исправлены ошибки."
 		],
-	timeData:"10.06.2024"}
+	timeData:"13.06.2024"}
 
 
 	]	

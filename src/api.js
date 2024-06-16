@@ -57,3 +57,19 @@ export const fetchThisUser = () => {
     });
   });
 };
+
+
+export const fetchMusic = async () => {
+ try{
+  const docRef = doc(db, "musics", "R9eO71o2f8f90NUDZOk9");
+  const docSnap = await getDoc(docRef);
+          if (docSnap.exists()) {
+          return docSnap.data().musicsArray;
+          
+        } else {
+          console.log("Документ не найден");
+        }
+ }catch (error){
+  console.error("Ошибка при получении данных из Firestore:", error)
+ }
+}

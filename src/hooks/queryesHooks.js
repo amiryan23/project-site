@@ -1,8 +1,9 @@
 import { useQuery,useMutation } from 'react-query';
-import { fetchData,fetchUsers,fetchThisUser} from './../api';
+import { fetchData,fetchUsers,fetchThisUser,fetchMusic} from './../api';
 import {likePostFunction,dislikePostFunction,savePostToFavorite,addCommentPostFunction,deleteCommentPostFunction} from './../context/comment'
 import {deletePostFunction,addPostFunction} from './../context/posts'
 import {followFunction,unfollowFunction,accpetRequestFunction,cancelRequestFunction,changeInfoUserFunction} from './../context/users'
+import {addMusicFunction} from './../context/music'
 import { useQueryClient } from 'react-query';
 
 
@@ -43,7 +44,17 @@ export const useThisUserQuerry = () => {
   return { thisUser, thisUseridLoading, thisUserisError };
 }
 
+export const useMusicsQuery = () => {
+  const {data:musicsArray,isLoading:musicsisLoading,isError:musicsisError} = useQuery('musicsArray',fetchMusic,{
+        refetchOnMount: false,
+    refetchOnWindowFocus: false,
+    refetchInterval: 120000,
+    retry:false,
 
+  });
+
+  return {musicsArray,musicsisLoading,musicsisError}
+}
 
 
 
@@ -177,11 +188,11 @@ export const useSavePostToFavorite = () => {
   const queryClient = useQueryClient();
 
   const addPostMutation= useMutation(
-    async ({ thisUser,postText,fileUrl,imageRef,forwardPost,tagged}) => {
+    async ({ thisUser,postText,fileUrl,imageRef,forwardPost,tagged,trackId}) => {
       const arrayPosts = queryClient.getQueryData('arrayPosts');
 
       if (arrayPosts) {
-        return addPostFunction(thisUser,postText,fileUrl,imageRef,forwardPost,tagged,arrayPosts,queryClient);
+        return addPostFunction(thisUser,postText,fileUrl,imageRef,forwardPost,tagged,trackId,arrayPosts,queryClient);
       } else {
         return Promise.reject("Массив постов не определен.");
       }
@@ -380,3 +391,28 @@ export const useDeleteComment = () => {
 //     )
 //   return notificationMutation
 // }
+
+
+export const useAddMusic = () => {
+  const queryClient = useQueryClient();
+
+    const addMusicMutation= useMutation(
+    async ({ thisUser,trackName,imageRef,trackRef}) => {
+      const musicsArray = queryClient.getQueryData('musicsArray');
+
+      if (musicsArray) {
+        return addMusicFunction(thisUser,trackName,imageRef,trackRef,musicsArray,queryClient);
+      } else {
+        return Promise.reject("Массив постов не определен.");
+      }
+    },
+    {
+      onSuccess: () => {
+       
+        queryClient.invalidateQueries('musicsArray');
+      },
+    }
+  );
+
+      return addMusicMutation;
+};

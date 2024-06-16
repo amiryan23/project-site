@@ -6,7 +6,7 @@ import { getAuth , onAuthStateChanged } from "firebase/auth";
 // import { getAnalytics } from "firebase/analytics";
 import {auth,db,storage,docId,updatesDocId} from './../firebase'
 import {useQuery,useQueryClient} from 'react-query'
-import {usePostsQuery,useUsersQuery,useThisUserQuerry} from './../hooks/queryesHooks';
+import {usePostsQuery,useUsersQuery,useThisUserQuerry,useMusicsQuery} from './../hooks/queryesHooks';
 import { useTranslation } from 'react-i18next';
 
 
@@ -35,6 +35,7 @@ const MyContextProvider = ({ children }) => {
   const [fileUrls, setFileUrls] = useState({});
   const [openModal,setOpenModal] = useState(false)
   const [updatesData,setUpdatesData] = useState()
+  const [srcMusicId,setSrcMusicId] = useState(null)
 
 const [activeLink,setActiveLink] = useState(locationStorage ? locationStorage : "/home")
 
@@ -47,6 +48,7 @@ const queryClient = useQueryClient();
   const { arrayPosts, postisLoading, postisError  } = usePostsQuery();
   const { users, usersisLoading, usersisError } = useUsersQuery();
   const {thisUser,thisUserisLoading,thisUserisError} = useThisUserQuerry()
+  const { musicsArray, musicsisLoading, musicsisError } = useMusicsQuery();
 
   const file = useRef()
 
@@ -228,8 +230,10 @@ const zoomThisPhoto = (url) =>{
         openModal,
         setOpenModal,
         zoomThisPhoto,
-        updatesData
-    }), [logined, authUser, isWideScreen, openMenu, commentText,notificText,theme,t,activeLink,setActiveLink,openUpdate,fileUrls,updatesData,openModal]);
+        updatesData,
+        srcMusicId,
+        setSrcMusicId
+    }), [logined, authUser, isWideScreen, openMenu, commentText,notificText,theme,t,activeLink,setActiveLink,openUpdate,fileUrls,updatesData,openModal,srcMusicId,setSrcMusicId]);
 
   return (
     <MyContext.Provider 

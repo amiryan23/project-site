@@ -25,6 +25,9 @@ import { BsBookmarkPlus,BsBookmarkCheckFill } from "react-icons/bs";
 import { IoMdPhotos } from "react-icons/io";
 import { AiOutlineRollback } from "react-icons/ai";
 import { FaUserTag } from "react-icons/fa6";
+import { FaCirclePlay  } from "react-icons/fa6";
+import { FaPauseCircle } from "react-icons/fa";
+import { IoIosMusicalNotes } from "react-icons/io";
 
 
 
@@ -34,13 +37,15 @@ const OtherPage = () => {
 
 	const {userId} = useParams()
 
-  const {  thisUser ,calculateTimeDifference,commentText,setCommentText,copyToClipboard,setNotificText,t,setActiveLink,fileUrls, setFileUrls,zoomThisPhoto} = useContext(MyContext);
+  const {  thisUser ,calculateTimeDifference,commentText,setCommentText,copyToClipboard,setNotificText,t,setActiveLink,fileUrls, setFileUrls,zoomThisPhoto,srcMusicId,setSrcMusicId} = useContext(MyContext);
 
 
 const queryClient = useQueryClient();
 
   const [openSettings,setOpenSettings] = useState(false)
   const [replyComment,setReplyComment] = useState(null)
+  const [trackId,setTrackId] = useState(null)
+  const [play,setPlay] = useState({ musicId: null, postId: null, playMusic: false })
 
  	const likePostMutation = useLikePostMutation();
   const dislikePostMutation = useDislikePostMutation()
@@ -52,6 +57,7 @@ const queryClient = useQueryClient();
   
   const { data: users } = useQuery('users', () => queryClient.getQueryData('users'));
     const { data: arrayPosts } = useQuery('arrayPosts', () => queryClient.getQueryData('arrayPosts'));
+    const { data: musicsArray } = useQuery('musicsArray', () => queryClient.getQueryData('musicsArray'));
 
 
 	const selectedUser = users ? users?.find((user) => {
@@ -61,6 +67,32 @@ const queryClient = useQueryClient();
     return false;
 }) : null;
 
+
+const playMusic = (musicId,postId,musicSrc) => {
+	setSrcMusicId((prevMusicId)=>null)
+	setTimeout(()=>{setSrcMusicId((prevMusicId)=>musicSrc)},10)
+    setPlay((prevPlay) => ({
+        ...prevPlay,
+        musicId: musicId,
+        postId:postId,
+        playMusic: true
+    }));
+    
+
+};
+
+
+const pauseMusic = (musicId,postId) => {
+	setSrcMusicId((prevMusicId)=>null)
+    setPlay((prevPlay) => ({
+        ...prevPlay,
+        musicId: musicId,
+        postId:postId,
+        playMusic: false
+    }));
+    
+ 
+};
 
 
    const handleLikePost = async (postId, userId) => {
@@ -193,6 +225,7 @@ const handleFileChange = useCallback((e, postId) => {
  setActiveLink("/")
 
  return () => {
+ 	setSrcMusicId((prevMusicId)=>null)
  	if(animBlock.current){
  	animBlock.current.classList.remove(s.animBlock)
  	clearTimeout(timer)
@@ -294,6 +327,15 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
 					</span>
 					</div>
 					<div className={s.postMiniContent2}>
+					{m.trackId !== null && m.trackId !== undefined 
+					? <div className={s.musicContent} >
+					<span className={s.musicItem1}><IoIosMusicalNotes />{musicsArray?.find(music => music.id === m.trackId)?.trackName?.length > 35 ? `${musicsArray?.find(music => music.id === m.trackId)?.trackName?.slice(0,35)}...` : musicsArray?.find(music => music.id === m.trackId)?.trackName}</span>
+					<span className={s.musicItem2}>		
+					{play.musicId === musicsArray?.find(music => music.id === m.trackId).id && play.playMusic === true && play.postId === m.id
+		? <span onClick={()=>{pauseMusic(musicsArray?.find(music => music.id === m.trackId).id,m.id)}}><FaPauseCircle /> </span>
+		: <span onClick={()=>{playMusic(musicsArray?.find(music => music.id === m.trackId).id,m.id,musicsArray?.find(music => music.id === m.trackId).urlTrack)}}><FaCirclePlay /> </span> }</span>
+					</div>
+					: ""}
 						{m.forwardPost !== undefined &&  m.forwardPost !== "" 
 				? arrayPosts?.find(post => post.id === m.forwardPost.fwPostid) 
 				? <Link className={s.fwPost} to={`/home/comment/post/${m.forwardPost.fwPostid}`}>

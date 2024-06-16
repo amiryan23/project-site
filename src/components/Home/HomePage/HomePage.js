@@ -22,13 +22,16 @@ import { BsBookmarkPlus,BsBookmarkCheckFill } from "react-icons/bs";
 import { IoMdPhotos } from "react-icons/io";
 import { FaUserTag } from "react-icons/fa6";
 import {addNotificationToUser} from './../../../helper/addNotification'
+import { FaCirclePlay  } from "react-icons/fa6";
+import { FaPauseCircle } from "react-icons/fa";
+import { IoIosMusicalNotes } from "react-icons/io";
 
 
 
 
 const HomePage = ()=>{
 
- const {  thisUser,calculateTimeDifference,commentText,setCommentText,setNotificText,copyToClipboard,t,setActiveLink,fileUrls, setFileUrls } = useContext(MyContext);
+ const {  thisUser,calculateTimeDifference,commentText,setCommentText,setNotificText,copyToClipboard,t,setActiveLink,fileUrls, setFileUrls,srcMusicId,setSrcMusicId } = useContext(MyContext);
 
  const queryClient = useQueryClient();
 
@@ -44,6 +47,7 @@ const HomePage = ()=>{
   
   	const { data: users } = useQuery('users', () => queryClient.getQueryData('users'));
     const { data: arrayPosts } = useQuery('arrayPosts', () => queryClient.getQueryData('arrayPosts'));
+    const { data: musicsArray } = useQuery('musicsArray', () => queryClient.getQueryData('musicsArray'));
 // const { data: thisUser } = useQuery('thisUser', () => queryClient.getQueryData('thisUser'));
     
 
@@ -51,6 +55,8 @@ const HomePage = ()=>{
   const [arrayLength,setArrayLength] = useState(4)
   const [replyComment,setReplyComment] = useState(null)
   const [pathAllActive,setAllActive] = useState(true)
+  const [trackId,setTrackId] = useState(null)
+  const [play,setPlay] = useState({ musicId: null, postId: null, playMusic: false })
   
 
  const animBlock = useRef()
@@ -69,6 +75,7 @@ const HomePage = ()=>{
 setActiveLink("/home")
  
  return () => {
+ 	setSrcMusicId((prevMusicId)=>null)
  	if(animBlock.current){
  	animBlock.current.classList.remove(s.animBlock)
  	clearTimeout(timer)
@@ -105,6 +112,33 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
     localStorage.setItem("thisComment", JSON.stringify(comment));
     setReplyComment({ ...replyComment, [postId]: comment });
   }, []);
+
+
+  const playMusic = (musicId,postId,musicSrc) => {
+	setSrcMusicId((prevMusicId)=>null)
+	setTimeout(()=>{setSrcMusicId((prevMusicId)=>musicSrc)},10)
+    setPlay((prevPlay) => ({
+        ...prevPlay,
+        musicId: musicId,
+        postId:postId,
+        playMusic: true
+    }));
+    
+
+};
+
+
+const pauseMusic = (musicId,postId) => {
+	setSrcMusicId((prevMusicId)=>null)
+    setPlay((prevPlay) => ({
+        ...prevPlay,
+        musicId: musicId,
+        postId:postId,
+        playMusic: false
+    }));
+    
+ 
+};
 
 
    const handleLikePost = async (postId, userId ) => {
@@ -283,6 +317,15 @@ const handleFileChange = useCallback((e, postId) => {
 					</span>
 					</div>
 					<div className={s.postMiniContent2}>
+					{m.trackId !== null && m.trackId !== undefined 
+					? <div className={s.musicContent} >
+					<span className={s.musicItem1}><IoIosMusicalNotes />{musicsArray?.find(music => music.id === m.trackId)?.trackName?.length > 35 ? `${musicsArray?.find(music => music.id === m.trackId)?.trackName?.slice(0,35)}...` : musicsArray?.find(music => music.id === m.trackId)?.trackName}</span>
+					<span className={s.musicItem2}>		
+					{play.musicId === musicsArray?.find(music => music.id === m.trackId).id && play.playMusic === true && play.postId === m.id
+		? <span onClick={()=>{pauseMusic(musicsArray?.find(music => music.id === m.trackId).id,m.id)}}><FaPauseCircle /> </span>
+		: <span onClick={()=>{playMusic(musicsArray?.find(music => music.id === m.trackId).id,m.id,musicsArray?.find(music => music.id === m.trackId).urlTrack)}}><FaCirclePlay /> </span> }</span>
+					</div>
+					: ""}
 						{m.imageURL 
 						? <span className={s.item1}><img src={m.imageURL ? m.imageURL : <MiniLoader />} alt="" /></span>
 						: "" }
@@ -545,6 +588,15 @@ const onlyFollowing = arrayPosts
 					</span>
 					</div>
 					<div className={s.postMiniContent2}>
+					{m.trackId !== null && m.trackId !== undefined 
+					? <div className={s.musicContent} >
+					<span className={s.musicItem1}><IoIosMusicalNotes />{musicsArray?.find(music => music.id === m.trackId)?.trackName?.length > 35 ? `${musicsArray?.find(music => music.id === m.trackId)?.trackName?.slice(0,35)}...` : musicsArray?.find(music => music.id === m.trackId)?.trackName}</span>
+					<span className={s.musicItem2}>		
+					{play.musicId === musicsArray?.find(music => music.id === m.trackId).id && play.playMusic === true && play.postId === m.id
+		? <span onClick={()=>{pauseMusic(musicsArray?.find(music => music.id === m.trackId).id,m.id)}}><FaPauseCircle /> </span>
+		: <span onClick={()=>{playMusic(musicsArray?.find(music => music.id === m.trackId).id,m.id,musicsArray?.find(music => music.id === m.trackId).urlTrack)}}><FaCirclePlay /> </span> }</span>
+					</div>
+					: ""}
 						{m.imageURL 
 						? <span className={s.item1}><img src={m.imageURL ? m.imageURL : <MiniLoader />} alt="" /></span>
 						: "" }
