@@ -1,4 +1,4 @@
-import {db,storage,docId,firebaseConfig} from './../firebase'
+import {db,storage,docId,firebaseConfig,musicDocId} from './../firebase'
 import { doc, updateDoc,setDoc  } from "firebase/firestore";
 import { ref, uploadBytes } from "firebase/storage";
 import imageCompression from 'browser-image-compression';
@@ -9,7 +9,7 @@ export  const addMusicFunction = async (thisUser,trackName,imageRef,trackRef,mus
    	
     try {
      
-
+    	
           	
      	 const file = imageRef.current.files[0];
 
@@ -57,7 +57,7 @@ export  const addMusicFunction = async (thisUser,trackName,imageRef,trackRef,mus
         };
         const newMusicArray = [...musicsArray, newMusic];
         queryClient.setQueryData('musicsArray',newMusicArray)
-        await setDoc(doc(db, "musics", "R9eO71o2f8f90NUDZOk9"), { musicsArray: newMusicArray });
+        await setDoc(doc(db, "musics", musicDocId), { musicsArray: newMusicArray });
         console.log("Новый объект успешно добавлен в Firestore.");
         window.history.back(-1)
        

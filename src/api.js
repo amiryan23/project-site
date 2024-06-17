@@ -1,4 +1,4 @@
-import {db,docId,auth} from './firebase'
+import {db,docId,auth,musicDocId} from './firebase'
 import { collection, doc, getDoc , getDocs   } from "firebase/firestore";
 import {  onAuthStateChanged } from "firebase/auth";
 
@@ -61,7 +61,7 @@ export const fetchThisUser = () => {
 
 export const fetchMusic = async () => {
  try{
-  const docRef = doc(db, "musics", "R9eO71o2f8f90NUDZOk9");
+  const docRef = doc(db, "musics", musicDocId);
   const docSnap = await getDoc(docRef);
           if (docSnap.exists()) {
           return docSnap.data().musicsArray;
