@@ -30,6 +30,7 @@ const playMusic = (musicId,musicSrc) => {
 
 const animBlock = useRef()
 
+
  let timer;
 
  useEffect (()=>{
