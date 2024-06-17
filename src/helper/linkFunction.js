@@ -26,6 +26,13 @@ export const parseTextWithLinks = (text) => {
         );
       }
     }
-    return part;
+    // Handle new lines by splitting part by newline character and rendering <br />
+    const textParts = part.split('\n').map((textPart, textIndex) => (
+      <>
+        {textPart}
+        {textIndex < part.split('\n').length - 1 && <br />}
+      </>
+    ));
+    return <span key={index}>{textParts}</span>;
   });
 };

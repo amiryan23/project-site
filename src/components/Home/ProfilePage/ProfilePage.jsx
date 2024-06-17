@@ -44,54 +44,55 @@ const ProfilePage = ()=>{
 
  const {   isWideScreen ,calculateTimeDifference,commentText,setCommentText,copyToClipboard,setNotificText,t,setActiveLink,fileUrls, setFileUrls,zoomThisPhoto,srcMusicId,setSrcMusicId} = useContext(MyContext);
 
- 	const forwardPostStorage = JSON.parse(localStorage.getItem("forwardPost"))
+	const forwardPostStorage = JSON.parse(localStorage.getItem("forwardPost"))
 
 	const queryClient = useQueryClient();
- 	const [postText,setPostText] = useState("")
-  const [fileUrl, setFileUrl] = useState(null);
-  const [showFile,setShowFile] = useState(false)
-  const [openSettings,setOpenSettings] = useState(null)
-  const [forwardPost,setForwardPost] = useState(forwardPostStorage ? forwardPostStorage : null)
-  const [replyComment,setReplyComment] = useState(null)
-  const [openUsers,setOpenUsers] = useState(false)
-  const [openMusic,setOpenMusic] = useState(false)
-  const [tagUser,setTagUser] = useState(null)
-  const [trackId,setTrackId] = useState(null)
-  const [play,setPlay] = useState({ musicId: null, postId: null, playMusic: false })
+	const [postText,setPostText] = useState("")
+	const [fileUrl, setFileUrl] = useState(null);
+	const [showFile,setShowFile] = useState(false)
+	const [openSettings,setOpenSettings] = useState(null)
+	const [forwardPost,setForwardPost] = useState(forwardPostStorage ? forwardPostStorage : null)
+	const [replyComment,setReplyComment] = useState(null)
+	const [openUsers,setOpenUsers] = useState(false)
+	const [openMusic,setOpenMusic] = useState(false)
+	const [tagUser,setTagUser] = useState(null)
+	const [trackId,setTrackId] = useState(null)
+	const [play,setPlay] = useState({ musicId: null, postId: null, playMusic: false })
  
 	const likePostMutation = useLikePostMutation();
-  const dislikePostMutation = useDislikePostMutation()
-  const addCommentPostMutation = useAddCommentToPostMutation()
-  const deletePostMutation = useDeletePostMutation()
-  const addPostMutation = useAddPostMutation()
-  const deleteCommentMutation = useDeleteComment()
+	const dislikePostMutation = useDislikePostMutation()
+	const addCommentPostMutation = useAddCommentToPostMutation()
+	const deletePostMutation = useDeletePostMutation()
+	const addPostMutation = useAddPostMutation()
+	const deleteCommentMutation = useDeleteComment()
 
-  	const { data: users } = useQuery('users', () => queryClient.getQueryData('users'));
-    const { data: thisUser } = useQuery('thisUser', () => queryClient.getQueryData('thisUser'));
-    const { data: arrayPosts } = useQuery('arrayPosts', () => queryClient.getQueryData('arrayPosts'));
-    const { data: musicsArray } = useQuery('musicsArray', () => queryClient.getQueryData('musicsArray'));
+		const { data: users } = useQuery('users', () => queryClient.getQueryData('users'));
+		const { data: thisUser } = useQuery('thisUser', () => queryClient.getQueryData('thisUser'));
+		const { data: arrayPosts } = useQuery('arrayPosts', () => queryClient.getQueryData('arrayPosts'));
+		const { data: musicsArray } = useQuery('musicsArray', () => queryClient.getQueryData('musicsArray'));
 
  const animBlock = useRef()
  const imageRef = useRef()
  const animTagUsers = useRef()
  const animMusics = useRef()
 
-   const postRef = useRef()
-  
+	 const postRef = useRef()
+	
 
  let timer;
 
  useEffect (()=>{
- 	if(animBlock.current){
+	if(animBlock.current){
  timer = setTimeout(()=>{animBlock.current.classList.add(s.animBlock)},10)
  }
 
  setActiveLink("/profile")
 
  return () => {
- 	if(animBlock.current){
- 	animBlock.current.classList.remove(s.animBlock)
- 	clearTimeout(timer)
+	setSrcMusicId((prevMusicId)=>null)
+	if(animBlock.current){
+	animBlock.current.classList.remove(s.animBlock)
+	clearTimeout(timer)
  }
  }
  },[])
@@ -99,187 +100,187 @@ const ProfilePage = ()=>{
 let timer2;
 
  useEffect (()=>{
- 	if(openUsers && animTagUsers.current){
+	if(openUsers && animTagUsers.current){
  timer2 = setTimeout(()=>{
- 	animTagUsers.current.classList.add(s.active)
- 	animTagUsers.current.classList.remove(s.usersContainer)
+	animTagUsers.current.classList.add(s.active)
+	animTagUsers.current.classList.remove(s.usersContainer)
  },10)
 
  } else if(!openUsers && animTagUsers.current){
-  timer2 = setTimeout(()=>{
-  	animTagUsers.current.classList.add(s.usersContainer)
-  	animTagUsers.current.classList.remove(s.active)
-  },10)
+	timer2 = setTimeout(()=>{
+		animTagUsers.current.classList.add(s.usersContainer)
+		animTagUsers.current.classList.remove(s.active)
+	},10)
  }
 
 
 
  return () => {
- 	if(animTagUsers.current ){
+	if(animTagUsers.current ){
 
- 	clearTimeout(timer2)
+	clearTimeout(timer2)
  }
  }
  },[openUsers])
 
  let timer3;
 
-  useEffect (()=>{
- 	if(openMusic && animMusics.current){
+	useEffect (()=>{
+	if(openMusic && animMusics.current){
  timer2 = setTimeout(()=>{
- 	animMusics.current.classList.add(s.activeMusic)
- 	animMusics.current.classList.remove(s.musicContainer)
+	animMusics.current.classList.add(s.activeMusic)
+	animMusics.current.classList.remove(s.musicContainer)
  },10)
 
  } else if(!openMusic && animMusics.current){
-  timer3 = setTimeout(()=>{
-  	animMusics.current.classList.add(s.musicContainer)
-  	animMusics.current.classList.remove(s.activeMusic)
-  },10)
+	timer3 = setTimeout(()=>{
+		animMusics.current.classList.add(s.musicContainer)
+		animMusics.current.classList.remove(s.activeMusic)
+	},10)
  }
 
  
 
  return () => {
- 	setSrcMusicId((prevMusicId)=>null)
- 	if(animMusics.current ){
+	
+	if(animMusics.current ){
 		clearTimeout(timer3)
  }
  }
  },[openMusic])
 
-   const handleFileChange = (e) => {
-        if (e.target.files && e.target.files.length > 0) {
-      const file = e.target.files[0];
-      const url = URL.createObjectURL(file);
-      setFileUrl(url);
-      
-    }
-  };
+	 const handleFileChange = (e) => {
+				if (e.target.files && e.target.files.length > 0) {
+			const file = e.target.files[0];
+			const url = URL.createObjectURL(file);
+			setFileUrl(url);
+			
+		}
+	};
 
-   const handleLikePost = async (postId, userId) => {
-    try {
-      await likePostMutation.mutate({ postId, userId });
-      console.log("Лайк успешно добавлен/удален к посту.");
-    } catch (error) {
-      console.error("Ошибка при обновлении лайка к посту:", error);
-    }
-  };
+	 const handleLikePost = async (postId, userId) => {
+		try {
+			await likePostMutation.mutate({ postId, userId });
+			console.log("Лайк успешно добавлен/удален к посту.");
+		} catch (error) {
+			console.error("Ошибка при обновлении лайка к посту:", error);
+		}
+	};
 
-  const handleDislikePost = async (postId,userId) => {
-  	try{
-  		await dislikePostMutation.mutate({postId,userId})
-  		console.log("Дизлайк успешно добален к посту")
-  	}catch(error){
-  		console.log("Ошибка при обновления дизлайка к посту")
-  	}
-  }
+	const handleDislikePost = async (postId,userId) => {
+		try{
+			await dislikePostMutation.mutate({postId,userId})
+			console.log("Дизлайк успешно добален к посту")
+		}catch(error){
+			console.log("Ошибка при обновления дизлайка к посту")
+		}
+	}
 
-  const addCommentToPost = async (postId,userId,thisUser,commentText,replyComment,file) => {
-  	try{
-  		
-  		await addCommentPostMutation.mutate({postId,userId,thisUser,commentText,replyComment,file})
-  		setCommentText("")
-  		setNotificText(t('NotificComment'))
-  		setReplyComment(null)
-  	
-  	}catch (error) {
-  		console.error("Ошибка при добовления комментари")
-  	}
-  }
+	const addCommentToPost = async (postId,userId,thisUser,commentText,replyComment,file) => {
+		try{
+			
+			await addCommentPostMutation.mutate({postId,userId,thisUser,commentText,replyComment,file})
+			setCommentText("")
+			setNotificText(t('NotificComment'))
+			setReplyComment(null)
+		
+		}catch (error) {
+			console.error("Ошибка при добовления комментари")
+		}
+	}
 
-  const handleDeleteItem = async (idToDelete) => {
-  	try{
-  		await deletePostMutation.mutate({idToDelete})
-  		setNotificText(t('NotificPostDel'))
-  	}catch (error) {
-  		console.error("Ошибка при удаления поста")
-  	}
-  }
+	const handleDeleteItem = async (idToDelete) => {
+		try{
+			await deletePostMutation.mutate({idToDelete})
+			setNotificText(t('NotificPostDel'))
+		}catch (error) {
+			console.error("Ошибка при удаления поста")
+		}
+	}
 
-  const handleAddPost = async (thisUser,postText,fileUrl,imageRef,forwardPost,tagged,trackId) => {
-  	try{
-  		if(postText !== "" || fileUrl !== null || forwardPost !== null){
-  		await addPostMutation.mutate({thisUser,postText,fileUrl,imageRef,forwardPost,tagged,trackId})
-  		setPostText("")
-      setFileUrl("")
-      setForwardPost(null)
-      setTagUser(null)
-  		setNotificText(t('NotificPostAdd'))
-  		setTrackId(null)
-  		localStorage.removeItem("forwardPost")
-  	} else {
-  		setNotificText(t('Error'))
-  	}
-  	}catch (error) {
-  		console.error("Ошибка при добовления поста")
-  	}
-  }
+	const handleAddPost = async (thisUser,postText,fileUrl,imageRef,forwardPost,tagged,trackId) => {
+		try{
+			if(postText !== "" || fileUrl !== null || forwardPost !== null){
+			await addPostMutation.mutate({thisUser,postText,fileUrl,imageRef,forwardPost,tagged,trackId})
+			setPostText("")
+			setFileUrl("")
+			setForwardPost(null)
+			setTagUser(null)
+			setNotificText(t('NotificPostAdd'))
+			setTrackId(null)
+			localStorage.removeItem("forwardPost")
+		} else {
+			setNotificText(t('Error'))
+		}
+		}catch (error) {
+			console.error("Ошибка при добовления поста")
+		}
+	}
 
-  const handleDeleteComment = async (postId,commentIdToDelete) => {
-  	try{
+	const handleDeleteComment = async (postId,commentIdToDelete) => {
+		try{
 
- 		await deleteCommentMutation.mutate({postId,commentIdToDelete})
-  		setNotificText(t('NotificComtDel'))
+		await deleteCommentMutation.mutate({postId,commentIdToDelete})
+			setNotificText(t('NotificComtDel'))
 
-  	}catch (error){
-  		console.error("Ошибка при удаления комментари",error)
-  	}
-  }
+		}catch (error){
+			console.error("Ошибка при удаления комментари",error)
+		}
+	}
 
 const playMusic = (musicId,postId,musicSrc) => {
 	setSrcMusicId((prevMusicId)=>null)
 	setTimeout(()=>{setSrcMusicId((prevMusicId)=>musicSrc)},10)
-    setPlay((prevPlay) => ({
-        ...prevPlay,
-        musicId: musicId,
-        postId:postId,
-        playMusic: true
-    }));
-    
+		setPlay((prevPlay) => ({
+				...prevPlay,
+				musicId: musicId,
+				postId:postId,
+				playMusic: true
+		}));
+		
 
 };
 
 
 const pauseMusic = (musicId,postId) => {
 	setSrcMusicId((prevMusicId)=>null)
-    setPlay((prevPlay) => ({
-        ...prevPlay,
-        musicId: musicId,
-        postId:postId,
-        playMusic: false
-    }));
-    
+		setPlay((prevPlay) => ({
+				...prevPlay,
+				musicId: musicId,
+				postId:postId,
+				playMusic: false
+		}));
+		
  
 };
 
-     const handleCommentChange = useCallback((postId, text) => {
-    setCommentText(prevState => ({
-      ...prevState,
-      [postId]: text
-    }));
-  }, []);
+		 const handleCommentChange = useCallback((postId, text) => {
+		setCommentText(prevState => ({
+			...prevState,
+			[postId]: text
+		}));
+	}, []);
 
 
-     const handleReplyComment = useCallback((postId, comment) => {
-    localStorage.setItem("thisComment", JSON.stringify(comment));
-    setReplyComment({ ...replyComment, [postId]: comment });
-  }, []);
+		 const handleReplyComment = useCallback((postId, comment) => {
+		localStorage.setItem("thisComment", JSON.stringify(comment));
+		setReplyComment({ ...replyComment, [postId]: comment });
+	}, []);
 
 
 const handleFileChangeComment = useCallback((e, postId) => {
  
-  if (e.target.files && e.target.files.length > 0) {
+	if (e.target.files && e.target.files.length > 0) {
  
-    const thisFile = e.target.files[0];
-    const url = URL.createObjectURL(thisFile);
+		const thisFile = e.target.files[0];
+		const url = URL.createObjectURL(thisFile);
 
-    setFileUrls(prevFileUrls => ({
-      ...prevFileUrls,
-      [postId]: {url:url,file:thisFile}
+		setFileUrls(prevFileUrls => ({
+			...prevFileUrls,
+			[postId]: {url:url,file:thisFile}
 
-    }));
-  }
+		}));
+	}
 
 }, []);
 
@@ -287,20 +288,20 @@ const handleFileChangeComment = useCallback((e, postId) => {
 
 
 
-  useEffect(()=>{
-  	if(fileUrl){
-  		setShowFile(true)
-  	} else {
-  		setShowFile(false)
+	useEffect(()=>{
+		if(fileUrl){
+			setShowFile(true)
+		} else {
+			setShowFile(false)
 
-  	}
-  },[fileUrl])
+		}
+	},[fileUrl])
 
 
 const replyCommentRef = useRef()
 
  useEffect(()=>{
- 	
+	
 if(replyComment !== null && replyCommentRef.current){
 
 replyCommentRef.current.classList.add(s.replyCommentAnim) 
@@ -312,10 +313,10 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
  },[replyComment])
 
 
-  const postThisUser = arrayPosts 
-  ? arrayPosts
-  .filter(m => m.userId === thisUser?.id) 
-  	.map(m => 		<div className={s.postMegaContent} ref={postRef} key={m.id} >
+	const postThisUser = arrayPosts 
+	? arrayPosts
+	.filter(m => m.userId === thisUser?.id) 
+		.map(m => 		<div className={s.postMegaContent} ref={postRef} key={m.id} >
 
 					<div className={s.postMiniContent1}>
 						<span className={s.postBlock1}>
@@ -343,7 +344,7 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
 							}}><IoCopySharp/>{t("CopyLink")}</span>
 							<span className={s.miniItem3} onClick={()=>{
 								handleDeleteItem(m.id)
-        				
+								
 
 							}}><MdDeleteForever/><span>{t("Delete")}</span></span>
 						</span> 
@@ -355,7 +356,7 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
 					? <div className={s.musicContent} >
 					<span className={s.musicItem1}><IoIosMusicalNotes />{musicsArray?.find(music => music.id === m.trackId)?.trackName?.length > 35 ? `${musicsArray?.find(music => music.id === m.trackId)?.trackName?.slice(0,35)}...` : musicsArray?.find(music => music.id === m.trackId)?.trackName}</span>
 					<span className={s.musicItem2}>		
-					{play.musicId === musicsArray?.find(music => music.id === m.trackId).id && play.playMusic === true && play.postId === m.id
+					{play?.musicId === musicsArray?.find(music => music.id === m.trackId)?.id && play?.playMusic === true && play?.postId === m.id
 		? <span onClick={()=>{pauseMusic(musicsArray?.find(music => music.id === m.trackId).id,m.id)}}><FaPauseCircle /> </span>
 		: <span onClick={()=>{playMusic(musicsArray?.find(music => music.id === m.trackId).id,m.id,musicsArray?.find(music => music.id === m.trackId).urlTrack)}}><FaCirclePlay /> </span> }</span>
 					</div>
@@ -438,60 +439,60 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
 						? <div className={s.postCommentBlock1}>
 							{m.commentArray.length !== 0
 							?  m.commentArray.map(comment => (
-					        <div key={comment.id} className={s.Comment}>
-					          <div className={s.Block1}>
-					            <span className={s.item}>
-					             <Link to={thisUser?.id !== comment.userId ? `/home/user/profile/${comment.userId}` : "/home/profile"} ><img src={users?.find(user => user.id === comment.userId).photo?.placed  || users?.find(user => user?.id === comment.userId).photo?.default } alt="" /></Link>
-					             <span>
-												  {
-												    comment.userId === thisUser?.id
-												    ? (
-												      thisUser?.onlineStatus
-												      ? <MdCircle title="Online" size="11" color="limegreen"/>
-												      : <MdBrightness1 title="Offline" size="11" color="rgba(256,256,256,0.8)"/>
-												    )
-												    : (
-												      users?.filter(user => user.id !== thisUser?.id)?.find(user => user.id === comment.userId)?.onlineStatus
-												      ? <MdCircle title="Online" size="11" color="limegreen"/>
-												      : <MdBrightness1 title="Offline" size="11" color="rgba(256,256,256,0.8)"/>
-												    )
-												  }
-					             </span>
-					            </span>
-					          </div>
-					          <div className={s.Block2}>
-					            <span className={s.item1}>
-					              <span className={s.miniItem1}>{users?.find(user => user.id === comment.userId).username || "Deleted"}</span>
-					              <span className={s.miniItem2}>{calculateTimeDifference(comment.timeAdded)}</span>
+									<div key={comment.id} className={s.Comment}>
+										<div className={s.Block1}>
+											<span className={s.item}>
+											 <Link to={thisUser?.id !== comment.userId ? `/home/user/profile/${comment.userId}` : "/home/profile"} ><img src={users?.find(user => user.id === comment.userId).photo?.placed  || users?.find(user => user?.id === comment.userId).photo?.default } alt="" /></Link>
+											 <span>
+													{
+														comment.userId === thisUser?.id
+														? (
+															thisUser?.onlineStatus
+															? <MdCircle title="Online" size="11" color="limegreen"/>
+															: <MdBrightness1 title="Offline" size="11" color="rgba(256,256,256,0.8)"/>
+														)
+														: (
+															users?.filter(user => user.id !== thisUser?.id)?.find(user => user.id === comment.userId)?.onlineStatus
+															? <MdCircle title="Online" size="11" color="limegreen"/>
+															: <MdBrightness1 title="Offline" size="11" color="rgba(256,256,256,0.8)"/>
+														)
+													}
+											 </span>
+											</span>
+										</div>
+										<div className={s.Block2}>
+											<span className={s.item1}>
+												<span className={s.miniItem1}>{users?.find(user => user.id === comment.userId).username || "Deleted"}</span>
+												<span className={s.miniItem2}>{calculateTimeDifference(comment.timeAdded)}</span>
 
-					            </span>
-					            <span className={s.item2}>
-					         		{comment.replyComment !== undefined &&  comment.replyComment !== ""
-					            	?	<div className={s.miniItem1}>
-					            		<span className={s.miniBlock1}>
-					            			{users?.find(user => user.id === comment.replyComment.userId).username || ""}
-					            		</span>
-					            		<span className={s.miniBlock2}>
-					            			{comment.replyComment.commentText}
-					            		</span>
-					            	</div>
-					            	: "" }
-					            	{comment.imgUrl !== undefined && comment.imgUrl !== "" ? 
-					            	<div className={s.miniItem}>
-					            		<img src={comment.imgUrl} alt="" width="100px"/>
-					            	</div>
-					            	: ""}
-					            	<div className={s.miniItem2}>
-					              {comment.commentText}
-					              </div>
-					            </span>
-					          </div>
-					         <div className={s.Block3} >
-					          <button onClick={()=>{ handleReplyComment(m.id,comment)}}><MdOutlineReply title="reply" /></button>
-					          <button onClick={()=>{handleDeleteComment(m.id,comment.id)}}>	<MdDelete title="delete"/> </button>
-					          </div>
-					         </div>
-					      ))
+											</span>
+											<span className={s.item2}>
+											{comment.replyComment !== undefined &&  comment.replyComment !== ""
+												?	<div className={s.miniItem1}>
+													<span className={s.miniBlock1}>
+														{users?.find(user => user.id === comment.replyComment.userId).username || ""}
+													</span>
+													<span className={s.miniBlock2}>
+														{comment.replyComment.commentText}
+													</span>
+												</div>
+												: "" }
+												{comment.imgUrl !== undefined && comment.imgUrl !== "" ? 
+												<div className={s.miniItem}>
+													<img src={comment.imgUrl} alt="" width="100px"/>
+												</div>
+												: ""}
+												<div className={s.miniItem2}>
+												{comment.commentText}
+												</div>
+											</span>
+										</div>
+									 <div className={s.Block3} >
+										<button onClick={()=>{ handleReplyComment(m.id,comment)}}><MdOutlineReply title="reply" /></button>
+										<button onClick={()=>{handleDeleteComment(m.id,comment.id)}}>	<MdDelete title="delete"/> </button>
+										</div>
+									 </div>
+								))
 							.slice(m.commentArray.length - 2,m.commentArray.length )
 							: <div className={s.noComment}>
 								{t('NоComments')}
@@ -523,11 +524,11 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
 							<div className={s.imgContainer}>
 							 <img src={fileUrls[m.id]?.url} alt="Preview" width="100px" /> 
 							 <span onClick={() => {
-				 				 setFileUrls(prevFileUrls => {
-		   						 const updatedFileUrl = { ...prevFileUrls };
-		   						 delete updatedFileUrl[m.id];
-								   return updatedFileUrl;
-								  });
+								 setFileUrls(prevFileUrls => {
+									 const updatedFileUrl = { ...prevFileUrls };
+									 delete updatedFileUrl[m.id];
+									 return updatedFileUrl;
+									});
 								}}>
 							 <MdOutlineClose />
 							 </span>
@@ -548,10 +549,10 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
 							<span  onClick={()=>{
 								addCommentToPost(m.id,thisUser?.id,thisUser,commentText[m.id],replyComment,fileUrls[m.id]?.file)
 								 setFileUrls(prevFileUrls => {
-		   						 const updatedFileUrl = { ...prevFileUrls };
-		   						 delete updatedFileUrl[m.id];
-								   return updatedFileUrl;
-								  });
+									 const updatedFileUrl = { ...prevFileUrls };
+									 delete updatedFileUrl[m.id];
+									 return updatedFileUrl;
+									});
 							}} className={s.item2}><RiSendPlaneFill title="Send"/></span>
 							</span>
 							: <span className={s.postCommentItem3}  style={{opacity:"0.5"}}>
@@ -565,13 +566,13 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
 
 				</div>)
 
-  : <MiniLoader />
+	: <MiniLoader />
 
 
 
 	return (
 
-    <div className={s.megaContainer} ref={animBlock}>
+		<div className={s.megaContainer} ref={animBlock}>
 
 			<div className={s.content1}>
 			<div className={s.megaBlock}>
@@ -751,8 +752,14 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
 							<span style={{backgroundImage:`url(${m.trackImgUrl})`}} className={s.musicItem1} >
 								<span>
 								{play.musicId === m.id && play.playMusic === true
-								? <span onClick={()=>{pauseMusic(m.id)}}><FaPauseCircle /> </span>
-								: <span onClick={()=>{playMusic(m.id,m.urlTrack)}}><FaCirclePlay /> </span> }
+								? <span onClick={()=>{
+									pauseMusic(m.id) 
+									// setSrcMusicId(null)
+								}}><FaPauseCircle /> </span>
+								: <span onClick={()=>{
+									playMusic(m.id,null,m.urlTrack)
+									// setSrcMusicId(m.urlTrack)
+								}}><FaCirclePlay /> </span> }
 								</span>
 							</span>
 							<span className={s.musicItem2}>{m.trackName}</span>

@@ -821,6 +821,27 @@
 					}					
 				}
 
+				.taggedUserContainer{
+					align-self: flex-end;
+					max-width: 200px;
+					width: auto;
+					display: flex;
+					flex-direction: row;
+					align-items: center;
+					gap: 5px;
+					text-decoration: none;
+					padding:0px 15px 0px 15px;
+					color: rgba(256, 256, 256, 0.6);
+					font-size: 13px;
+					font-weight: bold;
+
+					svg{
+						font-size: 18px;
+						color: rgba(256, 256, 256, 1);
+					}
+				
+				}
+
 			}
 
 			.postMiniContent3{
@@ -1423,26 +1444,7 @@
 
 					}
 
-				.taggedUserContainer{
-					align-self: flex-end;
-					max-width: 200px;
-					width: auto;
-					display: flex;
-					flex-direction: row;
-					align-items: center;
-					gap: 5px;
-					text-decoration: none;
-					padding:0px 15px 0px 15px;
-					color: rgba(256, 256, 256, 0.6);
-					font-size: 13px;
-					font-weight: bold;
 
-					svg{
-						font-size: 18px;
-						color: rgba(256, 256, 256, 1);
-					}
-				
-				}
 					
 				}
 

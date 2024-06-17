@@ -6,11 +6,13 @@ import { FaCirclePlay  } from "react-icons/fa6";
 import { FaPauseCircle } from "react-icons/fa";
 import { TbMusicPlus } from "react-icons/tb";
 import {Link} from 'react-router-dom'
-
+import { TbMusicSearch } from "react-icons/tb";
+import { AiOutlineRollback } from "react-icons/ai";
 
 const MusicPage = () =>{
  const { setActiveLink,srcMusicId,setSrcMusicId } = useContext(MyContext);
  const [play,setPlay] = useState({})
+ const [search,setSearch] = useState(null)
 
  const queryClient = useQueryClient();
 
@@ -26,12 +28,25 @@ const playMusic = (musicId,musicSrc) => {
 };
 
 
-useEffect(()=>{
+const animBlock = useRef()
 
-	return () => {
-		setSrcMusicId(null)
-	}
-},[])
+ let timer;
+
+ useEffect (()=>{
+ 	if(animBlock.current){
+ timer = setTimeout(()=>{animBlock.current.classList.add(s.animBlock)},10)
+ }
+
+ setActiveLink("/profile")
+
+ return () => {
+ 	setSrcMusicId((prevMusicId)=>null)
+ 	if(animBlock.current){
+ 	animBlock.current.classList.remove(s.animBlock)
+ 	clearTimeout(timer)
+ }
+ }
+ },[])
 
 const pauseMusic = (musicId) => {
     setPlay((prevPlay) => ({
@@ -43,7 +58,7 @@ const pauseMusic = (musicId) => {
 };
 
 const newMusicsArray = musicsArray 
-? musicsArray.map(m => 
+? musicsArray.filter(music => search !== null ? music.trackName.toLowerCase().includes(search) : music).map(m => 
 <div className={s.musicContainer} key={m.id}>
 	<div className={s.musicContent1} style={{backgroundImage:`url(${m.trackImgUrl})`}}>
 		<span>
@@ -64,13 +79,16 @@ const newMusicsArray = musicsArray
  },[])
 
 	return (
-		<div className={s.megaContainer}>
+		<div className={s.megaContainer} ref={animBlock}>
 	
 	<div className={s.content1}>
-		<span>Music</span><Link to ="/home/music/add"><TbMusicPlus /></Link>
+		<span>
+		<button onClick={() => window.history.back(-1)}><AiOutlineRollback size="30" color="whitesmoke"/></button>Music
+		</span>
+		<Link to ="/home/music/add"><TbMusicPlus /></Link>
 	</div>
 	<div className={s.content2}>
-		<input type="search" />
+		<TbMusicSearch /><input type="search" value={search} onChange={(e)=>{setSearch(e.target.value)}} />
 	</div>
 	<div className={s.content3}>
 		{newMusicsArray}

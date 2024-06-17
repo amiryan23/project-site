@@ -5,6 +5,7 @@ import {useAddMusic} from './../../../../hooks/queryesHooks'
 import { useQueryClient,useQuery } from 'react-query';
 import { MyContext } from './../../../../context/Context.js';
 import { MdFileDownloadDone } from "react-icons/md";
+import { AiOutlineRollback } from "react-icons/ai";
 
 const AddMusicPage = () => {
 
@@ -15,7 +16,7 @@ const AddMusicPage = () => {
 	const [fileTrackUrl, setFileTrackUrl] = useState(null);
 	const [thisFileName,setThisFileName] = useState(null);
 
-	 const {  thisUser , setNotificText  } = useContext(MyContext);
+	 const {  thisUser , setNotificText ,setActiveLink } = useContext(MyContext);
 
  const queryClient = useQueryClient();
 
@@ -25,6 +26,26 @@ const addMusicMutation = useAddMusic();
 
 const imageRef = useRef(null)
 const trackRef = useRef(null)
+
+const animBlock = useRef()
+
+ let timer;
+
+ useEffect (()=>{
+ 	if(animBlock.current){
+ timer = setTimeout(()=>{animBlock.current.classList.add(s.animBlock)},10)
+ }
+
+ setActiveLink("/music")
+
+ return () => {
+ 
+ 	if(animBlock.current){
+ 	animBlock.current.classList.remove(s.animBlock)
+ 	clearTimeout(timer)
+ }
+ }
+ },[])
 
 	  const handleFileChange = (e) => {
         if (e.target.files && e.target.files.length > 0) {
@@ -67,9 +88,11 @@ const trackRef = useRef(null)
 
 
 	return (
-		<div className={s.megaContainer}>
+		<div className={s.megaContainer} ref={animBlock}>
 			<div className={s.content1}>
-			<span>Add Music</span>
+				<span>
+		<button onClick={() => window.history.back(-1)}><AiOutlineRollback size="30" color="whitesmoke"/></button>Add Music
+		</span>
 			<button onClick={()=>{handleAddMusic(thisUser,trackName,imageRef,trackRef)}}><span>Add</span><MdFileDownloadDone/></button>
 			</div>
 			<div className={s.content2}>
