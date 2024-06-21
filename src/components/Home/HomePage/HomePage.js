@@ -602,7 +602,7 @@ const onlyFollowing = arrayPosts
 						: "" }
 						{m.postText 
 						? <span className={s.item2}>
-						{m.postText}
+						{parseTextWithLinks(m.postText)}
 						</span>
 						: "" }
 					</div>

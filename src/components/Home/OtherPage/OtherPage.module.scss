@@ -666,7 +666,10 @@
 				flex-direction: column;
 				gap: 10px;
 				padding: 0px 0px 0px 55px;
+				font-weight: bold;
+				font-size: 14px;
 
+				
 				.musicContent{
 					width: 100%;
 					display: flex;
@@ -900,9 +903,9 @@
 					width: 100%;
 					min-height:100px;
 					max-height: 1000px;
-					border-top: 1px solid rgba(256, 256, 256, 0.9);
+					border-top: 1px solid rgba(256, 256, 256, 0.5);
 
-					border-bottom: 1px solid #999;
+					border-bottom: 1px solid rgba(256, 256, 256, 0.2);
 					background-color:rgba(60,60,60,0.3);
 					border-radius:0px 0px 7px 7px;
 					
@@ -1065,6 +1068,7 @@
 						color: rgba(256, 256, 256, 0.7);
 						font-weight: bold;
 						font-size: 17px;
+						opacity: 0.4;
 					}
 
 
@@ -1097,15 +1101,19 @@
 				.replyContainer{
 					width: 65%;
 					min-height: 50px;
-					padding: 0px 10px 0px 10px;
+					padding: 5px 10px 5px 10px;
 					border: 1px dashed rgba(256, 256, 256, 0.2);
-					background-color: rgba(256, 256, 256, 0.1);
+					// background-color: rgba(256, 256, 256, 0.1);
+					background: linear-gradient(327deg, rgba(43,39,51,0.9528186274509804) 0%, rgba(22,21,22,0.9192051820728291) 83%);
 					opacity: 0.7;
 					border-radius: 15px;
 					display: flex;
 					flex-direction: column;
 					gap: 5px;
 					margin-left: 10px;
+					opacity:0;
+					transform:translateX(-100px)
+					transition 150ms linear;
 				
 
 				.replyMegaContent1{
@@ -1118,13 +1126,15 @@
 					.replyContent1{
 						color: rgba(256, 256, 256, 0.5);
 						font-weight: bold;
+						font-size: 13px;
+						padding: 5px;
 
 					}
 
 					.replyContent2{
 						color: rgba(256, 256, 256, 0.5);
 						font-weight: bold;
-						font-size: 19px;
+						font-size: 18px;
 
 						svg{
 							cursor: pointer;
@@ -1234,6 +1244,7 @@
 
 					textarea{
 						width: 100%;
+						height: 35px;
 						max-height: 75px;
 						padding: 7px;
 						background-color: rgba(0, 0, 0, 0.3);
@@ -1254,7 +1265,7 @@
 						transition: 250ms linear;
 						
 
-						margin-top: 25px;
+						// padding-top: 10px;
 					}					
 
 					textarea:disabled{
