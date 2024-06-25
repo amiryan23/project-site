@@ -36,6 +36,8 @@ const MyContextProvider = ({ children }) => {
   const [openModal,setOpenModal] = useState(false)
   const [updatesData,setUpdatesData] = useState()
   const [srcMusicId,setSrcMusicId] = useState(null)
+  const [openStoryModal,setOpenStoryModal] = useState(false)
+  const [viewStory,setViewStory] = useState(false)
 
 const [activeLink,setActiveLink] = useState(locationStorage ? locationStorage : "/home")
 
@@ -209,6 +211,7 @@ const zoomThisPhoto = (url) =>{
         logined,
         setLogined,
        thisUser,
+       users,
         isWideScreen,
         openMenu,
         setOpenMenu,
@@ -232,8 +235,12 @@ const zoomThisPhoto = (url) =>{
         zoomThisPhoto,
         updatesData,
         srcMusicId,
-        setSrcMusicId
-    }), [logined, authUser, isWideScreen, openMenu, commentText,notificText,theme,t,activeLink,setActiveLink,openUpdate,fileUrls,updatesData,openModal,srcMusicId,setSrcMusicId]);
+        setSrcMusicId,
+        openStoryModal,
+        setOpenStoryModal,
+        viewStory,
+        setViewStory
+    }), [logined, authUser, isWideScreen, openMenu, commentText,notificText,theme,t,activeLink,setActiveLink,openUpdate,fileUrls,updatesData,openModal,srcMusicId,setSrcMusicId,openStoryModal,viewStory]);
 
   return (
     <MyContext.Provider 

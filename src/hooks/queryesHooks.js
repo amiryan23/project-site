@@ -1,7 +1,7 @@
 import { useQuery,useMutation } from 'react-query';
 import { fetchData,fetchUsers,fetchThisUser,fetchMusic} from './../api';
 import {likePostFunction,dislikePostFunction,savePostToFavorite,addCommentPostFunction,deleteCommentPostFunction} from './../context/comment'
-import {deletePostFunction,addPostFunction} from './../context/posts'
+import {deletePostFunction,addPostFunction,AddStoryFunction} from './../context/posts'
 import {followFunction,unfollowFunction,accpetRequestFunction,cancelRequestFunction,changeInfoUserFunction} from './../context/users'
 import {addMusicFunction} from './../context/music'
 import { useQueryClient } from 'react-query';
@@ -416,3 +416,28 @@ export const useAddMusic = () => {
 
       return addMusicMutation;
 };
+
+
+export const useAddStory = () => {
+  const queryClient = useQueryClient();
+
+  const addStoryMutation = useMutation(
+    async ({thisUser,fileUrl}) => {
+      const usersArray = queryClient.getQueryData('users');
+
+      if(usersArray) {
+        return AddStoryFunction(thisUser,fileUrl,queryClient)
+      } else {
+        return Promise.reject("Error")
+      }
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries('users')
+      },
+    }
+
+    );
+
+  return addStoryMutation
+}

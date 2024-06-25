@@ -13,6 +13,7 @@ const Home = React.lazy(()=>import("./components/Home/Home"))
 const Login = React.lazy(()=>import("./components/Login/Login"))
 const Registration = React.lazy(()=>import("./components/Registration/Registration"))
 const Modal = React.lazy(()=>import("./components/Modal/Modal"))
+const ModalStory = React.lazy(()=>import("./components//ModalStory/ModalStory"))
 
 
 const  ScrollToTop = () => {
@@ -35,6 +36,7 @@ function App() {
     <div className="App">
       <Header />
       <Modal />
+      <ModalStory/>
       <Suspense fallback={<Loading />}>
       <Routes>
       <Route path="/home/*" element={<Home />} />

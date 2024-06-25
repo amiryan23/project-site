@@ -76,6 +76,8 @@
 
 		.miniBlock1{	
 				border-radius:50%;
+				display: flex;
+				flex-direction: row;
 
 			img{
 					
@@ -86,6 +88,26 @@
 				border-radius:50%;
 				border: 2px solid #999;
 
+			}
+
+			.activeStory{
+				border:3px solid #47D66E;
+				cursor: pointer;
+			}
+
+			span{
+				position: absolute;
+				align-self: flex-end;
+				display: flex;
+				justify-content: flex-end;
+				align-items: flex-end;
+				margin-left:145px;
+
+				svg{
+					color: rgba(256, 256, 256, 0.8);
+					font-size: 27px;
+					cursor: pointer;
+				}
 			}
 
 		}

@@ -33,8 +33,10 @@ import { FaUserTag } from "react-icons/fa6";
 import { TbMusicPlus,TbMusicSearch } from "react-icons/tb";
 import { FaCirclePlay  } from "react-icons/fa6";
 import { FaPauseCircle } from "react-icons/fa";
-import { IoIosMusicalNotes } from "react-icons/io";
+import { IoIosMusicalNotes,IoIosAddCircle } from "react-icons/io";
 import { FaVolumeDown ,FaVolumeMute  } from "react-icons/fa";
+import {isWithin24Hours} from './../../../helper/timeAdded'
+
 
 
 
@@ -42,7 +44,7 @@ import { FaVolumeDown ,FaVolumeMute  } from "react-icons/fa";
 
 const ProfilePage = ()=>{
 
- const {   isWideScreen ,calculateTimeDifference,commentText,setCommentText,copyToClipboard,setNotificText,t,setActiveLink,fileUrls, setFileUrls,zoomThisPhoto,srcMusicId,setSrcMusicId} = useContext(MyContext);
+ const {   isWideScreen ,calculateTimeDifference,commentText,setCommentText,copyToClipboard,setNotificText,t,setActiveLink,fileUrls, setFileUrls,zoomThisPhoto,srcMusicId,setSrcMusicId,setOpenStoryModal,setViewStory} = useContext(MyContext);
 
 	const forwardPostStorage = JSON.parse(localStorage.getItem("forwardPost"))
 
@@ -586,8 +588,20 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
 
 				<span className={s.miniBlock1}>
 				<img onClick={
-					()=>{zoomThisPhoto(thisUser?.photo?.placed ? thisUser?.photo?.placed : thisUser?.photo?.default)}
-				} src={thisUser?.photo?.placed ? thisUser?.photo?.placed : thisUser?.photo?.default} alt="" />
+					()=>(thisUser?.storyArray?.some(story => isWithin24Hours(story.timeAdded))
+					? (setOpenStoryModal(true), 
+						setViewStory(true) , 
+						localStorage.setItem("thisUserStoryData",JSON.stringify(thisUser?.id)))
+					:zoomThisPhoto(thisUser?.photo?.placed ? thisUser?.photo?.placed : thisUser?.photo?.default))
+				} src={thisUser?.photo?.placed ? thisUser?.photo?.placed : thisUser?.photo?.default} alt="" 
+				className={thisUser?.storyArray?.some(story => isWithin24Hours(story.timeAdded)) ? s.activeStory : ""} />
+				<span onClick={()=>{
+					setOpenStoryModal((prevStoryModal)=>true)
+					localStorage.setItem("storyData",JSON.stringify({
+						id:thisUser?.id,
+						photo:thisUser?.photo?.placed || thisUser?.photo?.default}))
+
+				}}><IoIosAddCircle title="Add Story"/></span>
 				</span>
 				<span className={s.miniBlock2}>
 					{thisUser ? 
