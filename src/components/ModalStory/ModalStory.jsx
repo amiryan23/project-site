@@ -6,7 +6,9 @@ import { IoMdCloseCircle } from "react-icons/io";
 import { useQueryClient,useQuery } from 'react-query';
 import React,{ useState,useCallback,useEffect,useContext,useRef} from 'react'
 import { MdDelete } from "react-icons/md";
-import {useAddStory} from './../../hooks/queryesHooks'
+import {useAddStory,useDeleteStory} from './../../hooks/queryesHooks'
+import { IoEyeSharp } from "react-icons/io5";
+import { FaPhotoFilm } from "react-icons/fa6";
 
 const ModalStory = ()=>{
 
@@ -15,6 +17,7 @@ const ModalStory = ()=>{
   const queryClient = useQueryClient();
   const [fileUrl, setFileUrl] = useState(null);
   const [width,setWidth] = useState(100)
+  const [storyText,setStoryText] = useState(null)
 
   const fileRef = useRef()
 
@@ -24,6 +27,7 @@ const ModalStory = ()=>{
 // const { data: users } = useQuery('users', () => queryClient.getQueryData('users'));
 
  const addStoryMutation = useAddStory()
+ const deleteStoryMutation = useDeleteStory()
 
   const handleFileChange = (e) => {
         if (e.target.files && e.target.files.length > 0) {
@@ -38,9 +42,9 @@ const ModalStory = ()=>{
     }
   };
 
-  const handlerAddStory = async (thisUser,fileUrl) => {
+  const handlerAddStory = async (thisUser,fileUrl,storyText) => {
   	try{
-  		await addStoryMutation.mutate({thisUser,fileUrl})
+  		await addStoryMutation.mutate({thisUser,fileUrl,storyText})
 			console.log("успешно добале")
 			setNotificText("Story added")
 			setTimeout(()=>{
@@ -52,31 +56,47 @@ const ModalStory = ()=>{
   	}
   }
 
+  const handlerDeleteStory = async (idToDelete,thisUser) => {
+  	try{
+  		await deleteStoryMutation.mutate({idToDelete,thisUser})
+  		console.log("deleted")
+  		setNotificText("Story deleted")
+  		setOpenStoryModal(false)
+  	} catch (error) {
+  		console.error(error)
+  	}
+  }
+
   let timer1;
   let timer2;
+  let timer3;
 
   useEffect(()=>{
   	if(viewStory){
-  	timer1 = setTimeout(()=>{setViewStory(false)
+  	timer1 = setTimeout(()=>{
   			setOpenStoryModal(false)},7000)
   	timer2 = 	setInterval(()=>setWidth((prevWidth)=>prevWidth - 1),70)
+  	timer3 = setTimeout(()=>{setViewStory(false)},7150)
   	}
 
   	return () => {
   		clearTimeout(timer1)
   		clearInterval(timer2)
+  		clearTimeout(timer3)
   		if(!viewStory){
   			setWidth(100) }
   		}
   	},[viewStory])
 
+  
+
 	return ReactDOM.createPortal(
 		
 		<dialog className={s.Container} open={openStoryModal} >
-		<input type="file" id="addStory" onChange={handleFileChange}/>
+		<input className={s.input1} type="file" accept="image/*" id="addStory" onChange={handleFileChange}/>
 			<div  className={s.content} 
 			style={{
-			 backgroundImage: fileUrl ? `url(${fileUrl.url})` : viewStory ? `url(${users?.find(user=> user.id === thisUserStoryData)?.storyArray[0]?.fileURL})` : undefined,
+			 backgroundImage: fileUrl ? `url(${fileUrl.url})` : viewStory ? `url(${users?.find(user=> user.id === thisUserStoryData)?.storyArray[users?.find(user => user.id === thisUserStoryData)?.storyArray.length - 1]?.fileURL})` : undefined,
 			backgroundColor: fileUrl || viewStory  ? 'rgba(0, 0, 0, 1)' : undefined}}>
 				<div className={s.content1}>
 				<div className={s.block1} style={{width:`${width}%`}}></div>
@@ -85,23 +105,54 @@ const ModalStory = ()=>{
 					<img src={viewStory ?  users?.find(user=> user.id === thisUserStoryData)?.photo?.placed || users?.find(user=> user.id === thisUserStoryData)?.photo?.default  : thisUserIdStory?.photo} alt="" />
 					<span className={s.item}>
 						<span className={s.miniItem1}>{viewStory ? users?.find(user=> user.id === thisUserStoryData)?.username : "You"}</span>
-						<span className={s.miniItem2}>{viewStory ? calculateTimeDifference(users?.find(user=> user.id === thisUserStoryData)?.storyArray[0]?.timeAdded) : ""}</span>
+						<span className={s.miniItem2}>{viewStory ? calculateTimeDifference(users?.find(user=> user.id === thisUserStoryData)?.storyArray[users?.find(user => user.id === thisUserStoryData)?.storyArray.length - 1]?.timeAdded) : ""}</span>
 					</span>
 				</span>
 					<span onClick={()=>{
 						setOpenStoryModal((prevOpenStoryModal)=>false)
-						setViewStory((prevViewStory)=>false)
+						
 						setTimeout(()=>{
+							setViewStory((prevViewStory)=>false)
 							localStorage.removeItem("storyData")
 							localStorage.removeItem("thisUserStoryData")},150)
 					}}><IoMdCloseCircle /></span>
 				</div>
 				</div>
-				{!fileUrl 
-				? <label htmlFor="addStory" className={s.content2}>Upload photo/video </label> 
+				{viewStory
+				? <div className={s.content4}>
+				{thisUserStoryData === thisUser?.id 
+				? <>
+					{/* <span className={s.item1}> <IoEyeSharp /> 0 </span>  */}
+				<div className={s.miniBlock1}>
+					{users?.find(user=> user.id === thisUserStoryData)?.storyArray[users?.find(user => user.id === thisUserStoryData)?.storyArray.length - 1]?.storyText}
+				</div>
+				<div className={s.miniBlock2}>
+					<span className={s.item1}>  </span> 
+					<span className={s.item2} onClick={()=>{handlerDeleteStory(users?.find(user=> user.id === thisUserStoryData)?.storyArray[users?.find(user => user.id === thisUserStoryData)?.storyArray.length - 1]?.id,thisUser)}}><MdDelete /></span>
+					</div>
+					</>
+					
+				: <div className={s.miniBlock1}>
+					{users?.find(user=> user.id === thisUserStoryData)?.storyArray[users?.find(user => user.id === thisUserStoryData)?.storyArray.length - 1]?.storyText}
+				</div>}
+				</div>
+				: !fileUrl 
+				? <div className={s.miniContent1}> 
+					<div className={s.miniBlock1}>
+						<textarea type="text" value={storyText} onChange={(e)=>{setStoryText(e.target.value)}} placeholder="Text..."></textarea>
+					</div>
+					<div className={s.miniBlock2}>
+				<label htmlFor="addStory" className={s.content2}>Upload photo <FaPhotoFilm /></label>
+					</div> 
+					</div>
 				: <div className={s.content3}>
-					<button onClick={()=>{handlerAddStory(thisUser,fileUrl)}} className={s.item1}>Add Story</button>
+					<div className={s.miniBlock1}>
+						<textarea type="text" value={storyText} onChange={(e)=>{setStoryText(e.target.value)}} placeholder="Text..." ></textarea>
+					</div>
+					<div className={s.miniBlock2}>
+					<button onClick={()=>{handlerAddStory(thisUser,fileUrl,storyText)}} className={s.item1}>Add story</button>
 					<span className={s.item2} onClick={()=>{setFileUrl(null)}}><MdDelete /></span>
+					</div>
 				</div>}
 
 			</div>

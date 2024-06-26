@@ -28,7 +28,7 @@ import { FaUserTag } from "react-icons/fa6";
 import { FaCirclePlay  } from "react-icons/fa6";
 import { FaPauseCircle } from "react-icons/fa";
 import { IoIosMusicalNotes } from "react-icons/io";
-
+import {isWithin24Hours} from './../../../helper/timeAdded'
 
 
 
@@ -37,7 +37,7 @@ const OtherPage = () => {
 
 	const {userId} = useParams()
 
-  const {  thisUser ,calculateTimeDifference,commentText,setCommentText,copyToClipboard,setNotificText,t,setActiveLink,fileUrls, setFileUrls,zoomThisPhoto,srcMusicId,setSrcMusicId} = useContext(MyContext);
+  const {  thisUser ,calculateTimeDifference,commentText,setCommentText,copyToClipboard,setNotificText,t,setActiveLink,fileUrls, setFileUrls,zoomThisPhoto,srcMusicId,setSrcMusicId,setOpenStoryModal,setViewStory} = useContext(MyContext);
 
 
 const queryClient = useQueryClient();
@@ -573,9 +573,16 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
 			</div>
 				<span className={s.Block1}>
 				
-				<span className={s.miniBlock1}><img onClick={
-					()=>{zoomThisPhoto(selectedUser?.photo?.placed || selectedUser?.photo?.default)}
-				} src={selectedUser?.photo?.placed || selectedUser?.photo?.default } alt="" /></span>
+				<span className={s.miniBlock1}>
+<img onClick={
+					()=>(selectedUser?.storyArray?.some(story => isWithin24Hours(story.timeAdded))
+					? (setOpenStoryModal(true), 
+						setViewStory(true) , 
+						localStorage.setItem("thisUserStoryData",JSON.stringify(selectedUser?.id)))
+					:zoomThisPhoto(selectedUser?.photo?.placed ? selectedUser?.photo?.placed : selectedUser?.photo?.default))
+				} src={selectedUser?.photo?.placed ? selectedUser?.photo?.placed : selectedUser?.photo?.default} alt="" 
+				className={selectedUser?.storyArray?.some(story => isWithin24Hours(story?.timeAdded)) ? s.activeStory : ""} />
+				</span>
 				<span className={s.miniBlock2}>
 					{selectedUser ? selectedUser?.username : <MiniLoader/>}
 				</span>

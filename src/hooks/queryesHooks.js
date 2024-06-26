@@ -1,8 +1,9 @@
 import { useQuery,useMutation } from 'react-query';
 import { fetchData,fetchUsers,fetchThisUser,fetchMusic} from './../api';
 import {likePostFunction,dislikePostFunction,savePostToFavorite,addCommentPostFunction,deleteCommentPostFunction} from './../context/comment'
-import {deletePostFunction,addPostFunction,AddStoryFunction} from './../context/posts'
+import {deletePostFunction,addPostFunction} from './../context/posts'
 import {followFunction,unfollowFunction,accpetRequestFunction,cancelRequestFunction,changeInfoUserFunction} from './../context/users'
+import {AddStoryFunction,DeleteStoryFunction} from './../context/story'
 import {addMusicFunction} from './../context/music'
 import { useQueryClient } from 'react-query';
 
@@ -422,11 +423,11 @@ export const useAddStory = () => {
   const queryClient = useQueryClient();
 
   const addStoryMutation = useMutation(
-    async ({thisUser,fileUrl}) => {
+    async ({thisUser,fileUrl,storyText}) => {
       const usersArray = queryClient.getQueryData('users');
 
       if(usersArray) {
-        return AddStoryFunction(thisUser,fileUrl,queryClient)
+        return AddStoryFunction(thisUser,fileUrl,storyText,queryClient)
       } else {
         return Promise.reject("Error")
       }
@@ -440,4 +441,26 @@ export const useAddStory = () => {
     );
 
   return addStoryMutation
+}
+
+export const useDeleteStory = () => {
+  const queryClient = useQueryClient()
+
+  const deleteStoryMutation = useMutation(
+    async({idToDelete,thisUser}) => {
+      const usersArray = queryClient.getQueryData('users');
+
+      if(usersArray) {
+        return DeleteStoryFunction(idToDelete,thisUser,queryClient)
+      } else {
+        return Promise.reject("Error")
+      }
+    },
+        {
+      onSuccess: () => {
+        queryClient.invalidateQueries('users')
+      },
+    }
+    );
+   return deleteStoryMutation
 }

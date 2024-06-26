@@ -1,6 +1,6 @@
 import {db,storage,docId,firebaseConfig} from './../firebase'
-import { doc, updateDoc,setDoc  } from "firebase/firestore";
-import { ref, uploadBytes } from "firebase/storage";
+import { doc, updateDoc,setDoc   } from "firebase/firestore";
+import { ref, uploadBytes , getDownloadURL } from "firebase/storage";
 import imageCompression from 'browser-image-compression';
 import Resizer from 'react-image-file-resizer';
 import {addNotificationToUser} from './../helper/addNotification'
@@ -118,38 +118,3 @@ export   const deletePostFunction = async (idToDelete,arrayPosts,queryClient) =>
 };
 
 
-export const AddStoryFunction = async (thisUser, fileUrl ,queryClient) => {
-  try {
-    
-
-    if (!thisUser.storyArray) {
-      thisUser.storyArray = [];
-    }
-
-    const storageRef = ref(storage, `StoryStorage/${fileUrl?.file?.name}`);
-
-    
-    await uploadBytes(storageRef, fileUrl?.file);
-
-    const newStory = {
-      id: new Date().getTime(),
-      userId: thisUser.id,
-      fileURL: fileUrl ? `https://firebasestorage.googleapis.com/v0/b/${firebaseConfig.storageBucket}/o/StoryStorage%2F${encodeURIComponent(fileUrl?.file?.name)}?alt=media` : false,
-      timeAdded: new Date().toLocaleString(), 
-    };
-
-    
-    thisUser.storyArray.push(newStory);
-
-    
-    await setDoc(doc(db, "users", thisUser.id), { storyArray: thisUser.storyArray }, { merge: true });
-
-    
-    const newThisUser = { ...thisUser, storyArray: thisUser.storyArray };
-    queryClient.setQueryData(['users', thisUser.id], newThisUser);
-
-    console.log("Новый объект успешно добавлен в Firestore.");
-  } catch (error) {
-    console.error("Ошибка при добавлении новой истории:", error);
-  }
-};

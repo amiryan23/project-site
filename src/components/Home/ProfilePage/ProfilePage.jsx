@@ -594,14 +594,15 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
 						localStorage.setItem("thisUserStoryData",JSON.stringify(thisUser?.id)))
 					:zoomThisPhoto(thisUser?.photo?.placed ? thisUser?.photo?.placed : thisUser?.photo?.default))
 				} src={thisUser?.photo?.placed ? thisUser?.photo?.placed : thisUser?.photo?.default} alt="" 
-				className={thisUser?.storyArray?.some(story => isWithin24Hours(story.timeAdded)) ? s.activeStory : ""} />
-				<span onClick={()=>{
+				className={thisUser?.storyArray?.some(story => isWithin24Hours(story?.timeAdded)) ? s.activeStory : ""} />
+				{!thisUser?.storyArray?.some(story => isWithin24Hours(story.timeAdded))
+					? <span onClick={()=>{
 					setOpenStoryModal((prevStoryModal)=>true)
 					localStorage.setItem("storyData",JSON.stringify({
 						id:thisUser?.id,
 						photo:thisUser?.photo?.placed || thisUser?.photo?.default}))
 
-				}}><IoIosAddCircle title="Add Story"/></span>
+				}}><IoIosAddCircle title="Add Story"/></span> : ""}
 				</span>
 				<span className={s.miniBlock2}>
 					{thisUser ? 
