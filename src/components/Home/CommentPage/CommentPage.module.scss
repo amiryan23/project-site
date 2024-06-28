@@ -53,6 +53,15 @@
 						user-select: none;
 					}
 
+			.activeStory{
+				border:2px solid #47D66E;
+				cursor: pointer;
+			}
+
+			.viewedstory{
+				border: 2px solid rgba(60, 179, 113,0.2);
+			}
+
 					span{
 						align-self:flex-end;
 						position: relative;
@@ -284,6 +293,15 @@
 								border: 2px solid #777;
 								cursor: pointer;
 							}
+
+			.activeStory{
+				border:2px solid #47D66E;
+				cursor: pointer;
+			}
+
+			.viewedstory{
+				border: 2px solid rgba(60, 179, 113,0.2);
+			}						
 
 							span{
 								align-self: flex-end;

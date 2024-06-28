@@ -175,7 +175,8 @@ const calculateTimeDifference = (timeAdded) => {
         return `${days} ${days > 1 ? t('Days') : t('Day')} ${t("Ago")}`;
     } else {
         // Более месяца назад
-        return `${t("Month")} ${t("Ago")}`;
+        // return `${t("Month")} ${t("Ago")}`;
+        return timeAdded
     }
 };
 

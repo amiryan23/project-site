@@ -107,6 +107,10 @@
 				cursor: pointer;
 			}
 
+			.viewedstory{
+				border: 3px solid rgba(60, 179, 113,0.2);
+			}
+
 		}
 
 		.miniBlock2{
@@ -469,6 +473,16 @@
 						border-radius: 50%;
 						user-select: none;
 					}
+
+			.activeStory{
+				border:2px solid #47D66E;
+				cursor: pointer;
+			}
+
+							.viewedstory{
+				border: 2px solid rgba(60, 179, 113,0.2);
+			}
+
 
 					span{
 						align-self:flex-end;
@@ -933,6 +947,17 @@
 								border: 2px solid #777;
 								cursor: pointer;
 							}
+
+
+			.activeStory{
+				border:2px solid #47D66E;
+				cursor: pointer;
+			}
+
+							.viewedstory{
+				border: 2px solid rgba(60, 179, 113,0.2);
+			}
+
 
 							span{
 								position: relative;

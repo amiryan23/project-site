@@ -16,6 +16,7 @@ import {auth,db,storage,docId} from './../../firebase'
 import Language from './../Language/Language'
 import { useQueryClient,useQuery } from 'react-query';
 import {updatesArray} from './../../helper/updatesArray'
+import {isWithin24Hours} from './../../helper/timeAdded'
 
 
 
@@ -35,6 +36,7 @@ const UpdatedSitePage = React.lazy(()=>import('./../UpdatedSitePage/UpdatedSiteP
 const SavePage = React.lazy(()=>import('./SavePage/SavePage'))
 const NotificationPage = React.lazy(()=>import('./NotificationPage/NotificationPage'))
 const AddMusicPage = React.lazy(()=>import('./MusicPage/AddMusicPage/AddMusicPage'))
+const ArchivePage = React.lazy(()=>import('./ArchivePage/ArchivePage'))
 
 
 
@@ -96,7 +98,8 @@ const topUsersList = sortedUsers?.map((user,index) => (
   <Link  to={thisUser?.id !== user.id ? `/home/user/profile/${user.id}` : "/home/profile"} key={user.id} className={s.topUserContainer}>
     <span className={s.miniItem1}>
        <span>#{index + 1}</span>
-      <img src={user.photo?.placed ? user.photo?.placed : user.photo?.default} alt="" />
+      <img src={user.photo?.placed ? user.photo?.placed : user.photo?.default} alt="" 
+      className={users?.find(u=> u.id === user?.id)?.storyArray?.some(story => isWithin24Hours(story?.timeAdded)) ? users?.find(u=> u.id === user?.id)?.storyArray[users?.find(u => u.id === user?.id)?.storyArray.length - 1]?.view?.includes(thisUser?.id) ? s.viewedstory : s.activeStory : ""} />
         
     </span>
     <span className={s.miniItem2}>
@@ -223,6 +226,9 @@ const topUsersList = sortedUsers?.map((user,index) => (
             <Route path="save" element={<SavePage />} />
             <Route path="notification" element={<NotificationPage />} />
             <Route path="music/add" element={<AddMusicPage />} />
+            <Route path="archive" element={<ArchivePage />} />
+
+           
 
             </Routes>
             </Suspense> 

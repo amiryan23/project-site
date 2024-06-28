@@ -36,6 +36,7 @@ import { FaPauseCircle } from "react-icons/fa";
 import { IoIosMusicalNotes,IoIosAddCircle } from "react-icons/io";
 import { FaVolumeDown ,FaVolumeMute  } from "react-icons/fa";
 import {isWithin24Hours} from './../../../helper/timeAdded'
+import { MdRestore } from "react-icons/md";
 
 
 
@@ -322,7 +323,8 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
 
 					<div className={s.postMiniContent1}>
 						<span className={s.postBlock1}>
-							<img src={thisUser?.photo?.placed ? thisUser?.photo?.placed : thisUser?.photo?.default} alt="" />
+							<img src={thisUser?.photo?.placed ? thisUser?.photo?.placed : thisUser?.photo?.default} alt="" 
+							className={users?.find(user=> user.id === thisUser?.id)?.storyArray?.some(story => isWithin24Hours(story?.timeAdded)) ? users?.find(user=> user.id === thisUser?.id)?.storyArray[users?.find(user => user.id === thisUser?.id)?.storyArray.length - 1]?.view?.includes(thisUser?.id) ? s.viewedstory : s.activeStory : ""}/>
 							<span>{thisUser.onlineStatus  ? <MdCircle title="Online" size="11" color="limegreen"/> : <MdBrightness1 title="Offline" size="11" color="rgba(256,256,256,0.8)"/>}</span>
 						</span>
 						<span className={s.postBlock2}>
@@ -444,7 +446,9 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
 									<div key={comment.id} className={s.Comment}>
 										<div className={s.Block1}>
 											<span className={s.item}>
-											 <Link to={thisUser?.id !== comment.userId ? `/home/user/profile/${comment.userId}` : "/home/profile"} ><img src={users?.find(user => user.id === comment.userId).photo?.placed  || users?.find(user => user?.id === comment.userId).photo?.default } alt="" /></Link>
+											 <Link to={thisUser?.id !== comment.userId ? `/home/user/profile/${comment.userId}` : "/home/profile"} >
+											 <img src={users?.find(user => user.id === comment.userId).photo?.placed  || users?.find(user => user?.id === comment.userId).photo?.default } alt="" 
+											  className={users?.find(user=> user.id === comment.userId)?.storyArray?.some(story => isWithin24Hours(story?.timeAdded)) ? users?.find(user=> user.id === comment.userId)?.storyArray[users?.find(user => user.id === comment.userId)?.storyArray.length - 1]?.view?.includes(thisUser?.id) ? s.viewedstory : s.activeStory : ""}   /></Link>
 											 <span>
 													{
 														comment.userId === thisUser?.id
@@ -580,6 +584,7 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
 			<div className={s.megaBlock}>
 			<button onClick={() => window.history.back(-1)}><AiOutlineRollback size="30" color="whitesmoke"/></button>
 			<span>
+			<Link to="/home/archive"><MdRestore title="Archive"/></Link>
 			<Link to="/home/save"><GoBookmarkFill title="Save"/></Link> 
 			<Link  to="/home/settings"><IoSettingsSharp title="Edit profile"/></Link>
 			</span>

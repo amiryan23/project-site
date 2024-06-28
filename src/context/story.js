@@ -84,3 +84,33 @@ export const DeleteStoryFunction = async (idToDelete, thisUser, queryClient) => 
     console.error("Ошибка при удалении истории:", error);
   }
 };
+
+
+export const ViewStoryFunction = async (userId, thisUser, usersArray, queryClient) => {
+  try {
+    const userStoryIndex = usersArray?.find(user => user.id === userId)?.storyArray.length - 1;
+    const userStory = usersArray?.find(user => user.id === userId)?.storyArray[userStoryIndex];
+
+    if (!userStory.view) {
+      userStory.view = [];
+    }
+
+    if (!userStory.view.includes(thisUser?.id)) {
+      userStory.view.push(thisUser?.id);
+
+      // Обновляем только storyArray для пользователя
+      const updatedStoryArray = [...usersArray.find(user => user.id === userId).storyArray];
+      updatedStoryArray[userStoryIndex] = { ...userStory };
+
+      await setDoc(doc(db, "users", userId), { storyArray: updatedStoryArray }, { merge: true });
+
+      // Обновляем данные в кэше
+      const updatedUser = { ...usersArray.find(user => user.id === userId), storyArray: updatedStoryArray };
+      queryClient.setQueryData(['users', userId], updatedUser);
+
+      console.log("Added View");
+    }
+  } catch (error) {
+    console.error("Error adding view to story:", error);
+  }
+};

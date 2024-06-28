@@ -25,6 +25,7 @@ import {addNotificationToUser} from './../../../helper/addNotification'
 import { FaCirclePlay  } from "react-icons/fa6";
 import { FaPauseCircle } from "react-icons/fa";
 import { IoIosMusicalNotes } from "react-icons/io";
+import {isWithin24Hours} from './../../../helper/timeAdded'
 
 
 
@@ -238,7 +239,11 @@ const handleFileChange = useCallback((e, postId) => {
  	.map((m,index) => 		<div className={s.postMegaContent} key={m.id}>
 					<div className={s.postMiniContent1}>
 						<span className={s.postBlock1}>
-							<Link to={thisUser?.id !== m.userId ? `/home/user/profile/${m.userId}` : "/home/profile"}><img src={users?.find(user => user.id === m.userId).photo?.placed ? users?.find(user => user?.id === m.userId).photo?.placed : users?.find(user => user?.id === m.userId).photo?.default} alt="" /></Link>
+							<Link to={thisUser?.id !== m.userId ? `/home/user/profile/${m.userId}` : "/home/profile"}>
+							<img 
+							src={users?.find(user => user.id === m.userId).photo?.placed ? users?.find(user => user?.id === m.userId).photo?.placed : users?.find(user => user?.id === m.userId).photo?.default} alt="" 
+							className={users?.find(user=> user.id === m.userId)?.storyArray?.some(story => isWithin24Hours(story?.timeAdded)) ? users?.find(user=> user.id === m.userId)?.storyArray[users?.find(user => user.id === m.userId)?.storyArray.length - 1]?.view?.includes(thisUser?.id) ? s.viewedstory : s.activeStory : ""}/>
+							</Link>
 						{!users?.find(user => user.id === m.userId).disableOnlineStatus || thisUser?.isAdmin 
 							? <span>
 								  {
@@ -392,7 +397,10 @@ const handleFileChange = useCallback((e, postId) => {
 					        <div key={comment.id} className={s.Comment}>
 					          <div className={s.Block1}>
 					            <span className={s.item}>
-					             <Link to={thisUser?.id !== comment.userId ? `/home/user/profile/${comment.userId}` : "/home/profile"} ><img src={users?.find(user => user.id === comment.userId).photo?.placed  || users?.find(user => user?.id === comment.userId).photo?.default } alt="" /></Link>
+					             <Link to={thisUser?.id !== comment.userId ? `/home/user/profile/${comment.userId}` : "/home/profile"} >
+					             <img src={users?.find(user => user.id === comment.userId).photo?.placed  || users?.find(user => user?.id === comment.userId).photo?.default } alt="" 
+					             className={users?.find(user=> user.id === comment.userId)?.storyArray?.some(story => isWithin24Hours(story?.timeAdded)) ? users?.find(user=> user.id === comment.userId)?.storyArray[users?.find(user => user.id === comment.userId)?.storyArray.length - 1]?.view?.includes(thisUser?.id) ? s.viewedstory : s.activeStory : ""} />
+					             </Link>
 					             {!users?.find(user => user.id === comment.userId).disableOnlineStatus || thisUser?.isAdmin 
 					             ? <span>
 												  {

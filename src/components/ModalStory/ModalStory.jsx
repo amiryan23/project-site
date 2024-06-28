@@ -122,12 +122,12 @@ const ModalStory = ()=>{
 				? <div className={s.content4}>
 				{thisUserStoryData === thisUser?.id 
 				? <>
-					{/* <span className={s.item1}> <IoEyeSharp /> 0 </span>  */}
+				{	users?.find(user=> user.id === thisUserStoryData)?.storyArray[users?.find(user => user.id === thisUserStoryData)?.storyArray.length - 1]?.storyText !== null &&
 				<div className={s.miniBlock1}>
 					{users?.find(user=> user.id === thisUserStoryData)?.storyArray[users?.find(user => user.id === thisUserStoryData)?.storyArray.length - 1]?.storyText}
-				</div>
+				</div>}
 				<div className={s.miniBlock2}>
-					<span className={s.item1}>  </span> 
+					<span className={s.item1}> <IoEyeSharp /> {users?.find(user=> user.id === thisUserStoryData)?.storyArray[users?.find(user => user.id === thisUserStoryData)?.storyArray.length - 1]?.view?.length || 0} </span>
 					<span className={s.item2} onClick={()=>{handlerDeleteStory(users?.find(user=> user.id === thisUserStoryData)?.storyArray[users?.find(user => user.id === thisUserStoryData)?.storyArray.length - 1]?.id,thisUser)}}><MdDelete /></span>
 					</div>
 					</>

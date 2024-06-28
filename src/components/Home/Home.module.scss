@@ -498,6 +498,16 @@
                         border-radius: 50%;
                         border: 2px solid rgba(256, 256, 256, 0.3);
                     }
+
+            .activeStory{
+                border:2px solid #47D66E;
+                cursor: pointer;
+            }
+
+                            .viewedstory{
+                border: 2px solid rgba(60, 179, 113,0.2);
+            }
+                    
                 }
 
                 .miniItem2{

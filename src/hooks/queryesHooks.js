@@ -3,7 +3,7 @@ import { fetchData,fetchUsers,fetchThisUser,fetchMusic} from './../api';
 import {likePostFunction,dislikePostFunction,savePostToFavorite,addCommentPostFunction,deleteCommentPostFunction} from './../context/comment'
 import {deletePostFunction,addPostFunction} from './../context/posts'
 import {followFunction,unfollowFunction,accpetRequestFunction,cancelRequestFunction,changeInfoUserFunction} from './../context/users'
-import {AddStoryFunction,DeleteStoryFunction} from './../context/story'
+import {AddStoryFunction,DeleteStoryFunction,ViewStoryFunction} from './../context/story'
 import {addMusicFunction} from './../context/music'
 import { useQueryClient } from 'react-query';
 
@@ -463,4 +463,26 @@ export const useDeleteStory = () => {
     }
     );
    return deleteStoryMutation
+}
+
+export const useViewStory = () => {
+  const queryClient = useQueryClient()
+
+  const viewStoryMutation = useMutation(
+    async({userId,thisUser}) => {
+      const usersArray = queryClient.getQueryData('users');
+
+      if(usersArray) {
+        return ViewStoryFunction(userId,thisUser,usersArray,queryClient)
+      } else {
+        return Promise.reject("Error")
+      }
+    },
+        {
+      onSuccess: () => {
+        queryClient.invalidateQueries('users')
+      },
+    }
+    );
+   return viewStoryMutation
 }

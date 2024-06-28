@@ -15,6 +15,7 @@ import { HiLockClosed } from "react-icons/hi";
 import { HiMiniLockClosed } from "react-icons/hi2";
 import { Route, Routes  } from 'react-router-dom';
 import { useHandleFollow  } from './../../../context/auth';
+import {useViewStory} from "./../../../hooks/queryesHooks"
 import {useLikePostMutation,usePostsQuery,useDislikePostMutation,useAddCommentToPostMutation,useDeletePostMutation,useFollowMutation,useUnfollowMutation,useDeleteComment,useSavePostToFavorite} from './../../../hooks/queryesHooks'
 import { useQueryClient,useQuery } from 'react-query';
 import { LuReplyAll } from "react-icons/lu";
@@ -53,6 +54,7 @@ const queryClient = useQueryClient();
   const deletePostMutation = useDeletePostMutation()
   const deleteCommentMutation = useDeleteComment()
   const savePostToFavoriteMutation = useSavePostToFavorite()
+  const viewStoryMutation = useViewStory()
   
   
   const { data: users } = useQuery('users', () => queryClient.getQueryData('users'));
@@ -197,7 +199,13 @@ const unfollowMutation = useUnfollowMutation()
   }, []);
 
 
-
+const handleViewStory = async (userId,thisUser) => {
+	try{
+		await viewStoryMutation.mutate({userId,thisUser})
+	}catch(error){
+		console.error(error)
+	}
+}
 
 
 const handleFileChange = useCallback((e, postId) => {
@@ -255,7 +263,8 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
   	.map(m => 		<div className={s.postMegaContent} key={m.id}>
 					<div className={s.postMiniContent1}>
 						<span className={s.postBlock1}>
-							<img src={selectedUser?.photo?.placed || selectedUser?.photo?.default} alt="" />
+							<img src={selectedUser?.photo?.placed || selectedUser?.photo?.default} alt="" 
+							className={users?.find(user=> user.id === selectedUser.id)?.storyArray?.some(story => isWithin24Hours(story?.timeAdded)) ? users?.find(user=> user.id === selectedUser.id)?.storyArray[users?.find(user => user.id === selectedUser.id)?.storyArray.length - 1]?.view?.includes(thisUser?.id) ? s.viewedstory : s.activeStory : ""}/>
 							<span>
 							{!selectedUser.disableOnlineStatus || thisUser?.isAdmin 
 							? selectedUser.onlineStatus  ? <MdCircle title="Online" size="11" color="limegreen"/> : <MdBrightness1 title="Offline" size="11" color="rgba(256,256,256,0.8)"/>
@@ -427,7 +436,9 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
 					        <div key={comment.id} className={s.Comment}>
 					          <div className={s.Block1}>
 					            <span className={s.item}>
-					             <Link to={thisUser?.id !== comment.userId ? `/home/user/profile/${comment.userId}` : "/home/profile"} ><img src={users?.find(user => user.id === comment.userId).photo?.placed  || users?.find(user => user?.id === comment.userId).photo?.default } alt="" /></Link>
+					             <Link to={thisUser?.id !== comment.userId ? `/home/user/profile/${comment.userId}` : "/home/profile"} >
+					             <img src={users?.find(user => user.id === comment.userId).photo?.placed  || users?.find(user => user?.id === comment.userId).photo?.default } alt="" 
+					             className={users?.find(user=> user.id === comment.userId)?.storyArray?.some(story => isWithin24Hours(story?.timeAdded)) ? users?.find(user=> user.id === comment.userId)?.storyArray[users?.find(user => user.id === comment.userId)?.storyArray.length - 1]?.view?.includes(thisUser?.id) ? s.viewedstory : s.activeStory : ""}/></Link>
 					            {!users?.find(user => user.id === comment.userId).disableOnlineStatus || thisUser?.isAdmin 
 					             ? <span>
 												  {
@@ -578,10 +589,11 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
 					()=>(selectedUser?.storyArray?.some(story => isWithin24Hours(story.timeAdded))
 					? (setOpenStoryModal(true), 
 						setViewStory(true) , 
+						handleViewStory(selectedUser?.id,thisUser),
 						localStorage.setItem("thisUserStoryData",JSON.stringify(selectedUser?.id)))
 					:zoomThisPhoto(selectedUser?.photo?.placed ? selectedUser?.photo?.placed : selectedUser?.photo?.default))
 				} src={selectedUser?.photo?.placed ? selectedUser?.photo?.placed : selectedUser?.photo?.default} alt="" 
-				className={selectedUser?.storyArray?.some(story => isWithin24Hours(story?.timeAdded)) ? s.activeStory : ""} />
+				className={selectedUser?.storyArray?.some(story => isWithin24Hours(story?.timeAdded)) ? selectedUser?.storyArray[users?.find(user => user.id === selectedUser.id)?.storyArray.length - 1]?.view?.includes(thisUser?.id) ? s.viewedstory : s.activeStory : ""} />
 				</span>
 				<span className={s.miniBlock2}>
 					{selectedUser ? selectedUser?.username : <MiniLoader/>}
