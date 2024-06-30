@@ -114,3 +114,42 @@ export const ViewStoryFunction = async (userId, thisUser, usersArray, queryClien
     console.error("Error adding view to story:", error);
   }
 };
+
+
+
+
+
+
+export const AddHighlightFunction = async (userId, storyId, usersArray, queryClient) => {
+  try {
+    const userIndex = usersArray.findIndex(user => user.id === userId);
+    if (userIndex === -1) {
+      throw new Error("User not found");
+    }
+
+    const user = usersArray[userIndex];
+    const storyIndex = user.storyArray.findIndex(story => story.id === storyId);
+    if (storyIndex === -1) {
+      throw new Error("Story not found");
+    }
+
+    const updatedStoryArray = [...user.storyArray];
+    const updatedStory = { ...updatedStoryArray[storyIndex] };
+
+    updatedStory.highlight = !updatedStory.highlight;
+    updatedStoryArray[storyIndex] = updatedStory;
+
+    await setDoc(doc(db, "users", userId), { storyArray: updatedStoryArray }, { merge: true });
+
+  
+    const updatedUser = { ...user, storyArray: updatedStoryArray };
+    const updatedUsersArray = [...usersArray];
+    updatedUsersArray[userIndex] = updatedUser;
+
+    queryClient.setQueryData('users', updatedUsersArray);
+
+    console.log("Toggled highlight");
+  } catch (error) {
+    console.error("Error toggling highlight:", error);
+  }
+};

@@ -37,7 +37,7 @@ import { IoIosMusicalNotes,IoIosAddCircle } from "react-icons/io";
 import { FaVolumeDown ,FaVolumeMute  } from "react-icons/fa";
 import {isWithin24Hours} from './../../../helper/timeAdded'
 import { MdRestore } from "react-icons/md";
-
+import { FaChevronCircleDown , FaChevronCircleUp } from "react-icons/fa";
 
 
 
@@ -61,6 +61,7 @@ const ProfilePage = ()=>{
 	const [tagUser,setTagUser] = useState(null)
 	const [trackId,setTrackId] = useState(null)
 	const [play,setPlay] = useState({ musicId: null, postId: null, playMusic: false })
+	const [storyHeight,setStoryHeight] = useState(false)
  
 	const likePostMutation = useLikePostMutation();
 	const dislikePostMutation = useDislikePostMutation()
@@ -716,7 +717,7 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
 						</span>
 					:""}
 					<span className={s.item2}>
-					<input ref={imageRef} id="file" type="file" style={{display:"none"}} onChange={handleFileChange}/>
+					<input ref={imageRef} id="file" type="file" accept="image/*" style={{display:"none"}} onChange={handleFileChange}/>
 						<label htmlFor="file" >
 						<MdOutlineAddPhotoAlternate title="Photo" />
 						</label>
@@ -795,6 +796,35 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
 				
 
 			</div>
+
+			{thisUser?.storyArray.some(story=> story.highlight === true)
+			? <div className={storyHeight ? `${s.storyContainer} ${s.activeStoryContainer}` : s.storyContainer}>
+				<div className={s.storyContent1}>
+				<span className={s.item1}>Highlights</span>
+				{storyHeight 
+					? <span className={s.item2} onClick={()=>setStoryHeight((prevStoryHeight)=>false)}><FaChevronCircleUp /></span>
+					: <span className={s.item2} onClick={()=>setStoryHeight((prevStoryHeight)=>true)}><FaChevronCircleDown /></span>
+				}
+				</div>
+				<span className={s.storyContent2}>
+			{thisUser?.storyArray?.filter(story=> story.highlight === true).map(story=> 
+				<div className={storyHeight ? `${s.activeCont} ${s.storyCont}` : s.storyCont} onClick={()=>setStoryHeight((prevStoryHeight)=>true)}  style={{backgroundImage:`url(${story.fileURL})`}}>
+		{storyHeight ?
+		<>
+		<div className={s.storyItem1}>{story?.timeAdded}</div>
+	
+		<div className={s.storyItem2}>
+		<span className={s.item1}>{story?.storyText}</span>
+
+		</div>
+		</>
+		: ""}
+			</div>
+					
+			)}
+			</span>
+			</div>
+			: ""}
 			<div className={s.content3}>
 			{arrayPosts 
 			? postThisUser.length > 0 ? postThisUser.reverse() : <div className={s.noPost}>{t('NoPosts')}</div>

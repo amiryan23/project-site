@@ -31,11 +31,12 @@
 		flex-direction: row;
 		gap: 20px;
 		padding: 15px;
-		flex-wrap: wrap;
-		justify-content: center;
+		flex-wrap:no-wrap;
+		justify-content: flex-start;
+		overflow-x: scroll;
 
 		.storyContainer{
-			width: 250px;
+			min-width: 250px;
 			height: 400px;
 			// border: 2px solid rgba(256, 256, 256, 0.6);
 			
@@ -56,6 +57,16 @@
 				padding: 15px;
 				font-size: 11px;
 				font-weight: bold;
+				display: flex;
+				flex-direction: row;
+				gap: 15px;
+				align-items: center;
+
+				svg{
+					font-size: 20px;
+					color: rgba(256, 256, 256, 0.9);
+				}
+				
 			}
 
 			.storyContent2{

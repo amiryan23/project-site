@@ -5,13 +5,21 @@ import { MyContext } from './../../../context/Context';
 import { IoEyeSharp } from "react-icons/io5";
 import { MdDelete } from "react-icons/md";
 import { BsHighlights } from "react-icons/bs";
+import {useAddHighlight} from './../../../hooks/queryesHooks'
+import { useQueryClient,useQuery } from 'react-query';
+
+
 
 const ArchivePage = () => {
 
-	const { thisUser,setSrcMusicId } = useContext(MyContext);
+	const { thisUser,setSrcMusicId,setNotificText } = useContext(MyContext);
 	const [hidden,setHidden] = useState({})
 
 	const animBlock = useRef()
+
+const queryClient = useQueryClient();
+
+const addHighlightMutation = useAddHighlight();
 
 	let timer;
 
@@ -29,12 +37,22 @@ return () => {
  }
  },[])
 
+	 const handleAddHighlight = async (userId, storyId) => {
+		try {
+			await addHighlightMutation.mutate({ userId, storyId });
+			console.log("Лайк успешно добавлен/удален к посту.");
+			setNotificText("Added to Highlights")
+		} catch (error) {
+			console.error("Ошибка при обновлении лайка к посту:", error);
+		}
+	};
+
 	const storyArchive = thisUser 
 	? thisUser?.storyArray?.map(story=> <div className={s.storyContainer} onMouseLeave={()=>{setHidden(null)}} onMouseOver={()=>{setHidden(story.id)}} style={{backgroundImage:`url(${story.fileURL})`}}>
-		<div className={s.storyContent1}>{story?.timeAdded}</div>
+		<div className={s.storyContent1}>{story?.timeAdded}{story?.highlight === true ? <BsHighlights/> : ""}</div>
 		
 		<div className={hidden === story.id ? `${s.activeStory} ${s.storyContent2}` : s.storyContent2}>
-			<button className={s.btn1}>Add to highlights <BsHighlights/> </button>
+			<button className={s.btn1} onClick={()=>{handleAddHighlight(story?.userId,story?.id)}}>Add to highlights <BsHighlights/> </button>
 			<button className={s.btn2}>Delete <MdDelete/></button>
 		</div> 
 		<div className={s.storyContent3}>

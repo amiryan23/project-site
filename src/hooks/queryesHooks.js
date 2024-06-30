@@ -3,7 +3,7 @@ import { fetchData,fetchUsers,fetchThisUser,fetchMusic} from './../api';
 import {likePostFunction,dislikePostFunction,savePostToFavorite,addCommentPostFunction,deleteCommentPostFunction} from './../context/comment'
 import {deletePostFunction,addPostFunction} from './../context/posts'
 import {followFunction,unfollowFunction,accpetRequestFunction,cancelRequestFunction,changeInfoUserFunction} from './../context/users'
-import {AddStoryFunction,DeleteStoryFunction,ViewStoryFunction} from './../context/story'
+import {AddStoryFunction,DeleteStoryFunction,ViewStoryFunction,AddHighlightFunction} from './../context/story'
 import {addMusicFunction} from './../context/music'
 import { useQueryClient } from 'react-query';
 
@@ -485,4 +485,30 @@ export const useViewStory = () => {
     }
     );
    return viewStoryMutation
+}
+
+
+
+
+export const useAddHighlight = () => {
+  const queryClient = useQueryClient()
+
+  const addHighlightMutation = useMutation(
+    async({userId, storyId}) => {
+      const usersArray = queryClient.getQueryData('users');
+
+      if(usersArray) {
+        return AddHighlightFunction(userId, storyId, usersArray, queryClient)
+      } else {
+        return Promise.reject("Error")
+      }
+    },
+        {
+      onSuccess: () => {
+        queryClient.invalidateQueries('users')
+        queryClient.invalidateQueries('thisUser');
+      },
+    }
+    );
+   return addHighlightMutation
 }

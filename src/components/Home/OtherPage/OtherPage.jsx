@@ -30,6 +30,8 @@ import { FaCirclePlay  } from "react-icons/fa6";
 import { FaPauseCircle } from "react-icons/fa";
 import { IoIosMusicalNotes } from "react-icons/io";
 import {isWithin24Hours} from './../../../helper/timeAdded'
+import { FaChevronCircleDown , FaChevronCircleUp } from "react-icons/fa";
+
 
 
 
@@ -47,6 +49,7 @@ const queryClient = useQueryClient();
   const [replyComment,setReplyComment] = useState(null)
   const [trackId,setTrackId] = useState(null)
   const [play,setPlay] = useState({ musicId: null, postId: null, playMusic: false })
+  const [storyHeight,setStoryHeight] = useState(false)
 
  	const likePostMutation = useLikePostMutation();
   const dislikePostMutation = useDislikePostMutation()
@@ -684,8 +687,37 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
 					{/* : <button className={s.btn1} onClick={()=>{handleFollow(selectedUser)}}><RiUserFollowFill/>Follow</button> */}
 					{/* } */}
 					{/* </span> */}
+
 				</span>
 			</div>
+			{(selectedUser?.storyArray?.some(story=> story?.highlight === true) && !selectedUser?.private ) || (selectedUser?.storyArray?.some(story=> story?.highlight === true) && !selectedUser?.userData?.followers?.includes(thisUser?.id))
+			? <div className={storyHeight ? `${s.storyContainer} ${s.activeStoryContainer}` : s.storyContainer}>
+				<div className={s.storyContent1}>
+				<span className={s.item1}>Highlights</span>
+				{storyHeight 
+					? <span className={s.item2} onClick={()=>setStoryHeight((prevStoryHeight)=>false)}><FaChevronCircleUp /></span>
+					: <span className={s.item2} onClick={()=>setStoryHeight((prevStoryHeight)=>true)}><FaChevronCircleDown /></span>
+				}
+				</div>
+				<span className={s.storyContent2}>
+			{selectedUser?.storyArray?.filter(story=> story.highlight === true).map(story=> 
+				<div className={storyHeight ? `${s.activeCont} ${s.storyCont}` : s.storyCont} onClick={()=>setStoryHeight((prevStoryHeight)=>true)}  style={{backgroundImage:`url(${story.fileURL})`}}>
+		{storyHeight ?
+		<>
+		<div className={s.storyItem1}>{story?.timeAdded}</div>
+	
+		<div className={s.storyItem2}>
+		<span className={s.item1}>{story?.storyText}</span>
+
+		</div>
+		</>
+		: ""}
+	</div>
+					
+			)}
+			</span>
+			</div>
+			: ""}
 			<div className={s.content2}>
 			 { !selectedUser?.private 
 			?
@@ -702,6 +734,7 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
 				<HiLockClosed />
 			</div> } 
 			</div>
+				}
 		</div>
 		)
 }
