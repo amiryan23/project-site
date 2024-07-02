@@ -160,7 +160,10 @@ const getNotificationText = (type) => {
 	return (
 		<div className={s.megaContainer} ref={animBlock}>
 			<div className={s.content1} ><IoMdNotifications/>{t('Notifics')}</div>
-			<div className={s.content}><button onClick={markAllNotificationsAsRead}>{t('MarkAllNotific')}<FaReadme /></button></div>
+			<div className={s.content}>
+			{thisUser?.notifications?.some(m => !m.read) ? <button onClick={markAllNotificationsAsRead}>{t('MarkAllNotific')}<FaReadme /></button>
+			: ""}
+			</div>
 			<div className={s.content2}>
 			{thisUser?.userData?.requests?.length > 0
 			? <span className={s.miniContent1}>

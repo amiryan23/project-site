@@ -491,24 +491,30 @@ export const useViewStory = () => {
 
 
 export const useAddHighlight = () => {
-  const queryClient = useQueryClient()
+  const queryClient = useQueryClient();
 
   const addHighlightMutation = useMutation(
-    async({userId, storyId}) => {
+    async ({ userId, storyId }) => {
       const usersArray = queryClient.getQueryData('users');
+      console.log('Fetched users array from cache:', usersArray);
 
-      if(usersArray) {
-        return AddHighlightFunction(userId, storyId, usersArray, queryClient)
+      if (usersArray) {
+        return AddHighlightFunction(userId, storyId, usersArray, queryClient);
       } else {
-        return Promise.reject("Error")
+        return Promise.reject("Error: Users array not found in cache");
       }
     },
-        {
+    {
       onSuccess: () => {
-        queryClient.invalidateQueries('users')
+        console.log('Mutation succeeded, invalidating queries');
+        queryClient.invalidateQueries('users');
         queryClient.invalidateQueries('thisUser');
       },
+      onError: (error) => {
+        console.error('Mutation failed:', error);
+      },
     }
-    );
-   return addHighlightMutation
-}
+  );
+
+  return addHighlightMutation;
+};

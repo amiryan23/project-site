@@ -1089,9 +1089,15 @@
 				border-radius: 50%;
 				border-top: 1px dashed rgba(183, 193, 172, 0.7);;
 				border-bottom: 1px dashed rgba(183, 193, 172, 0.7);;
-				background-size: 100% 100%;
+				background-size: cover;
 				background-repeat: no-repeat;
 				transition: 150ms linear;
+  				scrollbar-width: none; 
+  				-ms-overflow-style: none;
+  				position: relative;
+
+
+
 
 				.storyItem1{
 				width: 100%;
@@ -1108,9 +1114,53 @@
 				color: rgba(256, 256, 256, 0.3);
 				display: flex;
 				flex-direction: row;
-				justify-content: space-between;
-				padding: 15px;					
+				justify-content: flex-start;
+				padding: 5px;					
 				}
+			.storyItem3{
+				width: 100%;
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+				align-items: center;
+				gap: 10px;
+				backdrop-filter: blur(5px);
+				position: absolute;
+				top: 0;
+				bottom: 0;
+				flex: 1;
+				transition: 350ms linear;
+				opacity: 0;
+				transform: translateX(-70px);
+				border-radius: 15px;
+
+				.btn1{
+					width: 90%;
+					padding: 5px;
+					background-color: rgba(0, 0, 0, 0.6);
+					border: 2px solid rgba(256, 256, 256, 0.9);
+					color:rgba(256, 256, 256, 0.9);
+					border-radius: 25px;
+					font-weight: bold;
+					font-size: 12px;
+					display: flex;
+					flex-direction: row;
+					gap: 7px;
+					align-items: center;
+					justify-content: center;
+					cursor: pointer;
+					svg{
+						color:rgba(256, 256, 256, 0.9);
+					}
+				}
+
+			}
+
+			.activeStory{
+				opacity: 1;
+				transform: translateX(0px);
+				transition: 350ms linear;
+			}
 			}
 
 			.activeCont{

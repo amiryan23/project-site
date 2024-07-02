@@ -49,7 +49,9 @@ const ModalStory = ()=>{
 			setNotificText("Story added")
 			setTimeout(()=>{
 				setOpenStoryModal(false)
-				setFileUrl(null)},150)
+				window.location.href = "/home/profile"
+				setFileUrl(null)},3500)
+
 
   	}catch(error){
   		console.error(error)

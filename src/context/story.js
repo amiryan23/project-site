@@ -56,7 +56,9 @@ export const AddStoryFunction = async (thisUser, fileUrl , storyText ,queryClien
 
     
     const newThisUser = { ...thisUser, storyArray: thisUser.storyArray };
-    queryClient.setQueryData(['users', thisUser.id], newThisUser);
+  
+      queryClient.setQueryData('thisUser', newThisUser);
+    
 
     console.log("Новый объект успешно добавлен в Firestore.");
   } catch (error) {
@@ -141,12 +143,16 @@ export const AddHighlightFunction = async (userId, storyId, usersArray, queryCli
 
     await setDoc(doc(db, "users", userId), { storyArray: updatedStoryArray }, { merge: true });
 
-  
     const updatedUser = { ...user, storyArray: updatedStoryArray };
     const updatedUsersArray = [...usersArray];
     updatedUsersArray[userIndex] = updatedUser;
 
     queryClient.setQueryData('users', updatedUsersArray);
+
+    const thisUser = queryClient.getQueryData('thisUser');
+    if (thisUser && thisUser.id === userId) {
+      queryClient.setQueryData('thisUser', updatedUser);
+    }
 
     console.log("Toggled highlight");
   } catch (error) {

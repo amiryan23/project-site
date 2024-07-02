@@ -49,6 +49,7 @@
 			flex-direction: column;
 			justify-content: space-between;
 			overflow: hidden;
+			position: relative;
 
 			.storyContent1{
 				width: 100%;
@@ -81,6 +82,10 @@
 				transition: 350ms linear;
 				opacity: 0;
 				transform: translateX(-70px);
+				position: absolute;
+				top: 0;
+				bottom: 0;
+				border-radius: 15px;
 
 				.btn1{
 					width: 90%;

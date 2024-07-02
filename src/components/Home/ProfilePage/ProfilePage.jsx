@@ -17,7 +17,7 @@ import { MdEdit,MdDeleteForever,MdOutlineClose} from "react-icons/md";
 import { IoCopySharp } from "react-icons/io5";
 import { HiMiniLockClosed } from "react-icons/hi2";
 import {firebaseConfig,db,storage,docId} from './../../../firebase'
-import {useLikePostMutation,usePostsQuery,useDislikePostMutation,useAddCommentToPostMutation,useDeletePostMutation,useAddPostMutation,useDeleteComment} from './../../../hooks/queryesHooks'
+import {useLikePostMutation,usePostsQuery,useDislikePostMutation,useAddCommentToPostMutation,useDeletePostMutation,useAddPostMutation,useDeleteComment,useAddHighlight} from './../../../hooks/queryesHooks'
 import { useQueryClient,useQuery } from 'react-query';
 import { AiOutlineRollback } from "react-icons/ai";
 import { MdOutlineReply,MdCircle,MdBrightness1,MdDelete } from "react-icons/md";
@@ -38,7 +38,7 @@ import { FaVolumeDown ,FaVolumeMute  } from "react-icons/fa";
 import {isWithin24Hours} from './../../../helper/timeAdded'
 import { MdRestore } from "react-icons/md";
 import { FaChevronCircleDown , FaChevronCircleUp } from "react-icons/fa";
-
+import { BsHighlights } from "react-icons/bs";
 
 
 
@@ -62,6 +62,7 @@ const ProfilePage = ()=>{
 	const [trackId,setTrackId] = useState(null)
 	const [play,setPlay] = useState({ musicId: null, postId: null, playMusic: false })
 	const [storyHeight,setStoryHeight] = useState(false)
+	const [hidden,setHidden] = useState()
  
 	const likePostMutation = useLikePostMutation();
 	const dislikePostMutation = useDislikePostMutation()
@@ -69,6 +70,8 @@ const ProfilePage = ()=>{
 	const deletePostMutation = useDeletePostMutation()
 	const addPostMutation = useAddPostMutation()
 	const deleteCommentMutation = useDeleteComment()
+	const addHighlightMutation = useAddHighlight();
+
 
 		const { data: users } = useQuery('users', () => queryClient.getQueryData('users'));
 		const { data: thisUser } = useQuery('thisUser', () => queryClient.getQueryData('thisUser'));
@@ -257,6 +260,17 @@ const pauseMusic = (musicId,postId) => {
 		
  
 };
+
+	 const handleAddHighlight = async (userId, storyId) => {
+		try {
+			await addHighlightMutation.mutate({ userId, storyId });
+			console.log("Лайк успешно добавлен/удален к посту.");
+			setNotificText("Removed from Highlights")
+		} catch (error) {
+			console.error("Ошибка при обновлении лайка к посту:", error);
+		}
+	};
+
 
 		 const handleCommentChange = useCallback((postId, text) => {
 		setCommentText(prevState => ({
@@ -808,11 +822,17 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
 				</div>
 				<span className={s.storyContent2}>
 			{thisUser?.storyArray?.filter(story=> story.highlight === true).map(story=> 
-				<div className={storyHeight ? `${s.activeCont} ${s.storyCont}` : s.storyCont} onClick={()=>setStoryHeight((prevStoryHeight)=>true)}  style={{backgroundImage:`url(${story.fileURL})`}}>
+				<div className={storyHeight ? `${s.activeCont} ${s.storyCont}` : s.storyCont}
+				 onMouseLeave={()=>{setHidden(null)}} 
+				 onMouseOver={()=>{setHidden(story.id)}}
+				 onClick={()=>setStoryHeight((prevStoryHeight)=>true)}  
+				 style={{backgroundImage:`url(${story.fileURL})`}}>
 		{storyHeight ?
 		<>
 		<div className={s.storyItem1}>{story?.timeAdded}</div>
-	
+		<div className={hidden === story.id ? `${s.activeStory} ${s.storyItem3}` : s.storyItem3}>
+			<button className={s.btn1} onClick={()=>{handleAddHighlight(story?.userId,story?.id)}}>Remove from highlights <BsHighlights/> </button>
+		</div> 
 		<div className={s.storyItem2}>
 		<span className={s.item1}>{story?.storyText}</span>
 
