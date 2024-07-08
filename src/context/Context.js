@@ -140,44 +140,36 @@ localStorage.setItem('isSubscribed', 'true')
   }, []);
 
 
+
+
+
 const calculateTimeDifference = (timeAdded) => {
+  // Парсим строку времени в формате ISO в объект Date
+  const postTime = new Date(timeAdded);
 
-  const parts = timeAdded.split(/[,.: ]+/);
-  
-
-  const postTime = new Date(
-    parts[2], // год
-    parts[1] - 1, // месяц (от 0 до 11)
-    parts[0], // день
-    parts[3], // час
-    parts[4], // минуты
-    parts[5] // секунды
-  );
-
+  // Получаем текущее время
   const currentTime = new Date();
+
+  // Вычисляем разницу в миллисекундах
   const differenceInMilliseconds = currentTime - postTime;
+  
+  // Вычисляем разницу в минутах
   const differenceInMinutes = Math.floor(differenceInMilliseconds / (1000 * 60));
   
-  const thresholdMinutes = 5;
+  // Определяем разницу по времени
   if (differenceInMinutes < 1) {
-        // Менее минуты назад
-        return t("Now");
-    } else if (differenceInMinutes < 60) {
-        // Менее часа назад
-        return `${differenceInMinutes} ${t("Minutes")} ${t("Ago")}`;
-    } else if (differenceInMinutes < 24 * 60) {
-        // Менее суток назад
-        const hours = Math.floor(differenceInMinutes / 60);
-        return `${hours} ${t("Hour")}${hours > 1 ? t("s") : ""} ${t("Ago")}`;
-    } else if (differenceInMinutes < 30 * 24 * 60) {
-        // Менее месяца назад
-        const days = Math.floor(differenceInMinutes / (24 * 60));
-        return `${days} ${days > 1 ? t('Days') : t('Day')} ${t("Ago")}`;
-    } else {
-        // Более месяца назад
-        // return `${t("Month")} ${t("Ago")}`;
-        return timeAdded
-    }
+    return t("Now");
+  } else if (differenceInMinutes < 60) {
+    return `${differenceInMinutes} ${t("Minutes")} ${t("Ago")}`;
+  } else if (differenceInMinutes < 24 * 60) {
+    const hours = Math.floor(differenceInMinutes / 60);
+    return `${hours} ${t("Hour")}${hours > 1 ? t("s") : ""} ${t("Ago")}`;
+  } else if (differenceInMinutes < 30 * 24 * 60) {
+    const days = Math.floor(differenceInMinutes / (24 * 60));
+    return `${days} ${days > 1 ? t('Days') : t('Day')} ${t("Ago")}`;
+  } else {
+    return timeAdded; // Если прошло больше месяца
+  }
 };
 
 

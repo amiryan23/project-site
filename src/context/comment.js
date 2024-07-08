@@ -125,6 +125,9 @@ export const savePostToFavorite = async (postId,userId,arrayPosts,queryClient) =
 export const addCommentPostFunction = async (postId, userId, thisUser , commentText  , replyComment , file ,arrayPosts, queryClient) => {
     try {
 
+
+        const currentDate = new Date();
+        const utcTimeAdded = currentDate.toISOString();
         
         if(arrayPosts){
         const postIndex = arrayPosts.findIndex(post => post.id === postId);
@@ -176,7 +179,7 @@ export const addCommentPostFunction = async (postId, userId, thisUser , commentT
             userName:thisUser.username,
             commentText: commentText ,
             imgUrl: `https://firebasestorage.googleapis.com/v0/b/${firebaseConfig.storageBucket}/o/imageComments%2F${encodeURIComponent(uniqueFilename)}?alt=media`  ,
-            timeAdded: new Date().toLocaleString() ,
+            timeAdded: utcTimeAdded ,
             replyComment:thisRepleyPost
             };
 
@@ -210,7 +213,7 @@ export const addCommentPostFunction = async (postId, userId, thisUser , commentT
             userName:thisUser.username,
             commentText: commentText ,
             imgUrl:"",
-            timeAdded: new Date().toLocaleString() ,
+            timeAdded: utcTimeAdded ,
             replyComment:thisRepleyPost
             };
 

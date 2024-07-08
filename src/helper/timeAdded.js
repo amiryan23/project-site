@@ -1,20 +1,15 @@
 
-
 export const isWithin24Hours = (timeAdded) => {
   const millisecondsIn24Hours = 24 * 60 * 60 * 1000; 
-  if(timeAdded){
-  const [date, time] = timeAdded?.split(', ');
-  const [day, month, year] = date?.split('.');
+  
+  if (timeAdded) {
+    const timeAddedDate = new Date(timeAdded); // Создаем объект Date из строки в формате ISO 8601
+    const currentTime = new Date(); // Текущее время в локальной временной зоне
 
-  const formattedDate = `${year}-${month}-${day}T${time}`;
+    const timeDifference = currentTime - timeAddedDate; // Разница во времени в миллисекундах
 
-  const timeAddedDate = new Date(formattedDate); 
-  const currentTime = new Date(); 
+    return timeDifference < millisecondsIn24Hours;
+  }
 
-  const timeDifference = currentTime - timeAddedDate;
-
-  // console.log(`timeAdded: ${timeAdded}, formattedDate: ${formattedDate}, timeDifference: ${timeDifference}, isWithin24Hours: ${timeDifference < millisecondsIn24Hours}`);
-
-  return timeDifference < millisecondsIn24Hours;
-}
+  return false;
 };

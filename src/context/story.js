@@ -7,7 +7,9 @@ import Resizer from 'react-image-file-resizer';
 
 export const AddStoryFunction = async (thisUser, fileUrl , storyText ,queryClient) => {
   try {
-          
+         
+        const currentDate = new Date();
+        const utcTimeAdded = currentDate.toISOString(); 
           
        const file = fileUrl?.file;
 
@@ -44,7 +46,7 @@ export const AddStoryFunction = async (thisUser, fileUrl , storyText ,queryClien
       id: new Date().getTime(),
       userId: thisUser?.id,
       fileURL: fileUrl ? downloadURL : false,
-      timeAdded: new Date().toLocaleString(),
+      timeAdded: utcTimeAdded,
       storyText:storyText
     };
 
