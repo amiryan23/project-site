@@ -1292,8 +1292,17 @@
 				.postBlock4{
 					opacity: 0.6;
 					color: #999;
-					font-size: 9px;
+					font-size: 7px;
 					font-weight: bold;
+				}
+
+				.postBlock5{
+					svg{
+					opacity: 0.7;
+					color: whitesmoke;
+					font-size: 18px;
+					font-weight: bold;						
+					}
 				}
 
 				.postSettings{
@@ -1406,6 +1415,30 @@
 					background-color: rgba(256, 256, 256, 0.5);
 					color: #222;
 				}
+
+				.miniItem4{
+					color: rgba(256, 256, 256, 0.6);
+					display: flex;
+					flex-direction: row;
+					align-items: center;
+					padding: 13px;
+					gap: 5px;
+					font-weight: bold;
+					border-bottom:1px solid #999;
+					cursor:pointer;
+					background-color:rgba(256, 256, 256, 0.1);
+					
+
+
+					svg{
+						font-size: 23px;
+					}
+				}
+
+				.miniItem4:hover{
+					background-color: rgba(256, 256, 256, 0.5);
+					color: #222;
+				}			
 				
 				
 			}
@@ -2121,7 +2154,8 @@
 .animBlock{
 	opacity: 1;
 	transform: translateY(0px);
-	transition: 500ms linear;
+	transition: 600ms ease-out;
+
 }
 
 

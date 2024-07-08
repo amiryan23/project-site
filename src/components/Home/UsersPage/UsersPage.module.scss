@@ -265,7 +265,7 @@
 .animBlock{
 	opacity: 1;
 	transform: translateY(0px);
-	transition: 500ms linear;
+	transition: 600ms ease-out;
 }
 
 @media screen and (max-width:768px) {

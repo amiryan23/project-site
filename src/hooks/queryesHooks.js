@@ -1,7 +1,7 @@
 import { useQuery,useMutation } from 'react-query';
 import { fetchData,fetchUsers,fetchThisUser,fetchMusic} from './../api';
 import {likePostFunction,dislikePostFunction,savePostToFavorite,addCommentPostFunction,deleteCommentPostFunction} from './../context/comment'
-import {deletePostFunction,addPostFunction} from './../context/posts'
+import {deletePostFunction,addPostFunction,pinPostFunction} from './../context/posts'
 import {followFunction,unfollowFunction,accpetRequestFunction,cancelRequestFunction,changeInfoUserFunction} from './../context/users'
 import {AddStoryFunction,DeleteStoryFunction,ViewStoryFunction,AddHighlightFunction} from './../context/story'
 import {addMusicFunction} from './../context/music'
@@ -13,7 +13,7 @@ export const usePostsQuery = () => {
     refetchOnMount: false,
     refetchOnWindowFocus: false,
     refetchInterval: 120000,
-    retry:false,
+    retry:1,
 
   });
 
@@ -26,7 +26,7 @@ export const useUsersQuery = () => {
     refetchOnMount: false,
     refetchOnWindowFocus: false,
     refetchInterval: 120000,
-    retry:false,
+    retry:1,
 
   });
 
@@ -38,7 +38,7 @@ export const useThisUserQuerry = () => {
     refetchOnMount: false,
     refetchOnWindowFocus: false,
     refetchInterval: 120000,
-    retry:false,
+    retry:1,
 
   });
 
@@ -518,3 +518,34 @@ export const useAddHighlight = () => {
 
   return addHighlightMutation;
 };
+
+
+
+
+  export const usePinPost = () => {
+  const queryClient = useQueryClient();
+
+  const pinPostMutation= useMutation(
+    async ({ postIdToPin,thisUser}) => {
+      const arrayPosts = queryClient.getQueryData('arrayPosts');
+
+      if (arrayPosts) {
+        return pinPostFunction(postIdToPin,thisUser,arrayPosts, queryClient);
+      } else {
+        return Promise.reject("Массив постов не определен.");
+      }
+    },
+    {
+      onSuccess: () => {
+       
+        queryClient.invalidateQueries('arrayPosts');
+      },
+    }
+  );
+
+  return pinPostMutation;
+};
+
+
+
+

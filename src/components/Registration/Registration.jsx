@@ -194,7 +194,7 @@ useEffect(()=>{
                 <span><Link >{t('Rules')}</Link></span>
             </div>
             <div className={s.content4}>
-            <span>{t('acctext1')}<Link to="/login">{t('login')}</Link></span>
+            <span>{t('acctext1')}<Link to="/">{t('login')}</Link></span>
                     <button type="submit">{t('signUp')}</button>
                     <p style={{color:"red",textAlign:"center"}}>{error}</p>
             </div>

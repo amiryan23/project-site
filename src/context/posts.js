@@ -118,3 +118,28 @@ export   const deletePostFunction = async (idToDelete,arrayPosts,queryClient) =>
 };
 
 
+export const pinPostFunction = async (postIdToPin,thisUser,arrayPosts, queryClient) => {
+    try {
+        
+        const newArrayPosts = arrayPosts
+        .map(post => 
+            post.userId === thisUser.id && post.id === postIdToPin
+                ? { ...post, pinned: post.id === postIdToPin } 
+                : { ...post, pinned:false}
+        );
+
+        
+        queryClient.setQueryData('arrayPosts', newArrayPosts);
+
+
+        await updateDoc(doc(db, "posts", docId), { arrayPosts: newArrayPosts });
+
+        console.log("Пост успешно закреплен.");
+    } catch (error) {
+        console.error("Ошибка при закреплении поста:", error);
+    }
+};
+
+
+
+

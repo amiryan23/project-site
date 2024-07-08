@@ -37,6 +37,7 @@ const SavePage = React.lazy(()=>import('./SavePage/SavePage'))
 const NotificationPage = React.lazy(()=>import('./NotificationPage/NotificationPage'))
 const AddMusicPage = React.lazy(()=>import('./MusicPage/AddMusicPage/AddMusicPage'))
 const ArchivePage = React.lazy(()=>import('./ArchivePage/ArchivePage'))
+// const ChatGPT = React.lazy(()=>import('./../ChatGPT/ChatGPT'))
 
 
 
@@ -227,6 +228,7 @@ const topUsersList = sortedUsers?.map((user,index) => (
             <Route path="notification" element={<NotificationPage />} />
             <Route path="music/add" element={<AddMusicPage />} />
             <Route path="archive" element={<ArchivePage />} />
+            {/* <Route path="chatgpt" element={<ChatGPT />} /> */}
 
            
 

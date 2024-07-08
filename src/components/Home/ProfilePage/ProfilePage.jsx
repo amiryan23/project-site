@@ -4,11 +4,10 @@ import { MdOutlineAddPhotoAlternate } from "react-icons/md";
 import { MdOutlineAttachFile } from "react-icons/md";
 import { GrAttachment } from "react-icons/gr";
 import { HiMiniPlusSmall } from "react-icons/hi2";
-import { BsThreeDotsVertical } from "react-icons/bs";
+import { BsThreeDotsVertical , BsHighlights } from "react-icons/bs";
 import {Link} from 'react-router-dom'
 import {  collection, doc, setDoc, getDoc , updateDoc } from "firebase/firestore";
 import { getStorage,ref, uploadBytes } from "firebase/storage";
-import { FaHeart,FaHeartBroken , FaComment } from "react-icons/fa";
 import { MyContext } from './../../../context/Context';
 import { RiSendPlaneFill,RiCloseLine } from "react-icons/ri";
 import { IoSettingsSharp } from "react-icons/io5";
@@ -17,7 +16,7 @@ import { MdEdit,MdDeleteForever,MdOutlineClose} from "react-icons/md";
 import { IoCopySharp } from "react-icons/io5";
 import { HiMiniLockClosed } from "react-icons/hi2";
 import {firebaseConfig,db,storage,docId} from './../../../firebase'
-import {useLikePostMutation,usePostsQuery,useDislikePostMutation,useAddCommentToPostMutation,useDeletePostMutation,useAddPostMutation,useDeleteComment,useAddHighlight} from './../../../hooks/queryesHooks'
+import {useLikePostMutation,usePostsQuery,useDislikePostMutation,useAddCommentToPostMutation,useDeletePostMutation,useAddPostMutation,useDeleteComment,useAddHighlight,usePinPost} from './../../../hooks/queryesHooks'
 import { useQueryClient,useQuery } from 'react-query';
 import { AiOutlineRollback } from "react-icons/ai";
 import { MdOutlineReply,MdCircle,MdBrightness1,MdDelete } from "react-icons/md";
@@ -30,15 +29,16 @@ import { RiUserAddFill } from "react-icons/ri";
 import { TbUserSearch } from "react-icons/tb";
 import { HiMiniPlusCircle } from "react-icons/hi2";
 import { FaUserTag } from "react-icons/fa6";
-import { TbMusicPlus,TbMusicSearch } from "react-icons/tb";
+import { TbMusicPlus,TbMusicSearch,TbPin , TbPinnedOff } from "react-icons/tb";
 import { FaCirclePlay  } from "react-icons/fa6";
 import { FaPauseCircle } from "react-icons/fa";
 import { IoIosMusicalNotes,IoIosAddCircle } from "react-icons/io";
-import { FaVolumeDown ,FaVolumeMute  } from "react-icons/fa";
+import { FaHeart, FaHeartBroken , FaComment,FaVolumeDown ,FaVolumeMute,FaChevronCircleDown , FaChevronCircleUp  } from "react-icons/fa";
 import {isWithin24Hours} from './../../../helper/timeAdded'
 import { MdRestore } from "react-icons/md";
-import { FaChevronCircleDown , FaChevronCircleUp } from "react-icons/fa";
-import { BsHighlights } from "react-icons/bs";
+
+
+
 
 
 
@@ -71,6 +71,7 @@ const ProfilePage = ()=>{
 	const addPostMutation = useAddPostMutation()
 	const deleteCommentMutation = useDeleteComment()
 	const addHighlightMutation = useAddHighlight();
+	const pinPostMutation = usePinPost()
 
 
 		const { data: users } = useQuery('users', () => queryClient.getQueryData('users'));
@@ -235,6 +236,18 @@ let timer2;
 		}
 	}
 
+
+	const handlePinPost = async (postIdToPin,thisUser) => {
+		try{
+
+		await pinPostMutation.mutate({postIdToPin,thisUser})
+			setNotificText("This post pinned")
+
+		}catch (error){
+			console.error("Ошибка ",error)
+		}
+	}	
+
 const playMusic = (musicId,postId,musicSrc) => {
 	setSrcMusicId((prevMusicId)=>null)
 	setTimeout(()=>{setSrcMusicId((prevMusicId)=>musicSrc)},10)
@@ -333,7 +346,7 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
 
 	const postThisUser = arrayPosts 
 	? arrayPosts
-	.filter(m => m.userId === thisUser?.id) 
+	.filter(m => m.userId === thisUser?.id && m.pinned !== true) 
 		.map(m => 		<div className={s.postMegaContent} ref={postRef} key={m.id} >
 
 					<div className={s.postMiniContent1}>
@@ -361,6 +374,9 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
 								setOpenSettings(null)
 								
 							}}><IoCopySharp/>{t("CopyLink")}</span>
+							{/* <span className={s.miniItem4} onClick={()=>{ */}
+							{/* 	handlePinPost(m.id,thisUser) */}
+							{/* }}><TbPin/>Pin</span> */}
 							<span className={s.miniItem3} onClick={()=>{
 								handleDeleteItem(m.id)
 								
@@ -590,6 +606,269 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
 	: <MiniLoader />
 
 
+// 	const pinnedPost = arrayPosts
+// 	? arrayPosts
+// 	.filter(m=> m.pinned === true)
+// 		.map(m => 		<div className={s.postMegaContent} ref={postRef} key={m.id} >
+// 
+// 					<div className={s.postMiniContent1}>
+// 						<span className={s.postBlock1}>
+// 							<img src={thisUser?.photo?.placed ? thisUser?.photo?.placed : thisUser?.photo?.default} alt="" 
+// 							className={users?.find(user=> user.id === thisUser?.id)?.storyArray?.some(story => isWithin24Hours(story?.timeAdded)) ? users?.find(user=> user.id === thisUser?.id)?.storyArray[users?.find(user => user.id === thisUser?.id)?.storyArray.length - 1]?.view?.includes(thisUser?.id) ? s.viewedstory : s.activeStory : ""}/>
+// 							<span>{thisUser.onlineStatus  ? <MdCircle title="Online" size="11" color="limegreen"/> : <MdBrightness1 title="Offline" size="11" color="rgba(256,256,256,0.8)"/>}</span>
+// 						</span>
+// 						<span className={s.postBlock2}>
+// 							{thisUser?.username}
+// 						</span>
+// 						<span className={s.postBlock3}>
+// 							{calculateTimeDifference(m.timeAdded)}
+// 						</span>
+// 						<span className={s.postBlock4}>
+// 							{m.postChanged ?  `( ${t('Changed')} )` : ""}
+// 						</span>
+// 						<span className={s.postBlock5}>
+// 							<TbPin />
+// 						</span>
+// 						<span className={s.postSettings} onMouseLeave={()=>{setOpenSettings(null)}}>
+// 						<span onClick={()=>{ setOpenSettings(m.id) }} className={s.item1}><BsThreeDotsVertical /></span>
+// 						{openSettings === m.id 
+// 						? <span className={s.item2} >
+// 							<Link to={`/home/profile/edit/post/${m.id}`} className={s.miniItem1}><MdEdit/><span>{t("Edit")}</span></Link>
+// 							<span className={s.miniItem2} onClick={()=>{
+// 								copyToClipboard(`https://cospulse.netlify.app/home/comment/post/${m.id}`)
+// 								setOpenSettings(null)
+// 								
+// 							}}><IoCopySharp/>{t("CopyLink")}</span>
+// 							{/* <span className={s.miniItem4} onClick={()=>{ */}
+// 							{/* 	handlePinPost(m.id,thisUser) */}
+// 							{/* 	setOpenSettings(null) */}
+// 							{/* }}><TbPin/>Pin</span> */}
+// 							<span className={s.miniItem3} onClick={()=>{
+// 								handleDeleteItem(m.id)
+// 								
+// 
+// 							}}><MdDeleteForever/><span>{t("Delete")}</span></span>
+// 						</span> 
+// 						: "" }
+// 					</span>
+// 					</div>
+// 					<div className={s.postMiniContent2}>
+// 					{m.trackId !== null && m.trackId !== undefined 
+// 					? <div className={s.musicContent} >
+// 					<span className={s.musicItem1}><IoIosMusicalNotes />{musicsArray?.find(music => music.id === m.trackId)?.trackName?.length > 35 ? `${musicsArray?.find(music => music.id === m.trackId)?.trackName?.slice(0,35)}...` : musicsArray?.find(music => music.id === m.trackId)?.trackName}</span>
+// 					<span className={s.musicItem2}>		
+// 					{play?.musicId === musicsArray?.find(music => music.id === m.trackId)?.id && play?.playMusic === true && play?.postId === m.id
+// 		? <span onClick={()=>{pauseMusic(musicsArray?.find(music => music.id === m.trackId).id,m.id)}}><FaPauseCircle /> </span>
+// 		: <span onClick={()=>{playMusic(musicsArray?.find(music => music.id === m.trackId).id,m.id,musicsArray?.find(music => music.id === m.trackId).urlTrack)}}><FaCirclePlay /> </span> }</span>
+// 					</div>
+// 					: ""}
+// 						{m.forwardPost !== undefined &&  m.forwardPost !== "" 
+// 					
+// 					
+// 				? arrayPosts?.find(post => post.id === m.forwardPost.fwPostid) 
+// 				? <Link className={s.fwPost} to={`/home/comment/post/${m.forwardPost.fwPostid}`}>
+// 					<span className={s.fwItem1}>
+// 					<span className={s.miniFwitem1}>
+// 					{t("Forward")}
+// 					</span>
+// 					<Link to={`/home/user/profile/${arrayPosts?.find(post => post.id === m.forwardPost.fwPostid)?.userId ? arrayPosts?.find(post => post.id === m.forwardPost.fwPostid)?.userId : ""}`} className={s.miniFwitem2}>
+// 					{m.forwardPost?.fwPostUser}
+// 					</Link>
+// 
+// 					</span>
+// 					{m.forwardPost?.fwPostImage 
+// 					? <span className={s.fwItem2}>
+// 					<img src={m.forwardPost?.fwPostImage} alt="" /> 
+// 					</span> 
+// 					: ""}
+// 					{m.forwardPost?.fwPosttext 
+// 					? <span className={s.fwItem3}>
+// 						{m.forwardPost?.fwPosttext }
+// 						</span> 
+// 					: "" }
+// 				</Link>
+// 				: <div className={s.deletedPost}>{t('ThisPostDeleted')}</div>
+// 				: "" }
+// 						{m.imageURL 
+// 						? <span className={s.item1}><img src={m.imageURL ? m.imageURL : <MiniLoader />} alt="" /></span>
+// 						: "" }
+// 						{m.postText 
+// 						? <span className={s.item2}>
+// 						{parseTextWithLinks(m.postText)}
+// 						</span>
+// 						: "" }
+// 						{m.taggedUser !== undefined && m.taggedUser !== null 
+// 						? <Link to={`/home/user/profile/${users?.find(user=> user.id === m.taggedUser).id}`} className={s.taggedUserContainer}>
+// 							
+// 							<FaUserTag /> 
+// 							@{users?.find(user=> user.id === m.taggedUser).username}
+// 							
+// 							</Link>
+// 							: ""}
+// 					</div>
+// 					<div className={s.postMiniContent3}>
+// 						{m.likes.includes(thisUser?.id) 
+// 						? <span onClick={()=>{handleLikePost(m.id,thisUser?.id)}}>
+// 						<FaHeart title="Like" color="whitesmoke"/>
+// 						{Array.isArray(m.likes) ? m.likes.length : 0}
+// 						</span>
+// 						:<span onClick={()=>{handleLikePost(m.id,thisUser?.id)}}>
+// 						<FaHeart title="Like" />
+// 						{Array.isArray(m.likes) ? m.likes.length : 0}
+// 						</span> 
+// 						}
+// 						{m.dislikes.includes(thisUser?.id) 
+// 						?  <span onClick={()=>{handleDislikePost(m.id,thisUser?.id)}}>
+// 						<FaHeartBroken title="Dislike" color="whitesmoke"/>
+// 						{Array.isArray(m.dislikes) ? m.dislikes.length : 0}
+// 						</span> 
+// 						: <span onClick={()=>{handleDislikePost(m.id,thisUser?.id)}}>
+// 						<FaHeartBroken title="Dislike"/>
+// 						{Array.isArray(m.dislikes) ? m.dislikes.length : 0}
+// 						</span> 
+// 						}
+// 						{!m.privateComment 
+// 						?<Link to={`/home/comment/post/${m.id}`}>
+// 							<span><FaComment title="Comments"/>{m.commentArray.length}</span>
+// 						</Link>
+// 						:
+// 							<span><FaComment title="Comments"/><HiMiniLockClosed color="#888" size="15"/></span>
+// 						 }
+// 					</div>
+// 					<div className={s.postMiniContent4}>
+// 						{!m.privateComment 
+// 						? <div className={s.postCommentBlock1}>
+// 							{m.commentArray.length !== 0
+// 							?  m.commentArray.map(comment => (
+// 									<div key={comment.id} className={s.Comment}>
+// 										<div className={s.Block1}>
+// 											<span className={s.item}>
+// 											 <Link to={thisUser?.id !== comment.userId ? `/home/user/profile/${comment.userId}` : "/home/profile"} >
+// 											 <img src={users?.find(user => user.id === comment.userId).photo?.placed  || users?.find(user => user?.id === comment.userId).photo?.default } alt="" 
+// 											  className={users?.find(user=> user.id === comment.userId)?.storyArray?.some(story => isWithin24Hours(story?.timeAdded)) ? users?.find(user=> user.id === comment.userId)?.storyArray[users?.find(user => user.id === comment.userId)?.storyArray.length - 1]?.view?.includes(thisUser?.id) ? s.viewedstory : s.activeStory : ""}   /></Link>
+// 											 <span>
+// 													{
+// 														comment.userId === thisUser?.id
+// 														? (
+// 															thisUser?.onlineStatus
+// 															? <MdCircle title="Online" size="11" color="limegreen"/>
+// 															: <MdBrightness1 title="Offline" size="11" color="rgba(256,256,256,0.8)"/>
+// 														)
+// 														: (
+// 															users?.filter(user => user.id !== thisUser?.id)?.find(user => user.id === comment.userId)?.onlineStatus
+// 															? <MdCircle title="Online" size="11" color="limegreen"/>
+// 															: <MdBrightness1 title="Offline" size="11" color="rgba(256,256,256,0.8)"/>
+// 														)
+// 													}
+// 											 </span>
+// 											</span>
+// 										</div>
+// 										<div className={s.Block2}>
+// 											<span className={s.item1}>
+// 												<span className={s.miniItem1}>{users?.find(user => user.id === comment.userId).username || "Deleted"}</span>
+// 												<span className={s.miniItem2}>{calculateTimeDifference(comment.timeAdded)}</span>
+// 
+// 											</span>
+// 											<span className={s.item2}>
+// 											{comment.replyComment !== undefined &&  comment.replyComment !== ""
+// 												?	<div className={s.miniItem1}>
+// 													<span className={s.miniBlock1}>
+// 														{users?.find(user => user.id === comment.replyComment.userId).username || ""}
+// 													</span>
+// 													<span className={s.miniBlock2}>
+// 														{comment.replyComment.commentText}
+// 													</span>
+// 												</div>
+// 												: "" }
+// 												{comment.imgUrl !== undefined && comment.imgUrl !== "" ? 
+// 												<div className={s.miniItem}>
+// 													<img src={comment.imgUrl} alt="" width="100px"/>
+// 												</div>
+// 												: ""}
+// 												<div className={s.miniItem2}>
+// 												{comment.commentText}
+// 												</div>
+// 											</span>
+// 										</div>
+// 									 <div className={s.Block3} >
+// 										<button onClick={()=>{ handleReplyComment(m.id,comment)}}><MdOutlineReply title="reply" /></button>
+// 										<button onClick={()=>{handleDeleteComment(m.id,comment.id)}}>	<MdDelete title="delete"/> </button>
+// 										</div>
+// 									 </div>
+// 								))
+// 							.slice(m.commentArray.length - 2,m.commentArray.length )
+// 							: <div className={s.noComment}>
+// 								{t('NоComments')}
+// 							</div>}
+// 						</div>
+// 						: <div className={s.privateComment}>
+// 								<div className={s.item}>{t("ClosedComment")}<HiMiniLockClosed color="#999" size="52"/></div>
+// 							</div> }
+// 
+// 							{replyComment !== null && replyComment[m.id] ? 
+// 							<div className={s.replyContainer} ref={replyCommentRef}>
+// 							<div className={s.replyMegaContent1}>
+// 							<div className={s.replyContent1}>
+// 								{t('inReply')} {users?.find(user => user.id === replyComment[m.id]?.userId).username}
+// 							</div>
+// 							<div className={s.replyContent2} onClick={()=>{
+// 								localStorage.removeItem("thisComment")
+// 								setReplyComment(null)
+// 							}}>
+// 								<MdOutlineClose />
+// 							</div>
+// 							</div>
+// 							<div className={s.replyMegaContent2}>
+// 								{replyComment[m.id]?.commentText}
+// 							</div>
+// 							</div>
+// 							:"" }
+// 							{fileUrls[m.id]?.url &&
+// 							<div className={s.imgContainer}>
+// 							 <img src={fileUrls[m.id]?.url} alt="Preview" width="100px" /> 
+// 							 <span onClick={() => {
+// 								 setFileUrls(prevFileUrls => {
+// 									 const updatedFileUrl = { ...prevFileUrls };
+// 									 delete updatedFileUrl[m.id];
+// 									 return updatedFileUrl;
+// 									});
+// 								}}>
+// 							 <MdOutlineClose />
+// 							 </span>
+// 							 </div>
+// 							 }
+// 
+// 						<div className={s.postCommentBlock2}>
+// 							<span className={s.postCommentItem1}><img title={thisUser?.username} src={thisUser?.photo?.placed ? thisUser?.photo?.placed  : thisUser?.photo?.default } alt="" /></span>
+// 							<span className={s.postCommentItem2}>
+// 							{!m.privateComment 
+// 							? <textarea value={commentText[m.id] || ""} onChange={(e)=>{handleCommentChange(m.id,e.target.value)}} type="text" placeholder={t('AddComment')}/>
+// 							: <textarea value={commentText[m.id] || ""}  disabled="true" onChange={(e)=>{handleCommentChange(m.id,e.target.value)}} type="text" placeholder="..."/>}
+// 							</span>
+// 							{!m.privateComment 
+// 							? <span className={s.postCommentItem3}>
+// 							<input  id={`fileUrl-${[m.id]}`} type="file" onChange={(e)=>{handleFileChangeComment(e,m.id)}}  />
+// 							<label htmlFor={`fileUrl-${[m.id]}`} className={s.item1}><IoMdPhotos/></label>
+// 							<span  onClick={()=>{
+// 								addCommentToPost(m.id,thisUser?.id,thisUser,commentText[m.id],replyComment,fileUrls[m.id]?.file)
+// 								 setFileUrls(prevFileUrls => {
+// 									 const updatedFileUrl = { ...prevFileUrls };
+// 									 delete updatedFileUrl[m.id];
+// 									 return updatedFileUrl;
+// 									});
+// 							}} className={s.item2}><RiSendPlaneFill title="Send"/></span>
+// 							</span>
+// 							: <span className={s.postCommentItem3}  style={{opacity:"0.5"}}>
+// 							<span className={s.item1}><IoMdPhotos/></span>
+// 							<span className={s.item2}><RiSendPlaneFill  title="Send"/></span>
+// 							</span> 
+// 							}	
+// 						</div>
+// 
+// 					</div>
+// 
+// 				</div>)
+// : ""
 
 	return (
 
@@ -846,8 +1125,9 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
 			</div>
 			: ""}
 			<div className={s.content3}>
+			{/* {pinnedPost} */}
 			{arrayPosts 
-			? postThisUser.length > 0 ? postThisUser.reverse() : <div className={s.noPost}>{t('NoPosts')}</div>
+			? postThisUser.length > 0  ? postThisUser.reverse() : <div className={s.noPost}>{t('NoPosts')}</div>
 			: <MiniLoader />}
 			</div>
 			

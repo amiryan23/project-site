@@ -6,7 +6,7 @@ import { getAuth , onAuthStateChanged } from "firebase/auth";
 // import { getAnalytics } from "firebase/analytics";
 import {auth,db,storage,docId,updatesDocId} from './../firebase'
 import {useQuery,useQueryClient} from 'react-query'
-import {usePostsQuery,useUsersQuery,useThisUserQuerry,useMusicsQuery} from './../hooks/queryesHooks';
+import {usePostsQuery,useUsersQuery,useThisUserQuerry,useMusicsQuery,restorePostsFromCache} from './../hooks/queryesHooks';
 import { useTranslation } from 'react-i18next';
 
 
