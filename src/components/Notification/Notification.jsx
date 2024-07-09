@@ -38,7 +38,7 @@ useEffect(()=>{
     if (widthTimer > 0 && notificText) {
       interval = setInterval(() => {
         setWidthTimer((prevWidthTimer) => prevWidthTimer - 1);
-      }, 24); // Adjust the decrement and interval as needed
+      }, 24); 
     }
 
     if(!notificText){

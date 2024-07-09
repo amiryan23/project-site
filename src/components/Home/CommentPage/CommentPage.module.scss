@@ -24,8 +24,11 @@
 		.postMegaContent {
 			width: 100%;
 			min-height: 100px;
-			border-top: 2px solid rgba(256, 256, 256, 0.9);
-			// border-bottom: 1px solid rgba(256, 256, 256, 0.9);
+			border-top:5px solid rgba(60, 60, 60, 0.2);
+			border-bottom:5px solid rgba(60, 60, 60, 0.2);
+			background-color: rgba(256, 256, 256, 0.04);
+			margin-bottom: 5px;
+			border-radius: 13px;
 			
 			display:flex;
 			flex-direction:column;

@@ -8,6 +8,8 @@ import {Link} from 'react-router-dom'
 import MiniLoader from './../../MiniLoader/MiniLoader'
 import { useFollowMutation , useUnfollowMutation  } from './../../../hooks/queryesHooks';
 import { useQueryClient,useQuery } from 'react-query';
+import { AiOutlineRollback } from "react-icons/ai";
+
 
 
 
@@ -112,7 +114,10 @@ setActiveLink("/users")
 	return (
 
 		<div className={s.megaContainer} ref={animBlock}>
-			<div className={s.content1}>{t('SearchUsers')}</div>
+			<div className={s.content1}>
+					<span>
+		<button onClick={() => window.history.back(-1)}><AiOutlineRollback size="30" color="whitesmoke"/></button>{t('SearchUsers')}
+		</span></div>
 			<div className={s.content2}>
 				<TbUserSearch/><input value={search} onChange={(e)=>{setSearch(e.target.value)}} placeholder="Search user..." type="search" />
 			</div>

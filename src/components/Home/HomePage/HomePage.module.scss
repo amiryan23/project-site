@@ -21,13 +21,16 @@
 			display: flex;
 			flex-direction: column;
 			gap: 15px;
-			margin:25px 0px 0px 25px;
+			margin:25px 0px 0px 0px;
 
 
 			.miniItem1{
 			color: whitesmoke;
 			font-size: 30px;
 			font-weight: bold;
+			border-bottom: 1px solid whitesmoke;
+			padding-left: 15px;
+			padding-bottom: 10px;
 			
 			}
 
@@ -40,6 +43,7 @@
 			justify-content: flex-start;
 			align-items: center;
 			padding: 10px;
+
 
 			button{
 				min-width: 100px;
@@ -70,9 +74,11 @@
 		.postMegaContent {
 			width: 100%;
 			min-height: 100px;
-			border-top: 2px solid rgba(60, 60, 60, 0.2);
-			// border-bottom: 1px solid rgba(256, 256, 256, 0.9);
-			// padding: 25px ;
+			border-top:5px solid rgba(60, 60, 60, 0.2);
+			border-bottom:5px solid rgba(60, 60, 60, 0.2);
+			background-color: rgba(256, 256, 256, 0.04);
+			margin-bottom: 5px;
+			border-radius: 13px;
 			display:flex;
 			flex-direction:column;
 			gap:15px;
@@ -924,6 +930,7 @@
 
 
 
+
 				button{
 					width: 20%;
 					padding: 5px;
@@ -992,7 +999,7 @@
 		.megaContent{
 			
 			.content1{
-				margin:10px;
+				margin-top:10px;
 				font-size: 25px;
 			}
 			
