@@ -6,12 +6,16 @@ import { doc, updateDoc ,arrayUnion  } from "firebase/firestore";
 
 export const addNotificationToUser = async (targetUserId,userId,postId,type ) => {
   try {
+
+            const currentDate = new Date();
+        const utcTimeAdded = currentDate.toISOString(); 
+        
     const userDocRef = doc(db, "users", targetUserId);
     const notification = {
       type:type,
       fromUser:userId,
       postId:postId,
-      timestamp: new Date().toLocaleString(),
+      timestamp: utcTimeAdded,
       read: false
     };
     await updateDoc(userDocRef, {

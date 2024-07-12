@@ -161,6 +161,7 @@
         opacity: 0;
         transform:translateX(-250px);
         transition: 500ms linear;
+        overflow-y: scroll;
 
     .mobileContent1 {
           max-width: 180px;
@@ -281,6 +282,77 @@
             cursor: pointer;
             font-weight: bold;
             color: whitesmoke;
+                }
+            }
+        }
+
+        .block3{
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            border-top:3px solid whitesmoke;
+            color: whitesmoke;
+            font-size: 12px ;
+            font-weight: bold;
+            padding: 5px;
+            align-items: center;
+
+            .item1{
+                padding: 5px;
+                border-bottom: 1px solid rgba(256, 256, 256, 0.7);
+            }
+
+            .topUserContainer {
+                width: 120%;
+                display: flex;
+                flex-direction: row;
+                justify-content: space-evenly;
+                gap: 10px;
+                align-items: center;
+                border-bottom: 1px solid rgba(256, 256, 256, 0.1);
+                border-radius: 13px;
+                padding: 5px;
+                text-decoration: none;
+
+                
+
+                .miniItem1{
+                    text-decoration: none;
+                    color: rgba(256, 256, 256, 0.5);
+                    display: flex;
+                    flex-direction: row;
+                    align-items: flex-end;
+                    gap: 3px;
+
+                    img{
+                        width: 30px;
+                        height: 30px;
+                        border-radius: 50%;
+                        border: 2px solid rgba(256, 256, 256, 0.3);
+                    }
+
+            .activeStory{
+                border:2px solid #47D66E;
+                cursor: pointer;
+            }
+
+                            .viewedstory{
+                border: 2px solid rgba(60, 179, 113,0.2);
+            }
+                    
+                }
+
+                .miniItem2{
+                    color: rgba(256, 256, 256, 0.5);
+                    font-size: 11px;
+                    font-weight: bold;
+                }
+
+                 .miniItem3{
+                    color: rgba(256, 256, 256, 1);
+                        font-size: 9px;
+                    font-weight: bold;
                 }
             }
         }

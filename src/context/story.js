@@ -102,13 +102,13 @@ export const ViewStoryFunction = async (userId, thisUser, usersArray, queryClien
     if (!userStory.view.includes(thisUser?.id)) {
       userStory.view.push(thisUser?.id);
 
-      // Обновляем только storyArray для пользователя
+  
       const updatedStoryArray = [...usersArray.find(user => user.id === userId).storyArray];
       updatedStoryArray[userStoryIndex] = { ...userStory };
 
       await setDoc(doc(db, "users", userId), { storyArray: updatedStoryArray }, { merge: true });
 
-      // Обновляем данные в кэше
+     
       const updatedUser = { ...usersArray.find(user => user.id === userId), storyArray: updatedStoryArray };
       queryClient.setQueryData(['users', userId], updatedUser);
 

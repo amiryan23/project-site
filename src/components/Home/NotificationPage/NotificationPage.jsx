@@ -101,7 +101,7 @@ const getNotificationText = (type) => {
     case "Like":
       return t('NotificLike');
     case "Comment":
-      return t('NotificComment');
+      return t('NotificCommentAdded');
     case "Tagged":
       return t('TaggedPost');
     default:

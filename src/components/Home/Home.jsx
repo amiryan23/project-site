@@ -96,7 +96,7 @@ useEffect(()=>{
 const sortedUsers = usersWithPostCount?.sort((a, b) => b.postCount - a.postCount).slice(0,5);
 
 const topUsersList = sortedUsers?.map((user,index) => (
-  <Link  to={thisUser?.id !== user.id ? `/home/user/profile/${user.id}` : "/home/profile"} key={user.id} className={s.topUserContainer}>
+  <Link onClick={()=>{setOpenMenu(false)}}  to={thisUser?.id !== user.id ? `/home/user/profile/${user.id}` : "/home/profile"} key={user.id} className={s.topUserContainer}>
     <span className={s.miniItem1}>
        <span>#{index + 1}</span>
       <img src={user.photo?.placed ? user.photo?.placed : user.photo?.default} alt="" 
@@ -162,8 +162,10 @@ const topUsersList = sortedUsers?.map((user,index) => (
             }} to="/home/settings"><IoSettingsSharp/></Link>
                         
             </div>
-            
-            
+            <div className={s.block3}>
+            <span className={s.item1}>{t('ActiveUsers')}</span>
+            {topUsersList}
+            </div>
             </div>
             <div className={s.mobileContent2}>
 
@@ -257,7 +259,7 @@ const topUsersList = sortedUsers?.map((user,index) => (
                {openUpdate ? <div className={s.miniContent1}>
                     <span className={s.item1}>{updatesArray[updatesArray?.length - 1].title}</span>
                     <span className={s.item2}>
-                    {updatesArray[updatesArray?.length - 1].items?.map(item => <span>{item}</span>).slice(0,3)}
+                    {updatesArray[updatesArray?.length - 1].items?.map(item => <span>{item}</span>).slice(0,4)}
 
                     </span>
                     <span className={s.item3}>
