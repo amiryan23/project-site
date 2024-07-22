@@ -26,6 +26,7 @@ import { FaCirclePlay  } from "react-icons/fa6";
 import { FaPauseCircle } from "react-icons/fa";
 import { IoIosMusicalNotes } from "react-icons/io";
 import {isWithin24Hours} from './../../../helper/timeAdded'
+import { Typewriter,Cursor } from 'react-simple-typewriter'
 
 
 
@@ -64,14 +65,17 @@ const HomePage = ()=>{
  const btn1 = useRef()
  const btn2 = useRef()
 
+ const typeWriter = useRef()
 
 
  let timer;
+ let timer2;
 
  useEffect (()=>{
  	if(animBlock.current){
  timer = setTimeout(()=>{animBlock.current.classList.add(s.animBlock)},10)
  }
+
 
 setActiveLink("/home")
  
@@ -80,10 +84,23 @@ setActiveLink("/home")
  	if(animBlock.current){
  	animBlock.current.classList.remove(s.animBlock)
  	clearTimeout(timer)
+ 	
  }
+ 
  }
  },[])
 
+useEffect(()=>{
+ if(typeWriter.current && thisUser){
+ 	timer2 = setTimeout(()=>{
+ 		typeWriter.current.classList.remove(s.activeTypeWriter)
+ 		
+ 	},32500)
+ }
+ return () => {
+ 	clearTimeout(timer2)
+ }
+},[thisUser])
 
 const replyCommentRef = useRef()
 
@@ -228,7 +245,6 @@ const handleFileChange = useCallback((e, postId) => {
   	button2.current.classList.remove(s.active)
   	setAllActive(path)
   },[btn1,btn2])
-
 
 
 
@@ -803,6 +819,19 @@ const onlyFollowing = arrayPosts
 		<div className={s.megaContent} ref={animBlock}>
 			<span className={s.content1}>
 			<span className={s.miniItem1}>{t('Publication')}</span>
+			{thisUser 
+			? <span ref={typeWriter} className={`${s.miniItem3} ${s.activeTypeWriter}`}>
+									<Typewriter 
+					words={[`Hi ${thisUser?.username}`,"How are you?","I am very happy )))","Because you are reading this","Welcome to my world :3","Well, what is there in this world???","ERROR404#$@%#$% AHAHHAHAHAHAHAHAH",`P r o b a b l y ... n o t h i n g ) ) )`,"< Thank you />"]} 
+					loop={1}
+          cursor
+          cursorStyle='>'
+					typeSpeed={70}
+          deleteSpeed={30}
+          delaySpeed={1000}
+          />
+			</span>
+			: "" }
 			<span className={s.miniItem2}>
 				<button ref={btn1} onClick={()=>{changePath(btn1,btn2,true)}} className={s.active}>{t('All')}</button>
 				<button ref={btn2} onClick={()=>{changePath(btn2,btn1,false)}} >{t("Following")}</button>

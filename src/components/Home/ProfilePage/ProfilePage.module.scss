@@ -557,8 +557,36 @@
 		}
 
 			.block2{
+				display: flex;
+				flex-direction: row;
+				gap: 7px;
+				position: relative;
 
-				button{
+			.btn1{
+				border: none;
+				outline: none;
+				background-color: transparent;
+				padding: 5px;
+				cursor: pointer;
+				
+
+				svg{
+					color: #999;
+					transition: 250ms linear;
+				}
+
+				.btn1:hover{
+					color: whitesmoke;
+				
+					transition: 250ms linear;				
+			}
+				
+			
+
+
+		}
+
+				.btn2{
 					padding: 5px;
             background:transparent ;
             border: 2px solid whitesmoke;
@@ -578,13 +606,29 @@
             }
 				}
 
-				button:hover{
+				.btn2:hover{
 					background-color: whitesmoke;
 					color: #222;
 					transition: 250ms linear;
 
 					svg{
 						color: #222;
+					}
+				}
+
+				.EmojiContainer{
+					position: absolute;
+					
+					// left: 10px;
+					top: 45px;
+					right: 0;
+					z-index: 55;
+
+					.emojiContent{
+						// background-color: rgba(60, 60, 60, 1);
+						width: 100%;
+						max-height: 400px;
+						border: none;
 					}
 				}
 			}

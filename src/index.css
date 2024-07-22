@@ -3,6 +3,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&family=Roboto+Slab:wght@100..900&family=Source+Code+Pro:ital,wght@0,200..900;1,200..900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Armenian:wght@100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Gugi&display=swap');
 
 :root {
   --background-color: #ffffff; /* белый цвет */
@@ -30,6 +31,8 @@ body {
   -moz-osx-font-smoothing: grayscale;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   background-color:rgba(60, 60, 60, 0.9);
+/*  scroll-behavior:smooth;*/
+
 }
 
 body.dark{

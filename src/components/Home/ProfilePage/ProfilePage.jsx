@@ -36,6 +36,9 @@ import { IoIosMusicalNotes,IoIosAddCircle } from "react-icons/io";
 import { FaHeart, FaHeartBroken , FaComment,FaVolumeDown ,FaVolumeMute,FaChevronCircleDown , FaChevronCircleUp  } from "react-icons/fa";
 import {isWithin24Hours} from './../../../helper/timeAdded'
 import { MdRestore } from "react-icons/md";
+import Picker from 'emoji-picker-react';
+import { LuSmilePlus } from "react-icons/lu";
+import twemoji from 'twemoji';
 
 
 
@@ -63,6 +66,19 @@ const ProfilePage = ()=>{
 	const [play,setPlay] = useState({ musicId: null, postId: null, playMusic: false })
 	const [storyHeight,setStoryHeight] = useState(false)
 	const [hidden,setHidden] = useState()
+    const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+
+  const onEmojiClick = ( emojiData , event) => {
+  	 console.log('Emoji Data:', emojiData); 
+    setPostText(prevText => prevText + emojiData.emoji);
+  };
+
+    const parseEmoji = (text) => {
+    return twemoji.parse(text, {
+      folder: 'svg',
+      ext: '.svg'
+    });
+  };
  
 	const likePostMutation = useLikePostMutation();
 	const dislikePostMutation = useDislikePostMutation()
@@ -1028,8 +1044,18 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
 					</span>
 					</span>
 					<span className={s.block2}>
-					
-					<button onClick={()=>{handleAddPost(thisUser,postText,fileUrl,imageRef,forwardPost,tagUser,trackId)}}><HiMiniPlusSmall />{t("AddPost")}</button>
+					<button className={s.btn1} onClick={() => setShowEmojiPicker(!showEmojiPicker)}>
+       				 {showEmojiPicker ? <LuSmilePlus size="18"/> : <LuSmilePlus size="18"/>}
+      				</button>
+     			 {showEmojiPicker && <div onMouseLeave={() => setShowEmojiPicker(!showEmojiPicker)}  className={s.EmojiContainer}>
+     			 <Picker 
+     			 className={s.emojiContent} 
+
+     			 onEmojiClick={onEmojiClick}
+     			 disableSearchBar={false} />
+     			 </div>}
+     			
+					<button className={s.btn2} onClick={()=>{handleAddPost(thisUser,postText,fileUrl,imageRef,forwardPost,tagUser,trackId)}}><HiMiniPlusSmall />{t("AddPost")}</button>
 					
 					</span>
 				</span>
