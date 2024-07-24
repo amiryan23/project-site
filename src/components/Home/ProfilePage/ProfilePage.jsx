@@ -403,15 +403,6 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
 					</span>
 					</div>
 					<div className={s.postMiniContent2}>
-					{m.trackId !== null && m.trackId !== undefined 
-					? <div className={s.musicContent} >
-					<span className={s.musicItem1}><IoIosMusicalNotes />{musicsArray?.find(music => music.id === m.trackId)?.trackName?.length > 35 ? `${musicsArray?.find(music => music.id === m.trackId)?.trackName?.slice(0,35)}...` : musicsArray?.find(music => music.id === m.trackId)?.trackName}</span>
-					<span className={s.musicItem2}>		
-					{play?.musicId === musicsArray?.find(music => music.id === m.trackId)?.id && play?.playMusic === true && play?.postId === m.id
-		? <span onClick={()=>{pauseMusic(musicsArray?.find(music => music.id === m.trackId).id,m.id)}}><FaPauseCircle /> </span>
-		: <span onClick={()=>{playMusic(musicsArray?.find(music => music.id === m.trackId).id,m.id,musicsArray?.find(music => music.id === m.trackId).urlTrack)}}><FaCirclePlay /> </span> }</span>
-					</div>
-					: ""}
 						{m.forwardPost !== undefined &&  m.forwardPost !== "" 
 					
 					
@@ -455,6 +446,15 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
 							
 							</Link>
 							: ""}
+					{m.trackId !== null && m.trackId !== undefined 
+					? <div className={s.musicContent} >
+					<span className={s.musicItem1}><IoIosMusicalNotes />{musicsArray?.find(music => music.id === m.trackId)?.trackName?.length > 35 ? `${musicsArray?.find(music => music.id === m.trackId)?.trackName?.slice(0,35)}...` : musicsArray?.find(music => music.id === m.trackId)?.trackName}</span>
+					<span className={s.musicItem2}>		
+					{play?.musicId === musicsArray?.find(music => music.id === m.trackId)?.id && play?.playMusic === true && play?.postId === m.id
+		? <span onClick={()=>{pauseMusic(musicsArray?.find(music => music.id === m.trackId).id,m.id)}}><FaPauseCircle /> </span>
+		: <span onClick={()=>{playMusic(musicsArray?.find(music => music.id === m.trackId).id,m.id,musicsArray?.find(music => music.id === m.trackId).urlTrack)}}><FaCirclePlay /> </span> }</span>
+					</div>
+					: ""}
 					</div>
 					<div className={s.postMiniContent3}>
 						{m.likes.includes(thisUser?.id) 
@@ -1044,16 +1044,16 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
 					</span>
 					</span>
 					<span className={s.block2}>
-					<button className={s.btn1} onClick={() => setShowEmojiPicker(!showEmojiPicker)}>
-       				 {showEmojiPicker ? <LuSmilePlus size="18"/> : <LuSmilePlus size="18"/>}
-      				</button>
-     			 {showEmojiPicker && <div onMouseLeave={() => setShowEmojiPicker(!showEmojiPicker)}  className={s.EmojiContainer}>
-     			 <Picker 
-     			 className={s.emojiContent} 
-
-     			 onEmojiClick={onEmojiClick}
-     			 disableSearchBar={false} />
-     			 </div>}
+{/* 					<button className={s.btn1} onClick={() => setShowEmojiPicker(!showEmojiPicker)}> */}
+{/*        				 {showEmojiPicker ? <LuSmilePlus size="18"/> : <LuSmilePlus size="18"/>} */}
+{/*       				</button> */}
+{/*      			 {showEmojiPicker && <div onMouseLeave={() => setShowEmojiPicker(!showEmojiPicker)}  className={s.EmojiContainer}> */}
+{/*      			 <Picker  */}
+{/*      			 className={s.emojiContent}  */}
+{/*  */}
+{/*      			 onEmojiClick={onEmojiClick} */}
+{/*      			 disableSearchBar={false} /> */}
+{/*      			 </div>} */}
      			
 					<button className={s.btn2} onClick={()=>{handleAddPost(thisUser,postText,fileUrl,imageRef,forwardPost,tagUser,trackId)}}><HiMiniPlusSmall />{t("AddPost")}</button>
 					

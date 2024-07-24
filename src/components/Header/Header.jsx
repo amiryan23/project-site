@@ -34,7 +34,7 @@ const queryClient = useQueryClient();
         <header className={s.megaContainer}>
         {isWideScreen && logined ? <div className={s.content} onClick={()=>{setOpenMenu(true)}}><CgMenu size="25" color="whitesmoke" /></div> : ""}
             <div className={s.content1}>
-                <img src={Logo} alt="" width="150"/>
+               <Link to="/home"> <img src={Logo} alt="" width="150"/> </Link>
             </div>
             <div className={s.content2}>
               {isWideScreen ? ""

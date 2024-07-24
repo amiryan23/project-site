@@ -27,6 +27,7 @@ import { FaPauseCircle } from "react-icons/fa";
 import { IoIosMusicalNotes } from "react-icons/io";
 import {isWithin24Hours} from './../../../helper/timeAdded'
 import { Typewriter,Cursor } from 'react-simple-typewriter'
+import { FaPlay,FaPause  } from "react-icons/fa";
 
 
 
@@ -338,15 +339,7 @@ const handleFileChange = useCallback((e, postId) => {
 					</span>
 					</div>
 					<div className={s.postMiniContent2}>
-					{m.trackId !== null && m.trackId !== undefined 
-					? <div className={s.musicContent} >
-					<span className={s.musicItem1}><IoIosMusicalNotes />{musicsArray?.find(music => music.id === m.trackId)?.trackName?.length > 35 ? `${musicsArray?.find(music => music.id === m.trackId)?.trackName?.slice(0,35)}...` : musicsArray?.find(music => music.id === m.trackId)?.trackName}</span>
-					<span className={s.musicItem2}>		
-					{play.musicId === musicsArray?.find(music => music.id === m.trackId).id && play.playMusic === true && play.postId === m.id
-		? <span onClick={()=>{pauseMusic(musicsArray?.find(music => music.id === m.trackId).id,m.id)}}><FaPauseCircle /> </span>
-		: <span onClick={()=>{playMusic(musicsArray?.find(music => music.id === m.trackId).id,m.id,musicsArray?.find(music => music.id === m.trackId).urlTrack)}}><FaCirclePlay /> </span> }</span>
-					</div>
-					: ""}
+
 						{m.imageURL 
 						? <span className={s.item1}><img src={m.imageURL ? m.imageURL : <MiniLoader />} alt="" /></span>
 						: "" }
@@ -363,6 +356,15 @@ const handleFileChange = useCallback((e, postId) => {
 							
 							</Link>
 							: ""}
+					{m.trackId !== null && m.trackId !== undefined 
+					? <div className={s.musicContent} >
+					<span className={s.musicItem1}><IoIosMusicalNotes />{musicsArray?.find(music => music.id === m.trackId)?.trackName?.length > 35 ? `${musicsArray?.find(music => music.id === m.trackId)?.trackName?.slice(0,35)}...` : musicsArray?.find(music => music.id === m.trackId)?.trackName}</span>
+					<span className={s.musicItem2}>		
+					{play.musicId === musicsArray?.find(music => music.id === m.trackId).id && play.playMusic === true && play.postId === m.id
+		? <span onClick={()=>{pauseMusic(musicsArray?.find(music => music.id === m.trackId).id,m.id)}}><FaPause /> </span>
+		: <span onClick={()=>{playMusic(musicsArray?.find(music => music.id === m.trackId).id,m.id,musicsArray?.find(music => music.id === m.trackId).urlTrack)}}><FaPlay /> </span> }</span>
+					</div>
+					: ""}
 					</div>
 					<div className={s.postMiniContent3}>
 						{m.likes.includes(thisUser?.id) 
@@ -612,6 +614,15 @@ const onlyFollowing = arrayPosts
 					</span>
 					</div>
 					<div className={s.postMiniContent2}>
+
+						{m.imageURL 
+						? <span className={s.item1}><img src={m.imageURL ? m.imageURL : <MiniLoader />} alt="" /></span>
+						: "" }
+						{m.postText 
+						? <span className={s.item2}>
+						{parseTextWithLinks(m.postText)}
+						</span>
+						: "" }
 					{m.trackId !== null && m.trackId !== undefined 
 					? <div className={s.musicContent} >
 					<span className={s.musicItem1}><IoIosMusicalNotes />{musicsArray?.find(music => music.id === m.trackId)?.trackName?.length > 35 ? `${musicsArray?.find(music => music.id === m.trackId)?.trackName?.slice(0,35)}...` : musicsArray?.find(music => music.id === m.trackId)?.trackName}</span>
@@ -621,14 +632,6 @@ const onlyFollowing = arrayPosts
 		: <span onClick={()=>{playMusic(musicsArray?.find(music => music.id === m.trackId).id,m.id,musicsArray?.find(music => music.id === m.trackId).urlTrack)}}><FaCirclePlay /> </span> }</span>
 					</div>
 					: ""}
-						{m.imageURL 
-						? <span className={s.item1}><img src={m.imageURL ? m.imageURL : <MiniLoader />} alt="" /></span>
-						: "" }
-						{m.postText 
-						? <span className={s.item2}>
-						{parseTextWithLinks(m.postText)}
-						</span>
-						: "" }
 					</div>
 					<div className={s.postMiniContent3}>
 						{m.likes.includes(thisUser?.id) 

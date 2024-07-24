@@ -24,12 +24,14 @@
 }
 
 		.content{
+			align-self: center;
 		width: 400px;
 		height: 85vh;
 		border: 2px solid rgba(256, 256, 256 , 0.2);
 		display: flex;
 		flex-direction: column;
 		justify-content: space-between;
+		align-items: center;
 		padding: 15px;
 		background-position: center;
 		background-size: contain;

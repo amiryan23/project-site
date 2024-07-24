@@ -217,15 +217,7 @@ const handleFileChange = useCallback((e, postId) => {
 						</span>
 					</div>
 					<div className={s.postMiniContent2}>
-					{selectedPost.trackId !== null && selectedPost.trackId !== undefined 
-					? <div className={s.musicContent} >
-					<span className={s.musicItem1}><IoIosMusicalNotes />{musicsArray?.find(music => music.id === selectedPost.trackId)?.trackName?.length > 35 ? `${musicsArray?.find(music => music.id === selectedPost.trackId)?.trackName?.slice(0,35)}...` : musicsArray?.find(music => music.id === selectedPost.trackId)?.trackName}</span>
-					<span className={s.musicItem2}>		
-					{play.musicId === musicsArray?.find(music => music.id === selectedPost.trackId).id && play.playMusic === true && play.postId === selectedPost.id
-		? <span onClick={()=>{pauseMusic(musicsArray?.find(music => music.id === selectedPost.trackId).id,selectedPost.id)}}><FaPauseCircle /> </span>
-		: <span onClick={()=>{playMusic(musicsArray?.find(music => music.id === selectedPost.trackId).id,selectedPost.id,musicsArray?.find(music => music.id === selectedPost.trackId).urlTrack)}}><FaCirclePlay /> </span> }</span>
-					</div>
-					: ""}
+
 						{selectedPost?.imageURL 
 						? <span className={s.item1}><img src={selectedPost?.imageURL ? selectedPost?.imageURL : <MiniLoader />} alt="" /></span>
 						: "" }
@@ -241,7 +233,16 @@ const handleFileChange = useCallback((e, postId) => {
 							@{users?.find(user=> user.id === selectedPost.taggedUser).username}
 							
 							</Link>
-							: ""}						
+							: ""}	
+					{selectedPost.trackId !== null && selectedPost.trackId !== undefined 
+					? <div className={s.musicContent} >
+					<span className={s.musicItem1}><IoIosMusicalNotes />{musicsArray?.find(music => music.id === selectedPost.trackId)?.trackName?.length > 35 ? `${musicsArray?.find(music => music.id === selectedPost.trackId)?.trackName?.slice(0,35)}...` : musicsArray?.find(music => music.id === selectedPost.trackId)?.trackName}</span>
+					<span className={s.musicItem2}>		
+					{play.musicId === musicsArray?.find(music => music.id === selectedPost.trackId).id && play.playMusic === true && play.postId === selectedPost.id
+		? <span onClick={()=>{pauseMusic(musicsArray?.find(music => music.id === selectedPost.trackId).id,selectedPost.id)}}><FaPauseCircle /> </span>
+		: <span onClick={()=>{playMusic(musicsArray?.find(music => music.id === selectedPost.trackId).id,selectedPost.id,musicsArray?.find(music => music.id === selectedPost.trackId).urlTrack)}}><FaCirclePlay /> </span> }</span>
+					</div>
+					: ""}					
 					</div>
 					<div className={s.postMiniContent3}>
 						{selectedPost?.likes.includes(thisUser?.id) 
