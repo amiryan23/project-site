@@ -56,20 +56,20 @@ const unfollowMutation = useUnfollowMutation()
  let timer;
 
  useEffect (()=>{
- 	if(animBlock.current){
+	if(animBlock.current && logined){
  timer = setTimeout(()=>{animBlock.current.classList.add(s.animBlock)},10)
  }
 
-setActiveLink("/users")
+ setActiveLink("/users")
 
  return () => {
- 	if(animBlock.current){
- 	animBlock.current.classList.remove(s.animBlock)
- 	clearTimeout(timer)
+	
+	if(animBlock.current && !logined){
+	animBlock.current.classList.remove(s.animBlock)
+	clearTimeout(timer)
  }
  }
- },[])
-
+ },[logined])
 
  // const memoizedHandleFollow = useCallback((thisUser, user)=>{
  // 	handleFollow(thisUser, user)

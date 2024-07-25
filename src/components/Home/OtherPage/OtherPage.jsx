@@ -230,19 +230,20 @@ const handleFileChange = useCallback((e, postId) => {
  let timer;
 
  useEffect (()=>{
- 	if(animBlock.current){
+	if(animBlock.current && logined){
  timer = setTimeout(()=>{animBlock.current.classList.add(s.animBlock)},10)
  }
+
  setActiveLink("/")
 
  return () => {
- 	setSrcMusicId((prevMusicId)=>null)
- 	if(animBlock.current){
- 	animBlock.current.classList.remove(s.animBlock)
- 	clearTimeout(timer)
+	setSrcMusicId((prevMusicId)=>null)
+	if(animBlock.current && !logined){
+	animBlock.current.classList.remove(s.animBlock)
+	clearTimeout(timer)
  }
  }
- },[])
+ },[logined])
 
 
  const replyCommentRef = useRef()
@@ -588,7 +589,9 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
 			<div ><BsThreeDotsVertical title="Edit profile"/></div>
 			</div>
 				<span className={s.Block1}>
-				
+					<span className={s.miniBlock3}>
+				<span className={s.miniBlock}>{selectedUser?.description ? selectedUser.description : "..."}</span>
+					</span>				
 				<span className={s.miniBlock1}>
 <img onClick={
 					()=>(selectedUser?.storyArray?.some(story => isWithin24Hours(story.timeAdded))
@@ -650,9 +653,9 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
 					</>
 					}
 				</span>
-					<span className={s.miniBlock3}>
-				<span className={s.miniBlock}>{selectedUser?.description ? selectedUser.description : "..."}</span>
-					</span>
+				{/* 	<span className={s.miniBlock3}> */}
+				{/* <span className={s.miniBlock}>{selectedUser?.description ? selectedUser.description : "..."}</span> */}
+				{/* 	</span> */}
 				{selectedUser?.link && selectedUser?.link !== ""
 				? <span className={s.miniBlock5}>
 					<span><FiLink /></span>

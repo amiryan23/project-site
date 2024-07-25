@@ -72,7 +72,20 @@
 			align-items:center;
 			gap:15px;
 
-		
+				.miniBlock {
+				min-width: 250px;
+				max-width: 100%;
+				color: rgba(256, 256, 256, 0.7);;
+				font-weight: bold;
+				font-size: 14px;
+				
+				display: flex;
+				justify-content: center;
+				padding: 12px;
+				border: 2px solid #999;
+				border-radius: 25px 15px 25px 15px;
+				word-break: break-word;
+			}		
 
 		.miniBlock1{	
 				border-radius:50%;
@@ -190,20 +203,7 @@
 			}
 
 
-				.miniBlock {
-				min-width: 250px;
-				max-width: 100%;
-				color: rgba(256, 256, 256, 0.7);;
-				font-weight: bold;
-				font-size: 14px;
-				
-				display: flex;
-				justify-content: center;
-				padding: 12px;
-				border: 2px solid #999;
-				border-radius: 25px 15px 25px 15px;
-				word-break: break-word;
-			}
+
 
 				.miniBlock5{
 				width: 100%;

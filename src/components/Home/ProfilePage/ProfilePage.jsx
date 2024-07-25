@@ -106,7 +106,7 @@ const ProfilePage = ()=>{
  let timer;
 
  useEffect (()=>{
-	if(animBlock.current){
+	if(animBlock.current && logined){
  timer = setTimeout(()=>{animBlock.current.classList.add(s.animBlock)},10)
  }
 
@@ -114,12 +114,12 @@ const ProfilePage = ()=>{
 
  return () => {
 	setSrcMusicId((prevMusicId)=>null)
-	if(animBlock.current){
+	if(animBlock.current && !logined){
 	animBlock.current.classList.remove(s.animBlock)
 	clearTimeout(timer)
  }
  }
- },[])
+ },[logined])
 
 let timer2;
 
@@ -167,7 +167,7 @@ let timer2;
 
  return () => {
 	
-	if(animMusics.current ){
+	if(animMusics.current  ){
 		clearTimeout(timer3)
  }
  }
@@ -900,7 +900,9 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
 			</span>
 			</div>
 				<span className={s.Block1}>
-
+				<span className={s.miniBlock3}>
+				<span className={s.miniBlock}>{thisUser?.description || "..."}</span>
+					</span>
 				<span className={s.miniBlock1}>
 				<img onClick={
 					()=>(thisUser?.storyArray?.some(story => isWithin24Hours(story.timeAdded))
@@ -939,9 +941,9 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
 					<span>{t('Following')}</span>
 					</Link>
 				</span>
-				<span className={s.miniBlock3}>
-				<span className={s.miniBlock}>{thisUser?.description || "..."}</span>
-					</span>
+				{/* <span className={s.miniBlock3}> */}
+				{/* <span className={s.miniBlock}>{thisUser?.description || "..."}</span> */}
+				{/* 	</span> */}
 				{thisUser?.link && thisUser?.link !== ""
 				? <span className={s.miniBlock5}>
 					<span><FiLink /></span>

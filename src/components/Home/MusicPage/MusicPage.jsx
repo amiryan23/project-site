@@ -34,20 +34,20 @@ const animBlock = useRef()
  let timer;
 
  useEffect (()=>{
- 	if(animBlock.current){
+	if(animBlock.current && logined){
  timer = setTimeout(()=>{animBlock.current.classList.add(s.animBlock)},10)
  }
 
- setActiveLink("/profile")
+ setActiveLink("/music")
 
  return () => {
- 	setSrcMusicId((prevMusicId)=>null)
- 	if(animBlock.current){
- 	animBlock.current.classList.remove(s.animBlock)
- 	clearTimeout(timer)
+	setSrcMusicId((prevMusicId)=>null)
+	if(animBlock.current && !logined){
+	animBlock.current.classList.remove(s.animBlock)
+	clearTimeout(timer)
  }
  }
- },[])
+ },[logined])
 
 const pauseMusic = (musicId) => {
     setPlay((prevPlay) => ({
@@ -75,9 +75,7 @@ const newMusicsArray = musicsArray
 )
 : ""
 
- useEffect(()=>{
- 	setActiveLink("/music")
- },[])
+
 
 	return (
 		logined 
