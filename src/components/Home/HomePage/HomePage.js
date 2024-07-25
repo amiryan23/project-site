@@ -34,7 +34,7 @@ import { FaPlay,FaPause  } from "react-icons/fa";
 
 const HomePage = ()=>{
 
- const {  thisUser,calculateTimeDifference,commentText,setCommentText,setNotificText,copyToClipboard,t,setActiveLink,fileUrls, setFileUrls,srcMusicId,setSrcMusicId } = useContext(MyContext);
+ const {  thisUser,logined,calculateTimeDifference,commentText,setCommentText,setNotificText,copyToClipboard,t,setActiveLink,fileUrls, setFileUrls,srcMusicId,setSrcMusicId } = useContext(MyContext);
 
  const queryClient = useQueryClient();
 
@@ -819,6 +819,7 @@ const onlyFollowing = arrayPosts
 
 
 	return (
+	
 		<div className={s.megaContent} ref={animBlock}>
 			<span className={s.content1}>
 			<span className={s.miniItem1}>{t('Publication')}</span>
@@ -866,6 +867,7 @@ const onlyFollowing = arrayPosts
 				: ""}
 			</span>
 		</div>
+		
 
 		)
 }

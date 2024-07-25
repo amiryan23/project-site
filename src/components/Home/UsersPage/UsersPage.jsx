@@ -18,7 +18,7 @@ const UsersPage = ()=>{
 
 	const [search,setSearch] = useState("")
 
- const {  t,setActiveLink} = useContext(MyContext);
+ const {  t,setActiveLink,logined} = useContext(MyContext);
 
 const queryClient = useQueryClient();
 
@@ -112,8 +112,8 @@ setActiveLink("/users")
  : <MiniLoader />
 
 	return (
-
-		<div className={s.megaContainer} ref={animBlock}>
+		logined
+		? <div className={s.megaContainer} ref={animBlock}>
 			<div className={s.content1}>
 					<span>
 		<button onClick={() => window.history.back(-1)}><AiOutlineRollback size="30" color="whitesmoke"/></button>{t('SearchUsers')}
@@ -127,7 +127,7 @@ setActiveLink("/users")
 			</div>
 			
 		</div>
-		
+		: <div className="noLogined">You are not authorized <Link to="/" className="btnLogin">Login</Link></div>
 		)
 }
 

@@ -9,13 +9,13 @@ import { useQueryClient,useQuery } from 'react-query';
 import Resizer from 'react-image-file-resizer';
 // import {useChangeInfoUser} from './../../../hooks/queryesHooks'
 import { MdDeleteForever } from "react-icons/md";
-
+import {Link} from 'react-router-dom'
 
 
 
 const SettingsPage = () =>{
 
- const { thisUser,setNotificText,theme,setTheme,t,setActiveLink} = useContext(MyContext);
+ const { thisUser,setNotificText,theme,setTheme,t,setActiveLink,logined} = useContext(MyContext);
 
  const [username,setUsername] = useState(thisUser?.username ? thisUser.username : "")
  const [age,setAge] = useState(thisUser?.age ? thisUser.age : "")
@@ -185,7 +185,8 @@ const handlerChangeInfo = async () => {
 
 
 	return (
-		<div className={s.megaContainer} ref={animBlock}>
+		logined
+		? <div className={s.megaContainer} ref={animBlock}>
 			<div className={s.content1}>
 				{t('Settings')}
 			</div>
@@ -253,7 +254,7 @@ const handlerChangeInfo = async () => {
 			</div>
 
 		</div>
-		
+		: <div className="noLogined">You are not authorized <Link to="/" className="btnLogin">Login</Link></div>
 		)
 }
 

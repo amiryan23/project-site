@@ -40,7 +40,7 @@ const OtherPage = () => {
 
 	const {userId} = useParams()
 
-  const {  thisUser ,calculateTimeDifference,commentText,setCommentText,copyToClipboard,setNotificText,t,setActiveLink,fileUrls, setFileUrls,zoomThisPhoto,srcMusicId,setSrcMusicId,setOpenStoryModal,setViewStory} = useContext(MyContext);
+  const {  thisUser,logined ,calculateTimeDifference,commentText,setCommentText,copyToClipboard,setNotificText,t,setActiveLink,fileUrls, setFileUrls,zoomThisPhoto,srcMusicId,setSrcMusicId,setOpenStoryModal,setViewStory} = useContext(MyContext);
 
 
 const queryClient = useQueryClient();
@@ -579,7 +579,8 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
 
 
 	return (
-		<div className={s.megaContainer} ref={animBlock}>
+		logined
+		? <div className={s.megaContainer} ref={animBlock}>
 
 		<div className={s.content1}>
 		<div className={s.megaBlock}>
@@ -737,6 +738,7 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
 			</div>
 				}
 		</div>
+		: <div className="noLogined">You are not authorized <Link to="/" className="btnLogin">Login</Link></div>
 		)
 }
 

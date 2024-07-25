@@ -48,7 +48,7 @@ import twemoji from 'twemoji';
 
 const ProfilePage = ()=>{
 
- const {   isWideScreen ,calculateTimeDifference,commentText,setCommentText,copyToClipboard,setNotificText,t,setActiveLink,fileUrls, setFileUrls,zoomThisPhoto,srcMusicId,setSrcMusicId,setOpenStoryModal,setViewStory} = useContext(MyContext);
+ const {   isWideScreen,logined ,calculateTimeDifference,commentText,setCommentText,copyToClipboard,setNotificText,t,setActiveLink,fileUrls, setFileUrls,zoomThisPhoto,srcMusicId,setSrcMusicId,setOpenStoryModal,setViewStory} = useContext(MyContext);
 
 	const forwardPostStorage = JSON.parse(localStorage.getItem("forwardPost"))
 
@@ -887,8 +887,8 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
 // : ""
 
 	return (
-
-		<div className={s.megaContainer} ref={animBlock}>
+		logined
+		? <div className={s.megaContainer} ref={animBlock}>
 
 			<div className={s.content1}>
 			<div className={s.megaBlock}>
@@ -1116,7 +1116,7 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
 
 			</div>
 
-			{thisUser?.storyArray.some(story=> story.highlight === true)
+			{thisUser?.storyArray?.some(story=> story.highlight === true)
 			? <div className={storyHeight ? `${s.storyContainer} ${s.activeStoryContainer}` : s.storyContainer}>
 				<div className={s.storyContent1}>
 				<span className={s.item1}>Highlights</span>
@@ -1158,6 +1158,7 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
 			</div>
 			
 	</div>
+	: <div className="noLogined">You are not authorized <Link to="/" className="btnLogin">Login</Link></div>
 		)
 }
 

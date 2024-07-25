@@ -10,7 +10,7 @@ import { TbMusicSearch } from "react-icons/tb";
 import { AiOutlineRollback } from "react-icons/ai";
 
 const MusicPage = () =>{
- const { setActiveLink,srcMusicId,setSrcMusicId } = useContext(MyContext);
+ const { setActiveLink,srcMusicId,setSrcMusicId,logined } = useContext(MyContext);
  const [play,setPlay] = useState({})
  const [search,setSearch] = useState(null)
 
@@ -80,7 +80,8 @@ const newMusicsArray = musicsArray
  },[])
 
 	return (
-		<div className={s.megaContainer} ref={animBlock}>
+		logined 
+		? <div className={s.megaContainer} ref={animBlock}>
 	
 	<div className={s.content1}>
 		<span>
@@ -98,6 +99,7 @@ const newMusicsArray = musicsArray
 		
 			
 		</div>
+		: <div className="noLogined">You are not authorized <Link to="/" className="btnLogin">Login</Link></div>
 		)
 }
 
