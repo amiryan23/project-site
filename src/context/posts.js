@@ -4,9 +4,6 @@ import { ref, uploadBytes , getDownloadURL } from "firebase/storage";
 import imageCompression from 'browser-image-compression';
 import Resizer from 'react-image-file-resizer';
 import {addNotificationToUser} from './../helper/addNotification'
-import { FFmpeg } from '@ffmpeg/ffmpeg'
-import { fetchFile } from '@ffmpeg/util'
-
 
 
 
@@ -46,48 +43,11 @@ export const addPostFunction = async ( thisUser, postText, fileUrl, fileRef, for
         await uploadBytes(storageRef, compressedFile);
         imageURL = `https://firebasestorage.googleapis.com/v0/b/${firebaseConfig.storageBucket}/o/imagePosts%2F${encodeURIComponent(uniqueFilename)}?alt=media`;
       } else if (file.type.startsWith("video/")) {
-        try {
-    const ffmpeg = new FFmpeg();
-    await ffmpeg.load();
-    console.log("FFmpeg загружен успешно.");
-
-    // Записываем файл в файловую систему FFmpeg
-    await ffmpeg.writeFile('input.mov', await fetchFile(file));
-    console.log("Файл записан в файловую систему FFmpeg.");
-
-    // Сжимаем видео и конвертируем в MP4
-    await ffmpeg.run(
-      '-i', 'input.mov',
-      '-vf', 'scale=1280:-1', // Изменение разрешения для сжатия
-      '-b:v', '1000k', // Установка битрейта
-      '-c:v', 'libx264',
-      '-c:a', 'aac',
-      'output.mp4'
-    );
-    console.log("Видео конвертировано.");
-
-    // Чтение результата конвертации
-    const data = await ffmpeg.readFile('output.mp4');
-    console.log("Результат чтения файла:", data);
-
-    // Преобразование результата в Blob
-    const videoBlob = new Blob([data.buffer], { type: 'video/mp4' });
-    console.log("Преобразование результата в Blob завершено.");
-
-    // Создание URL для видео
-    const videoUrl = URL.createObjectURL(videoBlob);
-    console.log("Созданный URL для видео:", videoUrl);
-
-    // Загрузка видео на Firebase
-    const storageRef = ref(storage, `videoPosts/${uniqueFilename}`);
-    await uploadBytes(storageRef, videoBlob);
-    videoURL = `https://firebasestorage.googleapis.com/v0/b/${firebaseConfig.storageBucket}/o/videoPosts%2F${encodeURIComponent(uniqueFilename)}?alt=media`;
-    console.log("Видео загружено на Firebase. URL:", videoURL);
-
-  } catch (error) {
-    console.error("Ошибка при обработке видео:", error);
-  }
-}
+        // Если это видео, загружаем его без сжатия
+        storageRef = ref(storage, `videoPosts/${uniqueFilename}`);
+        await uploadBytes(storageRef, file);
+        videoURL = `https://firebasestorage.googleapis.com/v0/b/${firebaseConfig.storageBucket}/o/videoPosts%2F${encodeURIComponent(uniqueFilename)}?alt=media`;
+      }
 
       const newPost = { 
         id: new Date().getTime(), 

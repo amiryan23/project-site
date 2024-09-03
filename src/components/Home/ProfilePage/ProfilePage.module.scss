@@ -1321,8 +1321,8 @@
 					span{
 						align-self:flex-end;
 						position: relative;
-						left:-12px;
-						bottom: 0px;
+						left:-13px;
+						bottom: -4px;
 
 						
 
@@ -1676,13 +1676,23 @@
 
 
 				}
+				.videoItem{
+					width: 100%;
+					display: flex;
+					justify-content: center;
+					background-color:rgba(0,0,0,0.2);
+					// border: 2px solid #999;
+					border-radius: 7px;
+
 
 				video{
-					width: 200px;
+					width: 250px;
 					height: 100%;
-					border: 2px solid #999;
+					// border: 2px solid #999;
 					border-radius: 7px;
+					backdrop-filter: blur(15px);
 				}
+			}
 
 				.item2{
 					min-width: 50%;

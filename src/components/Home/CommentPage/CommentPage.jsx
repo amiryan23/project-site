@@ -221,6 +221,15 @@ const handleFileChange = useCallback((e, postId) => {
 						{selectedPost?.imageURL 
 						? <span className={s.item1}><img src={selectedPost?.imageURL ? selectedPost?.imageURL : <MiniLoader />} alt="" /></span>
 						: "" }
+						{selectedPost?.videoURL
+						? <span className={s.videoItem} >
+							
+						<video controls playsInline allowfullscreen="false" >
+          	<source src={selectedPost?.videoURL}  type="video/mp4" />
+          
+        		</video>
+        		</span>
+        		: ""}
 						{selectedPost?.postText 
 						? <span className={s.item2}>
 						{parseTextWithLinks(selectedPost?.postText)}
