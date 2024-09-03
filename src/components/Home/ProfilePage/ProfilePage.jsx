@@ -39,6 +39,7 @@ import { MdRestore } from "react-icons/md";
 import Picker from 'emoji-picker-react';
 import { LuSmilePlus } from "react-icons/lu";
 import twemoji from 'twemoji';
+import ReactPlayer from 'react-player'
 
 
 
@@ -433,6 +434,15 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
 						{m.imageURL 
 						? <span className={s.item1}><img src={m.imageURL ? m.imageURL : <MiniLoader />} alt="" /></span>
 						: "" }
+						{m.videoURL
+						? <span className={s.videoItem}>
+							
+						<video controls playsInline allowfullscreen="false" >
+          	<source src={m.videoURL}  type="video/mp4" />
+          
+        		</video>
+        		</span>
+        		: ""}
 						{m.postText 
 						? <span className={s.item2}>
 						{parseTextWithLinks(m.postText)}
@@ -890,7 +900,7 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
 		logined
 		? <div className={s.megaContainer} ref={animBlock}>
 
-			<div className={s.content1}>
+			<div className={s.content1} >
 			<div className={s.megaBlock}>
 			<button onClick={() => window.history.back(-1)}><AiOutlineRollback size="30" color="whitesmoke"/></button>
 			<span>
@@ -1028,7 +1038,7 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
 						</span>
 					:""}
 					<span className={s.item2}>
-					<input ref={imageRef} id="file" type="file" accept="image/*" style={{display:"none"}} onChange={handleFileChange}/>
+					<input ref={imageRef} id="file" type="file"  style={{display:"none"}} onChange={handleFileChange}/>
 						<label htmlFor="file" >
 						<MdOutlineAddPhotoAlternate title="Photo" />
 						</label>
@@ -1057,7 +1067,7 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
 {/*      			 disableSearchBar={false} /> */}
 {/*      			 </div>} */}
      			
-					<button className={s.btn2} onClick={()=>{handleAddPost(thisUser,postText,fileUrl,imageRef,forwardPost,tagUser,trackId)}}><HiMiniPlusSmall />{t("AddPost")}</button>
+					<button className={s.btn2} onClick={()=>{handleAddPost(thisUser,postText,fileUrl,imageRef,forwardPost,tagUser,trackId)}}><HiMiniPlusSmall size="29" />{t("AddPost")}</button>
 					
 					</span>
 				</span>

@@ -17,6 +17,7 @@ import Language from './../Language/Language'
 import { useQueryClient,useQuery } from 'react-query';
 import {updatesArray} from './../../helper/updatesArray'
 import {isWithin24Hours} from './../../helper/timeAdded'
+import { SiMarketo } from "react-icons/si";
 
 
 
@@ -37,7 +38,7 @@ const SavePage = React.lazy(()=>import('./SavePage/SavePage'))
 const NotificationPage = React.lazy(()=>import('./NotificationPage/NotificationPage'))
 const AddMusicPage = React.lazy(()=>import('./MusicPage/AddMusicPage/AddMusicPage'))
 const ArchivePage = React.lazy(()=>import('./ArchivePage/ArchivePage'))
-// const ChatGPT = React.lazy(()=>import('./../ChatGPT/ChatGPT'))
+const MarketPage = React.lazy(()=>import('./MarketPage/MarketPage'))
 
 
 
@@ -149,6 +150,11 @@ const topUsersList = sortedUsers?.map((user,index) => (
                 localStorage.setItem("location","/music")
                 setOpenMenu(false)
             }} to="/home/music"><FaMusic/>{t('Music')}</Link>
+            <Link className={activeLink === "/market" ? s.activeLink : s.link } onClick={()=>{
+                setActiveLink("/market")
+                localStorage.setItem("location","/market")
+                
+            }} to="/home/market"><SiMarketo/>{t('Market')}</Link>
            
             </div>
             <div className={s.Block2}>
@@ -193,7 +199,12 @@ const topUsersList = sortedUsers?.map((user,index) => (
                 setActiveLink("/music")
                 localStorage.setItem("location","/music")
                 
-            }} to="/home/music"><FaMusic/>{t('Music')}</Link>
+            }} to="/home/Music"><FaMusic/>{t('Music')}</Link>
+            <Link className={activeLink === "/market" ? s.activeLink : s.link } onClick={()=>{
+                setActiveLink("/market")
+                localStorage.setItem("location","/market")
+                
+            }} to="/home/market"><SiMarketo/>{t('Market')}</Link>
             
             </div>
           <div className={s.Block2}>
@@ -230,7 +241,7 @@ const topUsersList = sortedUsers?.map((user,index) => (
             <Route path="notification" element={<NotificationPage />} />
             <Route path="music/add" element={<AddMusicPage />} />
             <Route path="archive" element={<ArchivePage />} />
-            {/* <Route path="chatgpt" element={<ChatGPT />} /> */}
+            <Route path="market" element={<MarketPage />} />
 
            
 

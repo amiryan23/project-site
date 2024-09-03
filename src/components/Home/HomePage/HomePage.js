@@ -259,7 +259,8 @@ const handleFileChange = useCallback((e, postId) => {
 							<Link to={thisUser?.id !== m.userId ? `/home/user/profile/${m.userId}` : "/home/profile"}>
 							<img 
 							src={users?.find(user => user.id === m.userId).photo?.placed ? users?.find(user => user?.id === m.userId).photo?.placed : users?.find(user => user?.id === m.userId).photo?.default} alt="" 
-							className={users?.find(user=> user.id === m.userId)?.storyArray?.some(story => isWithin24Hours(story?.timeAdded)) ? users?.find(user=> user.id === m.userId)?.storyArray[users?.find(user => user.id === m.userId)?.storyArray.length - 1]?.view?.includes(thisUser?.id) ? s.viewedstory : s.activeStory : ""}/>
+							className={users?.find(user=> user.id === m.userId)?.storyArray?.some(story => isWithin24Hours(story?.timeAdded)) ? users?.find(user=> user.id === m.userId)?.storyArray[users?.find(user => user.id === m.userId)?.storyArray.length - 1]?.view?.includes(thisUser?.id) ? s.viewedstory : s.activeStory : ""}
+							loading="lazy"/>
 							</Link>
 						{!users?.find(user => user.id === m.userId).disableOnlineStatus || thisUser?.isAdmin 
 							? <span>
@@ -341,7 +342,7 @@ const handleFileChange = useCallback((e, postId) => {
 					<div className={s.postMiniContent2}>
 
 						{m.imageURL 
-						? <span className={s.item1}><img src={m.imageURL ? m.imageURL : <MiniLoader />} alt="" /></span>
+						? <span className={s.item1}><img src={m.imageURL ? m.imageURL : <MiniLoader />} alt="" loading="lazy" /></span>
 						: "" }
 						{m.postText 
 						? <span className={s.item2}>
@@ -416,7 +417,7 @@ const handleFileChange = useCallback((e, postId) => {
 					          <div className={s.Block1}>
 					            <span className={s.item}>
 					             <Link to={thisUser?.id !== comment.userId ? `/home/user/profile/${comment.userId}` : "/home/profile"} >
-					             <img src={users?.find(user => user.id === comment.userId).photo?.placed  || users?.find(user => user?.id === comment.userId).photo?.default } alt="" 
+					             <img src={users?.find(user => user.id === comment.userId).photo?.placed  || users?.find(user => user?.id === comment.userId).photo?.default } alt="" loading="lazy"
 					             className={users?.find(user=> user.id === comment.userId)?.storyArray?.some(story => isWithin24Hours(story?.timeAdded)) ? users?.find(user=> user.id === comment.userId)?.storyArray[users?.find(user => user.id === comment.userId)?.storyArray.length - 1]?.view?.includes(thisUser?.id) ? s.viewedstory : s.activeStory : ""} />
 					             </Link>
 					             {!users?.find(user => user.id === comment.userId).disableOnlineStatus || thisUser?.isAdmin 
@@ -457,7 +458,7 @@ const handleFileChange = useCallback((e, postId) => {
 					            	: "" }
 					            	{comment.imgUrl !== undefined && comment.imgUrl !== "" ? 
 					            	<div className={s.miniItem}>
-					            		<img src={comment.imgUrl} alt="" width="100px"/>
+					            		<img src={comment.imgUrl} alt="" width="100px" loading="lazy"/>
 					            	</div>
 					            	: ""}
 					            	<div className={s.miniItem2}>
@@ -500,7 +501,7 @@ const handleFileChange = useCallback((e, postId) => {
 							:"" }
 							{fileUrls[m.id]?.url && 
 							 <div className={s.imgContainer}>
-							 <img src={fileUrls[m.id]?.url} alt="Preview" width="100px" /> 
+							 <img src={fileUrls[m.id]?.url} alt="Preview" width="100px" loading="lazy"/> 
 							 <span onClick={() => {
 				 				 setFileUrls(prevFileUrls => {
 		   						 const updatedFileUrl = { ...prevFileUrls };
@@ -516,7 +517,7 @@ const handleFileChange = useCallback((e, postId) => {
 							 </div>
 							 }
 						<div className={s.postCommentBlock2}>
-							<span className={s.postCommentItem1}><img title={thisUser?.username} src={thisUser?.photo?.placed ? thisUser?.photo?.placed  : thisUser?.photo?.default } alt="" /></span>
+							<span className={s.postCommentItem1}><img title={thisUser?.username} src={thisUser?.photo?.placed ? thisUser?.photo?.placed  : thisUser?.photo?.default } alt="" loading="lazy"/></span>
 							<span className={s.postCommentItem2}>
 							{!m.privateComment 
 							? <textarea value={commentText[m.id] || ""} onChange={(e)=>{handleCommentChange(m.id,e.target.value)}} type="text" placeholder={t('AddComment')}/>
@@ -560,7 +561,7 @@ const onlyFollowing = arrayPosts
  	.map(m => 		<div className={s.postMegaContent} key={`f${m.id}`}>
 					<div className={s.postMiniContent1}>
 						<span className={s.postBlock1}>
-							<Link to={thisUser?.id !== m.userId ? `/home/user/profile/${m.userId}` : "/home/profile"}><img src={users?.find(user => user.id === m.userId).photo?.placed ? users?.find(user => user?.id === m.userId).photo?.placed : users?.find(user => user?.id === m.userId).photo?.default} alt="" /></Link>
+							<Link to={thisUser?.id !== m.userId ? `/home/user/profile/${m.userId}` : "/home/profile"}><img loading="lazy" src={users?.find(user => user.id === m.userId).photo?.placed ? users?.find(user => user?.id === m.userId).photo?.placed : users?.find(user => user?.id === m.userId).photo?.default} alt="" /></Link>
 						{!users?.find(user => user.id === m.userId).disableOnlineStatus || thisUser?.isAdmin 
 							? <span>
 								  {
@@ -616,7 +617,7 @@ const onlyFollowing = arrayPosts
 					<div className={s.postMiniContent2}>
 
 						{m.imageURL 
-						? <span className={s.item1}><img src={m.imageURL ? m.imageURL : <MiniLoader />} alt="" /></span>
+						? <span className={s.item1}><img src={m.imageURL ? m.imageURL : <MiniLoader />} alt="" loading="lazy" /></span>
 						: "" }
 						{m.postText 
 						? <span className={s.item2}>
@@ -682,7 +683,7 @@ const onlyFollowing = arrayPosts
 					        <div key={comment.id} className={s.Comment}>
 					          <div className={s.Block1}>
 					            <span className={s.item}>
-					             <Link to={thisUser?.id !== comment.userId ? `/home/user/profile/${comment.userId}` : "/home/profile"} ><img src={users?.find(user => user.id === comment.userId).photo?.placed  || users?.find(user => user?.id === comment.userId).photo?.default } alt="" /></Link>
+					             <Link to={thisUser?.id !== comment.userId ? `/home/user/profile/${comment.userId}` : "/home/profile"} ><img loading="lazy" src={users?.find(user => user.id === comment.userId).photo?.placed  || users?.find(user => user?.id === comment.userId).photo?.default } alt="" /></Link>
 					             {!users?.find(user => user.id === comment.userId).disableOnlineStatus || thisUser?.isAdmin 
 					             ? <span>
 												  {
@@ -721,7 +722,7 @@ const onlyFollowing = arrayPosts
 					            	: "" }
 					            	{comment.imgUrl !== undefined && comment.imgUrl !== "" ? 
 					            	<div className={s.miniItem}>
-					            		<img src={comment.imgUrl} alt="" width="100px"/>
+					            		<img src={comment.imgUrl} alt="" width="100px" loading="lazy"/>
 					            	</div>
 					            	: ""}
 					            	<div className={s.miniItem2}>
@@ -764,7 +765,7 @@ const onlyFollowing = arrayPosts
 							:"" }
 								{fileUrls[m.id]?.url &&
 							 <div className={s.imgContainer}>
-							 <img src={fileUrls[m.id]?.url} alt="Preview" width="100px" /> 
+							 <img src={fileUrls[m.id]?.url} alt="Preview" width="100px" loading="lazy"/> 
 							 <span onClick={() => {
 				 				 setFileUrls(prevFileUrls => {
 		   						 const updatedFileUrl = { ...prevFileUrls };
@@ -778,7 +779,7 @@ const onlyFollowing = arrayPosts
 							 }
 						
 						<div className={s.postCommentBlock2}>
-							<span className={s.postCommentItem1}><img title={thisUser?.username} src={thisUser?.photo?.placed ? thisUser?.photo?.placed  : thisUser?.photo?.default } alt="" /></span>
+							<span className={s.postCommentItem1}><img title={thisUser?.username} src={thisUser?.photo?.placed ? thisUser?.photo?.placed  : thisUser?.photo?.default } alt="" loading="lazy"/></span>
 							<span className={s.postCommentItem2}>
 							{!m.privateComment 
 							? <textarea value={commentText[m.id] || ""} onChange={(e)=>{handleCommentChange(m.id,e.target.value)}} type="text" placeholder={t('AddComment')}/>
@@ -823,19 +824,19 @@ const onlyFollowing = arrayPosts
 		<div className={s.megaContent} ref={animBlock}>
 			<span className={s.content1}>
 			<span className={s.miniItem1}>{t('Publication')}</span>
-			{thisUser 
-			? <span ref={typeWriter} className={`${s.miniItem3} ${s.activeTypeWriter}`}>
-									<Typewriter 
-					words={[`Hi ${thisUser?.username}`,"How are you?","I am very happy )))","Because you are reading this","Welcome to my world :3","Well, what is there in this world???","ERROR404#$@%#$% AHAHHAHAHAHAHAHAH",`P r o b a b l y ... n o t h i n g ) ) )`,"< Thank you />"]} 
-					loop={1}
-          cursor
-          cursorStyle='>'
-					typeSpeed={70}
-          deleteSpeed={30}
-          delaySpeed={1000}
-          />
-			</span>
-			: "" }
+			{/* {thisUser  */}
+			{/* ? <span ref={typeWriter} className={`${s.miniItem3} ${s.activeTypeWriter}`}> */}
+			{/* 						<Typewriter  */}
+			{/* 		words={[`Hi ${thisUser?.username}`,"How are you?","I am very happy )))","Because you are reading this","Welcome to my world :3","Well, what is there in this world???","ERROR404#$@%#$% AHAHHAHAHAHAHAHAH",`P r o b a b l y ... n o t h i n g ) ) )`,"< Thank you />"]}  */}
+			{/* 		loop={1} */}
+   {/*        cursor */}
+   {/*        cursorStyle='>' */}
+			{/* 		typeSpeed={70} */}
+   {/*        deleteSpeed={30} */}
+   {/*        delaySpeed={1000} */}
+   {/*        /> */}
+			{/* </span> */}
+			{/* : "" } */}
 			<span className={s.miniItem2}>
 				<button ref={btn1} onClick={()=>{changePath(btn1,btn2,true)}} className={s.active}>{t('All')}</button>
 				<button ref={btn2} onClick={()=>{changePath(btn2,btn1,false)}} >{t("Following")}</button>
