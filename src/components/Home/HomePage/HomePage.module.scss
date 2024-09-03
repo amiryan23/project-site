@@ -209,6 +209,7 @@
 				gap: 30px;
 				padding: 5px;
 				flex: 1;
+				z-index:3;
 
 
 
@@ -434,7 +435,7 @@
 					background-color:rgba(0,0,0,0.2);
 					// border: 2px solid #999;
 					border-radius: 7px;
-					
+
 
 				video{
 					width: 250px;
@@ -442,6 +443,7 @@
 					// border: 2px solid #999;
 					border-radius: 7px;
 					backdrop-filter: blur(15px);
+					// z-index: -1;
 				}
 			}
 
