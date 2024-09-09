@@ -748,7 +748,7 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
 				<HiLockClosed />
 			</div> } 
 			</div>
-				}
+				
 		</div>
 		: <div className="noLogined">You are not authorized <Link to="/" className="btnLogin">Login</Link></div>
 		)

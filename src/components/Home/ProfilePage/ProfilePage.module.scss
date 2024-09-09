@@ -1678,19 +1678,25 @@
 				}
 				.videoItem{
 					width: 100%;
+					min-height: 250px;
+					max-height: 500px;
+					height: auto;
 					display: flex;
 					justify-content: center;
-					background-color:rgba(0,0,0,0.2);
+					align-items: center;
+					
 					// border: 2px solid #999;
-					border-radius: 7px;
+
 
 
 				video{
-					width: 250px;
-					height: 100%;
-					// border: 2px solid #999;
+					width: 100%;
+					min-height: 250px;
+					max-height: 500px;
+					background-color:rgba(256, 256, 256, 0.1);
 					border-radius: 7px;
-					backdrop-filter: blur(15px);
+					border: 2px solid  rgba(256, 256, 256, 0.2);
+					
 					
 				}
 			}

@@ -352,6 +352,7 @@ const handleFileChange = useCallback((e, postId) => {
           
         		</video>
         		</span>
+        		
         		: ""}
 						{m.postText 
 						? <span className={s.item2}>

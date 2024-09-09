@@ -24,7 +24,9 @@
         font-family: "Josefin Sans","Source Code Pro", sans-serif;
         // background: linear-gradient(0deg, rgba(69,200,168,0.5) 0%, rgba(36,157,153,0.5) 100%);
         // background-color:rgba(256, 256, 256, 0.7);
-        background-color:rgba(0,0,0,0.7);
+        background-color:#272b30;
+        position: sticky;
+        top: 100px;
 
 
 
@@ -55,23 +57,18 @@
             flex-direction: row;
             gap: 5px;
             align-items: center;
-            transition-duration: 500ms;
+            transition-duration: 250ms;
             }
 
             .link:hover{
-                animation: animMenu 200ms linear forwards;
+                transform: scale(0.99);color:whitesmoke;
+                transition: 250ms linear;
             }
 
             
 
-            @keyframes animMenu {
-                0%{background-color: transparent;}
-                50%{background-color:rgba(0,0,0,0.5) ; color:whitesmoke; }
-                100%{background-color:rgba(0,0,0,0.5) ; transform: scale(0.99);color:whitesmoke; }
-            }
-
             .activeLink{
-               background-color:rgba(0,0,0,0.5) ;
+               // background-color:rgba(0,0,0,0.5) ;
                 padding: 10px;
             border: 2px solid whitesmoke;
             border-radius: 13px;
@@ -83,7 +80,7 @@
             align-items: center;
                         font-size: 14px;
             font-weight: bold;
-            transition-duration: 500ms;
+            transition-duration: 200ms;
             }
 
 
@@ -124,7 +121,7 @@
                 
                 button{
                      padding: 7px;
-            background-color: rgba(0,0,0,0.5);
+            background-color: transparent;
             border: 2px solid rgba(256, 256, 256, 0.5);
             border-radius: 7px;
             display: flex;
@@ -205,7 +202,7 @@
             flex-direction: row;
             gap: 5px;
             align-items: center;
-            transition-duration: 500ms linear;
+            transition: 500ms linear;
             }
 
             .link:hover{
@@ -221,7 +218,7 @@
             }
 
             .activeLink{
-                background-color: rgba(0,0,0,1);
+                // background-color: rgba(0,0,0,1);
                 padding: 10px;
             border: 2px solid rgba(256, 256, 256, 1.0);
             border-radius: 13px;
@@ -271,7 +268,7 @@
                 
                 button{
                      padding: 7px;
-            background-color: rgba(0,0,0,0.5);
+            background-color: transparent;
              border: 2px solid rgba(256, 256, 256, 0.5);
             border-radius: 7px;
             display: flex;
@@ -374,7 +371,7 @@
         border-radius: 15px;
         flex:1 1 380px;
         // background: linear-gradient(0deg, rgba(69,200,168,0.5) 0%, rgba(36,157,153,0.5) 100%);
-        background-color:rgba(0,0,0,0.7);
+        background-color:rgba(39, 43, 48,0.5);
         // background-color: rgba(256, 256, 256, 0.3);
         overflow:hidden;
 
@@ -443,8 +440,9 @@
             max-height: 400px;
             display: flex;
             flex-direction: column;
-            background-color:rgba(0,0,0,0.7);
+            background-color:rgba(39, 43, 48,1);
             border-radius: 15px;
+
 
 
 
@@ -528,8 +526,12 @@
             min-height: 400px;
             display: flex;
             flex-direction: column;
-            background-color:rgba(0,0,0,0.7);
+            background-color:rgba(39, 43, 48,1);
             border-radius: 15px;
+            position: sticky;
+            top: 100px;
+           
+
 
          .item1{
              width: 100%;
