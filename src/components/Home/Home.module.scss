@@ -390,6 +390,7 @@
         flex-direction: column;
         justify-content: flex-start;
         gap: 10px;
+       
 
 
         .miniContent{
@@ -402,8 +403,12 @@
             flex-direction: column;
             padding: 15px;
             gap: 10px;
-            display: none;
-            visibility: hidden;
+            // display: none;
+            // visibility: hidden;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
 
             .item1{
                 align-self: center;
@@ -442,6 +447,7 @@
             flex-direction: column;
             background-color:rgba(39, 43, 48,1);
             border-radius: 15px;
+            z-index: 555;
 
 
 
@@ -560,6 +566,7 @@
                 border-radius: 13px;
                 padding: 5px;
                 text-decoration: none;
+                z-index: -2;
                 
 
                 .miniItem1{

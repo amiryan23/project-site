@@ -18,6 +18,7 @@ import { useQueryClient,useQuery } from 'react-query';
 import {updatesArray} from './../../helper/updatesArray'
 import {isWithin24Hours} from './../../helper/timeAdded'
 import { SiMarketo } from "react-icons/si";
+import MusicPlayer from './../MusicPlayer/MusicPlayer'
 
 
 
@@ -54,7 +55,7 @@ const Home = ()=> {
      const {  logined, setLogined  , thisUser , isWideScreen,openMenu,setOpenMenu,activeLink,setActiveLink,openUpdate,setOpenUpdate,t,srcMusicId,setSrcMusicId} = useContext(MyContext);
 
      const mobileMenuAnim = useRef()
-     const song = useRef(new Audio())
+
 
      const queryClient = useQueryClient();
 
@@ -78,15 +79,7 @@ const Home = ()=> {
     }
 
 
-useEffect(()=>{
-    if(srcMusicId){
-        song.current.src = srcMusicId;
-        song.current.play()
-    } else {
-        song.current.src = null
-        song.current.pause()
-    }
-},[srcMusicId,setSrcMusicId])
+
 
 
     const usersWithPostCount = users?.map(user => ({
@@ -249,24 +242,12 @@ const topUsersList = sortedUsers?.map((user,index) => (
             </Suspense> 
             </div>
             <div className={s.content3}>
-                {/* <div className={s.miniContent}> */}
-                {/* <span className={s.item1}> */}
-                {/*     music name */}
-                {/* </span> */}
-                {/* <span className={s.item2}> */}
-                {/*     <span className={s.miniBlock1}>-:-</span> */}
-                {/*     <span className={s.miniBlock2}> */}
-                {/*         <span className={s.element}></span> */}
-                {/*     </span> */}
-                {/*     <span className={s.miniBlock1}>-:-</span> */}
-                {/* </span> */}
-                {/* <span className={s.item3}> */}
-                {/*     prev play next */}
-                {/* </span> */}
-                {/* </div> */}
-            <div className={s.miniContent}>
-                <audio  ref={song} ></audio>
+                
+           {srcMusicId !== null 
+           ? <div className={s.miniContent}>
+                <MusicPlayer/>
             </div>
+            : ""}
                {openUpdate ? <div className={s.miniContent1}>
                     <span className={s.item1}>{updatesArray[updatesArray?.length - 1].title}</span>
                     <span className={s.item2}>

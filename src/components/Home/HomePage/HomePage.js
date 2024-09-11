@@ -347,7 +347,7 @@ const handleFileChange = useCallback((e, postId) => {
 						{m.videoURL
 						? <span className={s.videoItem} >
 							
-						<video controls playsInline allowfullscreen="false" >
+						<video controls playsInline allowfullscreen="false" preload="metadata">
           	<source src={m.videoURL}  type="video/mp4" />
           
         		</video>
