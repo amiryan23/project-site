@@ -25,6 +25,7 @@ export const parseTextWithLinks = (text) => {
       } else if (instagramPattern.test(part)) {
         return (
           <div className="instagram-container" key={index}>
+          <span> © instagram </span>
             <blockquote
               className="instagram-media"
               data-instgrm-permalink={part}
@@ -38,17 +39,18 @@ export const parseTextWithLinks = (text) => {
         const embedUrl = match ? match[1] : '';
 
         return (
-          <>
+          <div className="telegram-container">
+         <span> © telegram </span>
           <blockquote
             className="telegram-post"
             data-telegram-post={embedUrl}
             data-dark="1"
             key={index}
           >
-            <a href={part} target="_blank" rel="noopener noreferrer">View on Telegram</a>
+            
           </blockquote>
-
-          </>
+          
+          </div>
         );
       } else {
         return (

@@ -933,6 +933,7 @@
 						border-radius: 7px;
 						border: 2px solid rgba(256, 256, 256, 0.2);
 						user-select: none;
+						filter:drop-shadow(1px 1px 10px #999);
 					}
 				}
 
@@ -1191,6 +1192,7 @@
 										max-height: 450px;
 										border-radius: 9px;
 										border: 2px solid rgba(256, 256, 256, 0.3);
+										
 									}
 								}
 
