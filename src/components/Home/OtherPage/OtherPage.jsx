@@ -31,6 +31,9 @@ import { FaPauseCircle } from "react-icons/fa";
 import { IoIosMusicalNotes } from "react-icons/io";
 import {isWithin24Hours} from './../../../helper/timeAdded'
 import { FaChevronCircleDown , FaChevronCircleUp } from "react-icons/fa";
+import {InstagramEmbedLoader} from './../../../helper/instaPost'
+import {TelegramEmbedLoader} from './../../../helper/telegramPost'
+
 
 
 
@@ -380,6 +383,8 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
         		: ""}
 						{m.postText 
 						? <span className={s.item2}>
+						<InstagramEmbedLoader/>
+						<TelegramEmbedLoader/>
 						{parseTextWithLinks(m.postText)}
 						</span>
 						: "" }

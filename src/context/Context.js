@@ -38,6 +38,7 @@ const MyContextProvider = ({ children }) => {
   const [srcMusicId,setSrcMusicId] = useState(null)
   const [openStoryModal,setOpenStoryModal] = useState(false)
   const [viewStory,setViewStory] = useState(false)
+  const [isLoading,setIsLoading] = useState(false) 
 
 const [activeLink,setActiveLink] = useState(locationStorage ? locationStorage : "/home")
 
@@ -65,6 +66,7 @@ useEffect(()=>{
 
     }
 },[thisUser])
+
 
 
 
@@ -132,7 +134,6 @@ localStorage.setItem('isSubscribed', 'true')
 
 
 
-
     
 
     window.addEventListener('resize', handleResize);
@@ -144,19 +145,19 @@ localStorage.setItem('isSubscribed', 'true')
 
 
 const calculateTimeDifference = (timeAdded) => {
-  // Парсим строку времени в формате ISO в объект Date
+
   const postTime = new Date(timeAdded);
 
-  // Получаем текущее время
+
   const currentTime = new Date();
 
-  // Вычисляем разницу в миллисекундах
+  
   const differenceInMilliseconds = currentTime - postTime;
   
-  // Вычисляем разницу в минутах
+
   const differenceInMinutes = Math.floor(differenceInMilliseconds / (1000 * 60));
   
-  // Определяем разницу по времени
+ 
   if (differenceInMinutes < 1) {
     return t("Now");
   } else if (differenceInMinutes < 60) {
@@ -167,8 +168,15 @@ const calculateTimeDifference = (timeAdded) => {
   } else if (differenceInMinutes < 30 * 24 * 60) {
     const days = Math.floor(differenceInMinutes / (24 * 60));
     return `${days} ${days > 1 ? t('Days') : t('Day')} ${t("Ago")}`;
+  } else if (differenceInMinutes < 12 * 30 * 24 * 60) {
+    const months = Math.floor(differenceInMinutes / (30 * 24 * 60));
+    return `${months} ${months > 1 ? t('Month') : t('Month')} ${t("Ago")}`;
+  } else if (differenceInMinutes < 365 * 24 * 60) {
+    const years = Math.floor(differenceInMinutes / (365 * 24 * 60));
+    return `${years} ${years > 1 ? t('Years') : t('Year')} ${t("Ago")}`;
   } else {
-    return timeAdded; // Если прошло больше месяца
+    
+    return timeAdded.split('T')[0];
   }
 };
 
@@ -232,7 +240,9 @@ const zoomThisPhoto = (url) =>{
         openStoryModal,
         setOpenStoryModal,
         viewStory,
-        setViewStory
+        setViewStory,
+        isLoading,
+        setIsLoading
     }), [logined, authUser, isWideScreen, openMenu, commentText,notificText,theme,t,activeLink,setActiveLink,openUpdate,fileUrls,updatesData,openModal,srcMusicId,setSrcMusicId,openStoryModal,viewStory]);
 
   return (

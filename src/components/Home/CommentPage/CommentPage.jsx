@@ -19,6 +19,8 @@ import { FaCirclePlay  } from "react-icons/fa6";
 import { FaPauseCircle } from "react-icons/fa";
 import { IoIosMusicalNotes } from "react-icons/io";
 import {isWithin24Hours} from './../../../helper/timeAdded'
+import {InstagramEmbedLoader} from './../../../helper/instaPost'
+import {TelegramEmbedLoader} from './../../../helper/telegramPost'
 
 
 const CommentPage = () => {
@@ -232,6 +234,8 @@ const handleFileChange = useCallback((e, postId) => {
         		: ""}
 						{selectedPost?.postText 
 						? <span className={s.item2}>
+						<InstagramEmbedLoader/>
+						<TelegramEmbedLoader/>
 						{parseTextWithLinks(selectedPost?.postText)}
 						</span>
 						: "" }

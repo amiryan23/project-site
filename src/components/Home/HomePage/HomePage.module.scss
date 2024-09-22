@@ -423,7 +423,7 @@
 						border: 2px solid rgba(256, 256, 256, 0.2);
 						border-bottom: none;
 						user-select: none;
-						box-shadow:1px 2px 4px #999;
+						filter:drop-shadow(1px 1px 10px #999);
 
 					}
 				}
@@ -1034,7 +1034,7 @@
             cursor: pointer;
             font-weight: bold;
             color:rgba(256, 256, 256, 0.5);
-            font-size: 15px;
+            font-size: 12px;
             transition: 250ms linear;
             font-family: "Josefin Sans","Source Code Pro","Noto Sans Armenian", sans-serif;	
 

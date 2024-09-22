@@ -8,6 +8,7 @@ import Footer from './components/Footer/Footer'
 import './i18n';
 import { BrowserRouter,Route,Routes,useLocation  } from 'react-router-dom';
 import { MyContextProvider } from './context/Context'; 
+import {InstagramEmbedLoader} from './helper/instaPost'
 
 const Home = React.lazy(()=>import("./components/Home/Home"))
 const Login = React.lazy(()=>import("./components/Login/Login"))
@@ -33,7 +34,9 @@ function App() {
     <MyContextProvider>
     <BrowserRouter>
     <ScrollToTop />
+
     <div className="App">
+    <InstagramEmbedLoader/>
       <Header />
       <Modal />
       <ModalStory/>

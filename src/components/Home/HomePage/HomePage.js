@@ -28,13 +28,16 @@ import { IoIosMusicalNotes } from "react-icons/io";
 import {isWithin24Hours} from './../../../helper/timeAdded'
 import { Typewriter,Cursor } from 'react-simple-typewriter'
 import { FaPlay,FaPause  } from "react-icons/fa";
+import {InstagramEmbedLoader} from './../../../helper/instaPost'
+import {TelegramEmbedLoader} from './../../../helper/telegramPost'
+
 
 
 
 
 const HomePage = ()=>{
 
- const {  thisUser,logined,calculateTimeDifference,commentText,setCommentText,setNotificText,copyToClipboard,t,setActiveLink,fileUrls, setFileUrls,srcMusicId,setSrcMusicId } = useContext(MyContext);
+ const {  thisUser,logined,calculateTimeDifference,commentText,setCommentText,setNotificText,copyToClipboard,t,setActiveLink,fileUrls, setFileUrls,srcMusicId,setSrcMusicId,isLoading,setIsLoading } = useContext(MyContext);
 
  const queryClient = useQueryClient();
 
@@ -356,6 +359,8 @@ const handleFileChange = useCallback((e, postId) => {
         		: ""}
 						{m.postText 
 						? <span className={s.item2}>
+						<InstagramEmbedLoader />
+						<TelegramEmbedLoader/>
 						{parseTextWithLinks(m.postText)}
 						</span>
 						: "" }

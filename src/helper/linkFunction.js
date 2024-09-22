@@ -1,6 +1,10 @@
+import { useEffect } from 'react';
+
 export const parseTextWithLinks = (text) => {
   const urlPattern = /(https?:\/\/[^\s]+)/g;
   const youtubePattern = /https?:\/\/(www\.)?(youtube\.com|youtu\.be)\/.+$/;
+  const instagramPattern = /https?:\/\/(www\.)?instagram\.com\/p\/[A-Za-z0-9_-]+\/?/;
+  const telegramPattern = /https?:\/\/(www\.)?t\.me\/[A-Za-z0-9_-]+\/\d+/; // Новый шаблон для Telegram
   const parts = text.split(urlPattern);
 
   return parts.map((part, index) => {
@@ -18,6 +22,34 @@ export const parseTextWithLinks = (text) => {
             allowFullScreen
           ></iframe>
         );
+      } else if (instagramPattern.test(part)) {
+        return (
+          <div className="instagram-container" key={index}>
+            <blockquote
+              className="instagram-media"
+              data-instgrm-permalink={part}
+              data-instgrm-version="15"
+              data-dark="1"
+            ></blockquote>
+          </div>
+        );
+      } else if (telegramPattern.test(part)) {  // Обработка Telegram ссылок
+        const match = part.match(/t\.me\/([A-Za-z0-9_-]+\/\d+)/);
+        const embedUrl = match ? match[1] : '';
+
+        return (
+          <>
+          <blockquote
+            className="telegram-post"
+            data-telegram-post={embedUrl}
+            data-dark="1"
+            key={index}
+          >
+            <a href={part} target="_blank" rel="noopener noreferrer">View on Telegram</a>
+          </blockquote>
+
+          </>
+        );
       } else {
         return (
           <a key={index} href={part} target="_blank" rel="noopener noreferrer">
@@ -26,7 +58,8 @@ export const parseTextWithLinks = (text) => {
         );
       }
     }
-    // Handle new lines by splitting part by newline character and rendering <br />
+
+
     const textParts = part.split('\n').map((textPart, textIndex) => (
       <>
         {textPart}

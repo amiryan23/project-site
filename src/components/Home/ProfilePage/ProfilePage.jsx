@@ -40,7 +40,8 @@ import Picker from 'emoji-picker-react';
 import { LuSmilePlus } from "react-icons/lu";
 import twemoji from 'twemoji';
 import ReactPlayer from 'react-player'
-
+import {InstagramEmbedLoader} from './../../../helper/instaPost'
+import {TelegramEmbedLoader} from './../../../helper/telegramPost'
 
 
 
@@ -49,7 +50,7 @@ import ReactPlayer from 'react-player'
 
 const ProfilePage = ()=>{
 
- const {   isWideScreen,logined ,calculateTimeDifference,commentText,setCommentText,copyToClipboard,setNotificText,t,setActiveLink,fileUrls, setFileUrls,zoomThisPhoto,srcMusicId,setSrcMusicId,setOpenStoryModal,setViewStory} = useContext(MyContext);
+ const {   isWideScreen,logined ,calculateTimeDifference,commentText,setCommentText,copyToClipboard,setNotificText,t,setActiveLink,fileUrls, setFileUrls,zoomThisPhoto,srcMusicId,setSrcMusicId,setOpenStoryModal,setViewStory,isLoading,setIsLoading} = useContext(MyContext);
 
 	const forwardPostStorage = JSON.parse(localStorage.getItem("forwardPost"))
 
@@ -445,6 +446,8 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
         		: ""}
 						{m.postText 
 						? <span className={s.item2}>
+						<InstagramEmbedLoader/>
+						<TelegramEmbedLoader/>
 						{parseTextWithLinks(m.postText)}
 						</span>
 						: "" }
