@@ -17,7 +17,7 @@ const MarketPage = () => {
 				<span className={s.item2}>Balance: {thisUser?.coscoin && thisUser?.coscoin != undefined && thisUser?.coscoin != 0 ? thisUser?.coscoin : "0" } Cospoint</span>
 			</div>
 			<div className={s.content2}>
-				{/* <iframe src="https://cdn.htmlgames.com/NinjaBreakout/" width="100%" height="600px"></iframe> */}
+			
 			</div>
 		</div>
 		)

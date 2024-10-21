@@ -969,6 +969,9 @@
 				background-color: rgba(256, 256, 256, 0.1);
 				border-radius: 13px;
 				color: rgba(256, 256, 256, 0.9);
+				display: flex;
+				flex-direction: column;
+				gap: 7px;
 				
 
 					a{

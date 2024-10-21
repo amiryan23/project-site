@@ -122,7 +122,7 @@ const unfollowMutation = useUnfollowMutation()
 				<TbUserSearch/><input value={search} onChange={(e)=>{setSearch(e.target.value)}} placeholder="Search user..." type="search" />
 			</div>
 			<div className={s.content3}>
-			{users ? usersArray?.slice(0,4) : ""}
+			{users ? usersArray?.slice(0,8) : ""}
 				
 			</div>
 			

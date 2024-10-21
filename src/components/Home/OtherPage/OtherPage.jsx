@@ -33,7 +33,7 @@ import {isWithin24Hours} from './../../../helper/timeAdded'
 import { FaChevronCircleDown , FaChevronCircleUp } from "react-icons/fa";
 import {InstagramEmbedLoader} from './../../../helper/instaPost'
 import {TelegramEmbedLoader} from './../../../helper/telegramPost'
-
+import Zoom from 'react-medium-image-zoom'
 
 
 
@@ -369,10 +369,10 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
 				</Link>
 				: <div className={s.deletedPost}>{t('ThisPostDeleted')}</div>
 				: "" }
-						{m.imageURL 
-						? <span className={s.item1}><img src={m.imageURL ? m.imageURL : <MiniLoader />} alt="" /></span>
+						{m.imageURL && !m.postText
+						? <span className={s.item1}><Zoom isZoomed={true}><img src={m.imageURL ? m.imageURL : <MiniLoader />} alt="" /></Zoom></span>
 						: "" }
-						{m.videoURL
+						{m.videoURL && !m.postText
 						? <span className={s.videoItem} >
 							
 						<video controls playsInline allowfullscreen="false" >
@@ -383,6 +383,18 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
         		: ""}
 						{m.postText 
 						? <span className={s.item2}>
+						{m.imageURL 
+						? <span className={s.item1}><Zoom isZoomed={true}><img src={m.imageURL ? m.imageURL : <MiniLoader />} alt="" /></Zoom></span>
+						: "" }
+						{m.videoURL
+						? <span className={s.videoItem} >
+							
+						<video controls playsInline allowfullscreen="false" >
+          	<source src={m.videoURL}  type="video/mp4" />
+          
+        		</video>
+        		</span>
+        		: ""}
 						<InstagramEmbedLoader/>
 						<TelegramEmbedLoader/>
 						{parseTextWithLinks(m.postText)}
@@ -496,7 +508,7 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
 					            	: "" }
 					            	{comment.imgUrl !== undefined && comment.imgUrl !== "" ? 
 					            	<div className={s.miniItem}>
-					            		<img src={comment.imgUrl} alt="" width="100px"/>
+					            		<Zoom isZoomed={true}><img src={comment.imgUrl} alt="" width="100px"/></Zoom>
 					            	</div>
 					            	: ""}
 					            	<div className={s.miniItem2}>
@@ -723,7 +735,7 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
 				<div className={storyHeight ? `${s.activeCont} ${s.storyCont}` : s.storyCont} onClick={()=>setStoryHeight((prevStoryHeight)=>true)}  style={{backgroundImage:`url(${story.fileURL})`}}>
 		{storyHeight ?
 		<>
-		<div className={s.storyItem1}>{story?.timeAdded}</div>
+		<div className={s.storyItem1}>{calculateTimeDifference(story?.timeAdded)}</div>
 	
 		<div className={s.storyItem2}>
 		<span className={s.item1}>{story?.storyText}</span>
@@ -733,7 +745,7 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
 		: ""}
 	</div>
 					
-			)}
+			).reverse()}
 			</span>
 			</div>
 			: ""}

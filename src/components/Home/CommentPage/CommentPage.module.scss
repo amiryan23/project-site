@@ -210,6 +210,10 @@
 				color: rgba(256, 256, 256, 0.9);
 				font-weight: bold;
 				font-size: 14px;
+				display: flex;
+				flex-direction: column;
+				gap: 7px;
+				
 				
 					a{
 						color: rgba(256, 256, 256, 0.7);

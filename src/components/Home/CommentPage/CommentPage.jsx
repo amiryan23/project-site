@@ -21,6 +21,7 @@ import { IoIosMusicalNotes } from "react-icons/io";
 import {isWithin24Hours} from './../../../helper/timeAdded'
 import {InstagramEmbedLoader} from './../../../helper/instaPost'
 import {TelegramEmbedLoader} from './../../../helper/telegramPost'
+import Zoom from 'react-medium-image-zoom'
 
 
 const CommentPage = () => {
@@ -220,10 +221,10 @@ const handleFileChange = useCallback((e, postId) => {
 					</div>
 					<div className={s.postMiniContent2}>
 
-						{selectedPost?.imageURL 
-						? <span className={s.item1}><img src={selectedPost?.imageURL ? selectedPost?.imageURL : <MiniLoader />} alt="" /></span>
+						{selectedPost?.imageURL && !selectedPost.postText
+						? <span className={s.item1}><Zoom isZoomed={true}><img src={selectedPost?.imageURL ? selectedPost?.imageURL : <MiniLoader />} alt="" /></Zoom></span>
 						: "" }
-						{selectedPost?.videoURL
+						{selectedPost?.videoURL && !selectedPost.postText
 						? <span className={s.videoItem} >
 							
 						<video controls playsInline allowfullscreen="false" >
@@ -234,6 +235,18 @@ const handleFileChange = useCallback((e, postId) => {
         		: ""}
 						{selectedPost?.postText 
 						? <span className={s.item2}>
+						{selectedPost?.imageURL
+						? <span className={s.item1}><Zoom isZoomed={true}><img src={selectedPost?.imageURL ? selectedPost?.imageURL : <MiniLoader />} alt="" /></Zoom></span>
+						: "" }
+						{selectedPost?.videoURL
+						? <span className={s.videoItem} >
+							
+						<video controls playsInline allowfullscreen="false" >
+          	<source src={selectedPost?.videoURL}  type="video/mp4" />
+          
+        		</video>
+        		</span>
+        		: ""}
 						<InstagramEmbedLoader/>
 						<TelegramEmbedLoader/>
 						{parseTextWithLinks(selectedPost?.postText)}
@@ -347,7 +360,7 @@ const handleFileChange = useCallback((e, postId) => {
 					            	: "" }
 					            	{comment.imgUrl !== undefined && comment.imgUrl !== "" ? 
 					            	<div className={s.miniItem}>
-					            		<img src={comment.imgUrl} alt="" width="100px"/>
+					            		<Zoom isZoomed={true}><img src={comment.imgUrl} alt="" width="100px"/></Zoom>
 					            	</div>
 					            	: ""}
 					         				<div className={s.miniItem2}>

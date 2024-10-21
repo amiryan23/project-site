@@ -30,7 +30,7 @@ import { Typewriter,Cursor } from 'react-simple-typewriter'
 import { FaPlay,FaPause  } from "react-icons/fa";
 import {InstagramEmbedLoader} from './../../../helper/instaPost'
 import {TelegramEmbedLoader} from './../../../helper/telegramPost'
-
+import Zoom from 'react-medium-image-zoom'
 
 
 
@@ -343,9 +343,26 @@ const handleFileChange = useCallback((e, postId) => {
 					</span>
 					</div>
 					<div className={s.postMiniContent2}>
+						{m.imageURL && !m.postText 
+						? <span className={s.item1}>
+						<Zoom isZoomed={true} style={{backgroundColor:'rgba(0,0,0,0.5)'}}><img src={m.imageURL ? m.imageURL : <MiniLoader />} alt="" loading="lazy" /></Zoom></span>
+						: "" }
+						{m.videoURL && !m.postText
+						? <span className={s.videoItem} >
+							
+						<video controls playsInline allowfullscreen="false" preload="metadata">
+          	<source src={m.videoURL}  type="video/mp4" />
+          
+        		</video>
+        		</span>
+        		
+        		: ""}
 
+
+						{m.postText 
+						? <span className={s.item2}>
 						{m.imageURL 
-						? <span className={s.item1}><img src={m.imageURL ? m.imageURL : <MiniLoader />} alt="" loading="lazy" /></span>
+						? <span className={s.item1}><Zoom isZoomed={true}><img src={m.imageURL ? m.imageURL : <MiniLoader />} alt="" loading="lazy" /></Zoom></span>
 						: "" }
 						{m.videoURL
 						? <span className={s.videoItem} >
@@ -357,8 +374,6 @@ const handleFileChange = useCallback((e, postId) => {
         		</span>
         		
         		: ""}
-						{m.postText 
-						? <span className={s.item2}>
 						<InstagramEmbedLoader />
 						<TelegramEmbedLoader/>
 						{parseTextWithLinks(m.postText)}
@@ -473,7 +488,7 @@ const handleFileChange = useCallback((e, postId) => {
 					            	: "" }
 					            	{comment.imgUrl !== undefined && comment.imgUrl !== "" ? 
 					            	<div className={s.miniItem}>
-					            		<img src={comment.imgUrl} alt="" width="100px" loading="lazy"/>
+					            		<Zoom isZoomed={true}><img src={comment.imgUrl} alt="" width="100px" loading="lazy"/></Zoom>
 					            	</div>
 					            	: ""}
 					            	<div className={s.miniItem2}>
@@ -631,11 +646,36 @@ const onlyFollowing = arrayPosts
 					</div>
 					<div className={s.postMiniContent2}>
 
-						{m.imageURL 
-						? <span className={s.item1}><img src={m.imageURL ? m.imageURL : <MiniLoader />} alt="" loading="lazy" /></span>
+						{m.imageURL && !m.postText
+						? <span className={s.item1}><Zoom isZoomed={true}><img src={m.imageURL ? m.imageURL : <MiniLoader />} alt="" loading="lazy" /></Zoom></span>
 						: "" }
+						{m.videoURL && !m.postText
+						? <span className={s.videoItem} >
+							
+						<video controls playsInline allowfullscreen="false" preload="metadata">
+          	<source src={m.videoURL}  type="video/mp4" />
+          
+        		</video>
+        		</span>
+        		
+        		: ""}
 						{m.postText 
 						? <span className={s.item2}>
+						{m.imageURL 
+						? <span className={s.item1}><Zoom isZoomed={true}><img src={m.imageURL ? m.imageURL : <MiniLoader />} alt="" loading="lazy" /></Zoom></span>
+						: "" }
+						{m.videoURL
+						? <span className={s.videoItem} >
+							
+						<video controls playsInline allowfullscreen="false" preload="metadata">
+          	<source src={m.videoURL}  type="video/mp4" />
+          
+        		</video>
+        		</span>
+        		
+        		: ""}
+        		<InstagramEmbedLoader />
+						<TelegramEmbedLoader/>
 						{parseTextWithLinks(m.postText)}
 						</span>
 						: "" }
@@ -737,7 +777,7 @@ const onlyFollowing = arrayPosts
 					            	: "" }
 					            	{comment.imgUrl !== undefined && comment.imgUrl !== "" ? 
 					            	<div className={s.miniItem}>
-					            		<img src={comment.imgUrl} alt="" width="100px" loading="lazy"/>
+					            		<Zoom isZoomed={true}><img src={comment.imgUrl} alt="" width="100px" loading="lazy"/></Zoom>
 					            	</div>
 					            	: ""}
 					            	<div className={s.miniItem2}>
