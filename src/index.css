@@ -147,7 +147,7 @@ code {
   
 }
 [data-rmiz-modal]::backdrop {
-/*  display: none;*/
+  display: none;
 }
 [data-rmiz-modal][open] {
   position: fixed;
@@ -173,6 +173,8 @@ code {
 }
 [data-rmiz-modal-overlay="visible"] {
   background-color: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(5px);
+  
 
 }
 [data-rmiz-modal-content] {
@@ -183,8 +185,10 @@ code {
 [data-rmiz-modal-img] {
   position: absolute;
   border-radius:9px;
+  border:1px solid #999;
   image-rendering: high-quality;
   transform-origin: top left;
+  filter:drop-shadow(1px 1px 10px #999);
   transition: transform 0.35s linear;
 }
 @media (prefers-reduced-motion: reduce) {

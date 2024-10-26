@@ -174,9 +174,9 @@
             }
 
             @keyframes noRead {
-            	0%{background-color:rgba(256,256,256,0.1); }
+            	0%{background: linear-gradient(159deg, rgba(189,157,228,0.23369565217391308) 0%, rgba(67,38,163,0.23) 93%); }
             	50%{background-color:rgba(256,256,256,0.5);}
-            	100%{background-color:rgba(256,256,256,0.1);}
+            	100%{background: linear-gradient(159deg, rgba(189,157,228,0.23369565217391308) 0%, rgba(67,38,163,0.23) 93%);}
             }
         }
 	}

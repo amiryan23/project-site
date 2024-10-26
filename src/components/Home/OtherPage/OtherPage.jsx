@@ -732,18 +732,22 @@ replyCommentRef.current.classList.add(s.replyCommentAnim)
 				</div>
 				<span className={s.storyContent2}>
 			{selectedUser?.storyArray?.filter(story=> story.highlight === true).map(story=> 
+				// <Zoom isZoomed={true}>
 				<div className={storyHeight ? `${s.activeCont} ${s.storyCont}` : s.storyCont} onClick={()=>setStoryHeight((prevStoryHeight)=>true)}  style={{backgroundImage:`url(${story.fileURL})`}}>
 		{storyHeight ?
 		<>
+		
 		<div className={s.storyItem1}>{calculateTimeDifference(story?.timeAdded)}</div>
 	
 		<div className={s.storyItem2}>
 		<span className={s.item1}>{story?.storyText}</span>
 
 		</div>
+		
 		</>
 		: ""}
 	</div>
+
 					
 			).reverse()}
 			</span>
